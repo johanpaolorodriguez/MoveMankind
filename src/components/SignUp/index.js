@@ -17,7 +17,7 @@ const SignUpFormBase = (props) => {
     const { value:email, bind:bindEmail, reset:resetEmail } = useInput("");
     const { value:passwordOne, bind:bindPasswordOne, reset:resetPasswordOne } = useInput("");
     const { value:passwordTwo, bind:bindPasswordTwo, reset:resetPasswordTwo } = useInput("");
-    const [error, setError] = useState("");
+    const [error, setError] = useState(null);
     
     const onSubmit = event => {
         props.firebase.doCreateUserWithEmailAndPassword(email, passwordOne)
@@ -31,7 +31,7 @@ const SignUpFormBase = (props) => {
         .catch(error => {
             setError(error);
         })
-        event.preventDefault()
+        event.preventDefault();
     }
 
     const isInvalid =
@@ -42,34 +42,34 @@ const SignUpFormBase = (props) => {
 
     return (
         <form onSubmit={ onSubmit }>
-        <input
-            { ...bindUsername }
-            name="username"
-            type="text"
-            placeholder="Full Name"
-        />
-        <input
-            { ...bindEmail }
-            name="email"
-            type="email"
-            placeholder="Email"
-        />
-        <input
-            { ...bindPasswordOne }
-            name="passwordOne"
-            type="password"
-            placeholder="Password"
-        />
-        <input
-            { ...bindPasswordTwo }
-            name="passwordTwo"
-            type="password"
-            placeholder="Confirm Password"
-        />
-        <button disabled={ isInvalid } type="submit">Sign Up</button>
+            <input
+                { ...bindUsername }
+                name="username"
+                type="text"
+                placeholder="Full Name"
+            />
+            <input
+                { ...bindEmail }
+                name="email"
+                type="email"
+                placeholder="Email"
+            />
+            <input
+                { ...bindPasswordOne }
+                name="passwordOne"
+                type="password"
+                placeholder="Password"
+            />
+            <input
+                { ...bindPasswordTwo }
+                name="passwordTwo"
+                type="password"
+                placeholder="Confirm Password"
+            />
+            <button disabled={ isInvalid } type="submit">Sign Up</button>
 
-        { error && <p>{ error.message }</p> }
-    </form>
+            { error && <p>{ error.message }</p> }
+        </form>
     )
 }
 
