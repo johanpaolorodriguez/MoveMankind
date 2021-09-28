@@ -31,7 +31,7 @@ const SignInFormBase = (props) => {
         })
         event.preventDefault();
     }
-
+    
     return (
         <form onSubmit={ onSubmit }>
             <input 
@@ -51,6 +51,8 @@ const SignInFormBase = (props) => {
         </form>
     )
 }
+
+
 
 const SignInForm = compose(
     withRouter,
