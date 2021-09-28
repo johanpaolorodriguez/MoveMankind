@@ -5,11 +5,13 @@ import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
 import * as ROUTES from '../../constants/routes'
 import { useInput } from "../Hooks/input-hook";
+import { PasswordForgetLink } from "../PasswordForget";
 
 const SignInPage = () => (
     <div>
         <h1>SignIn</h1>
             <SignInForm />
+            <PasswordForgetLink />
             <SignUpLink />
     </div>
 );
@@ -17,7 +19,7 @@ const SignInPage = () => (
 const SignInFormBase = (props) => {
     const { value:email, bind:bindEmail, reset:resetEmail } = useInput("");
     const { value:password, bind:bindPassword, reset:resetPassword } = useInput("");
-    const [ error, setError ] = useState(null)
+    const [ error, setError ] = useState(null);
 
     const onSubmit = event => {
         props.firebase.doSignInWithEmailAndPassword(email, password)
