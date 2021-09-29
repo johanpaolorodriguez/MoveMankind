@@ -5,8 +5,6 @@ import { withFirebase } from "../Firebase";
 import * as ROUTES from '../../constants/routes'
 import { useInput } from "../Hooks/input-hook";
 
-// const db = getFirestore();
-
 const SignUpPage = () => (
     <div>
         <h1>SignUp</h1>
@@ -25,9 +23,8 @@ const SignUpFormBase = (props) => {
        event.preventDefault();
        try {
            const authUser = await props.firebase.doCreateUserWithEmailAndPassword(email, passwordOne);
-           console.log(authUser.user.uid);
            //add user to firestore database
-            await props.firebase.doAddNewUserToDatabase(authUser.user.uid, {
+            await props.firebase.doAddNewUserToDB(authUser.user.uid, {
                 username:username,
                 email: email,
             });
