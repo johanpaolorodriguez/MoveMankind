@@ -1,5 +1,7 @@
+import { getFirestore } from "@firebase/firestore";
 import app from "firebase/compat/app";
 import "firebase/compat/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -10,11 +12,11 @@ const config = {
   messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
 };
 
-app.initializeApp(config);
 class Firebase {
   constructor() {
     app.initializeApp(config);
     this.auth = app.auth();
+    this.db = getFirestore();
   }
   // *** AUTH API ***
   doCreateUserWithEmailAndPassword = (email, password) =>
@@ -25,6 +27,10 @@ class Firebase {
   doPasswordReset = (email) => this.auth.sendPasswordResetEmail(email);
   doPasswordUpdate = (password) =>
     this.auth.currentUser.updatePassword(password);
+  // *** USER API ***
+  doAddNewUserToDatabase = (uid, data) => {
+     setDoc(doc(this.db, "users", uid), data)
+  } 
 }
 
 export default Firebase;

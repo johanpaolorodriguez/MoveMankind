@@ -5,6 +5,8 @@ import { withFirebase } from "../Firebase";
 import * as ROUTES from '../../constants/routes'
 import { useInput } from "../Hooks/input-hook";
 
+// const db = getFirestore();
+
 const SignUpPage = () => (
     <div>
         <h1>SignUp</h1>
@@ -19,19 +21,25 @@ const SignUpFormBase = (props) => {
     const { value:passwordTwo, bind:bindPasswordTwo, reset:resetPasswordTwo } = useInput("");
     const [error, setError] = useState(null);
     
-    const onSubmit = event => {
-        props.firebase.doCreateUserWithEmailAndPassword(email, passwordOne)
-        .then(authUser => {
+    const onSubmit = async (event) => {
+       event.preventDefault();
+       try {
+           const authUser = await props.firebase.doCreateUserWithEmailAndPassword(email, passwordOne);
+           console.log(authUser.user.uid);
+           //add user to firestore database
+            await props.firebase.doAddNewUserToDatabase(authUser.user.uid, {
+                username:username,
+                email: email,
+            });
             resetUsername();
             resetEmail();
             resetPasswordOne();
             resetPasswordTwo();
             props.history.push(ROUTES.HOME)
-        })
-        .catch(error => {
-            setError(error);
-        })
-        event.preventDefault();
+       } catch (event) {
+           setError(error);
+           console.log(error);
+       }
     }
 
     const isInvalid =
