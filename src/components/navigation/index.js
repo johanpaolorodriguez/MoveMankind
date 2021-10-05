@@ -4,8 +4,7 @@ import * as ROUTES from "../../constants/routes";
 import { AuthUserContext } from "../Session";
 import SignoutButton from "../SignOut";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
-import { useState } from "react";
+import { MenuIcon, XIcon } from "@heroicons/react/outline";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -231,17 +230,16 @@ const Navigation = () => {
   );
 };
 
-const NavbarLink = (props) => {
-  return (
-    <NavLink
-      className="px-3 py-2 text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
-      activeClassName="bg-gray-700"
-      {...props}
-    >
-      <span className="flex-shrink-0">{props.name}</span>
-    </NavLink>
-  );
-};
+const NavbarLink = (props) => (
+  <NavLink
+    className="px-3 py-2 text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
+    activeClassName="bg-gray-700"
+    {...props}
+  >
+    <span className="flex-shrink-0">{props.name}</span>
+  </NavLink>
+);
+
 const NavPanelLink = (props) => (
   <NavLink
     className="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
