@@ -12,14 +12,22 @@ const CardComponent = ({
   author,
 }) => {
   return (
-    <div class="cardContainer">
-      <h2 class="cardTitle">{startupName}</h2>
-      <p class="cardDescription">{startupDescription}</p>
-      <p class="otherInformation">Goal: ${investmentGoal}</p>
-      <p class="otherInformation">Minimum Investment: ${investmentMinimum}</p>
-      {author !== "Admin" ? <p class="otherInformation">Author: {author}</p> : null}
-      <p class="otherInformation">Investment deadline: {investmentDeadline}</p>
-      <p class="otherInformation">Current Investment Total: ${currentInvestmentTotal}</p>
+    <div className="cardContainer">
+      <h2 className="cardTitle">{startupName}</h2>
+      <p className="cardDescription">{startupDescription}</p>
+      <p className="otherInformation">Goal: ${investmentGoal}</p>
+      <p className="otherInformation">
+        Minimum Investment: ${investmentMinimum}
+      </p>
+      {author !== "Admin" ? (
+        <p className="otherInformation">Author: {author}</p>
+      ) : null}
+      <p className="otherInformation">
+        Investment deadline: {investmentDeadline}
+      </p>
+      <p className="otherInformation">
+        Current Investment Total: ${currentInvestmentTotal}
+      </p>
     </div>
   );
 };
