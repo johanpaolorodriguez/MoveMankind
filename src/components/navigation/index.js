@@ -53,50 +53,26 @@ const Navigation = () => {
                     {/* Nav Links */}
                     <div className="hidden | sm:block sm:ml-6">
                       <div className="flex space-x-4">
-                        {authUser && (
-                          <NavbarLink
-                            to={ROUTES.HOME}
-                            key="Home"
-                            name={"Home"}
-                            exact
-                          />
-                        )}
+                        {ROUTES.ITEMS.map((item) => {
+                          const render = (
+                            <NavbarLink
+                              to={item.href}
+                              key={item.name}
+                              name={item.name}
+                              exact
+                            />
+                          );
+                          if (!authUser && !item.restricted) {
+                            return render;
+                          }
 
-                        {authUser && (
-                          <NavbarLink
-                            to={ROUTES.ACCOUNT}
-                            key="Account"
-                            name={"Account"}
-                            exact
-                          />
-                        )}
-
-                        {authUser && (
-                          <NavbarLink
-                            to={ROUTES.ADMIN}
-                            key="Admin"
-                            name={"Admin"}
-                            exact
-                          />
-                        )}
-
-                        {!authUser && (
-                          <NavbarLink
-                            to={ROUTES.SIGN_IN}
-                            key="Sign In"
-                            name={"Sign In"}
-                            exact
-                          />
-                        )}
-
-                        {!authUser && (
-                          <NavbarLink
-                            to={ROUTES.SIGN_UP}
-                            key="Sign Up"
-                            name={"Sign Up"}
-                            exact
-                          />
-                        )}
+                          if (authUser) {
+                            if (item.restricted) {
+                              return render;
+                            }
+                          }
+                          return null;
+                        })}
 
                         {authUser && <SignoutButton />}
                       </div>
@@ -175,50 +151,26 @@ const Navigation = () => {
                 {/* Mobile menu panel */}
                 <Disclosure.Panel className="sm:hidden">
                   <div className="px-2 pt-2 pb-3 space-y-1">
-                    {authUser && (
-                      <NavPanelLink
-                        to={ROUTES.HOME}
-                        key="Home"
-                        name={"Home"}
-                        exact
-                      />
-                    )}
+                    {ROUTES.ITEMS.map((item) => {
+                      const render = (
+                        <NavPanelLink
+                          to={item.href}
+                          key={item.name}
+                          name={item.name}
+                          exact
+                        />
+                      );
+                      if (!authUser && !item.restricted) {
+                        return render;
+                      }
 
-                    {authUser && (
-                      <NavPanelLink
-                        to={ROUTES.ACCOUNT}
-                        key="Account"
-                        name={"Account"}
-                        exact
-                      />
-                    )}
-
-                    {authUser && (
-                      <NavPanelLink
-                        to={ROUTES.ADMIN}
-                        key="Admin"
-                        name={"Admin"}
-                        exact
-                      />
-                    )}
-
-                    {!authUser && (
-                      <NavPanelLink
-                        to={ROUTES.SIGN_IN}
-                        key="Sign In"
-                        name={"Sign In"}
-                        exact
-                      />
-                    )}
-
-                    {!authUser && (
-                      <NavPanelLink
-                        to={ROUTES.SIGN_UP}
-                        key="Sign Up"
-                        name={"Sign Up"}
-                        exact
-                      />
-                    )}
+                      if (authUser) {
+                        if (item.restricted) {
+                          return render;
+                        }
+                      }
+                      return null;
+                    })}
                   </div>
                 </Disclosure.Panel>
               </Fragment>
