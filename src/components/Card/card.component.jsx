@@ -1,8 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import "./card.styles.css";
 
 const CardComponent = ({
+  uid,
   startupName,
   startupDescription,
   investmentGoal,
@@ -13,7 +15,9 @@ const CardComponent = ({
 }) => {
   return (
     <div className="cardContainer">
-      <h2 className="cardTitle">{startupName}</h2>
+      <Link to={`/startups/${uid}`} className="cardTitle hover:text-gray-600">
+        {startupName}
+      </Link>
       <p className="cardDescription">{startupDescription}</p>
       <p className="otherInformation">Goal: ${investmentGoal}</p>
       <p className="otherInformation">

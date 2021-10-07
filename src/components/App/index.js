@@ -1,5 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import * as ROUTES from "../../constants/routes";
+import { withAuthentication } from "../Session";
 import Navigation from "../Navigation";
 import LandingPage from "../Landing";
 import SignUpPage from "../SignUp";
@@ -9,8 +11,7 @@ import HomePage from "../Home";
 import AccountPage from "../Account";
 import AdminPage from "../Admin";
 import StartUpsPage from "../StartUps";
-import * as ROUTES from "../../constants/routes";
-import { withAuthentication } from "../Session";
+import ViewStartUpPage from "../ViewStartUp";
 
 const App = () => (
   <Router>
@@ -23,6 +24,7 @@ const App = () => (
     <Route path={ROUTES.ADMIN} component={AdminPage} />
     <Route exact path={ROUTES.LANDING} component={LandingPage} />
     <Route exact path={ROUTES.STARTUPS} component={StartUpsPage} />
+    <Route path="/startups/:uid" component={ViewStartUpPage} />
   </Router>
 );
 
