@@ -1,4 +1,4 @@
-import { getFirestore } from "@firebase/firestore";
+import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore";
 import app from "firebase/compat/app";
 import "firebase/compat/auth";
 import { collection, doc, setDoc, getDocs } from "firebase/firestore";
@@ -17,6 +17,8 @@ class Firebase {
     app.initializeApp(config);
     this.auth = app.auth();
     this.db = getFirestore();
+    connectFirestoreEmulator(this.db, "localhost", 8080);
+    this.auth.useEmulator("http://localhost:9099");
   }
   // *** AUTH API ***
   doCreateUserWithEmailAndPassword = (email, password) =>
@@ -29,8 +31,16 @@ class Firebase {
     this.auth.currentUser.updatePassword(password);
   // *** USER API ***
   doAddNewUserToDB = (uid, data) => {
-     setDoc(doc(this.db, "users", uid), data);
-  }
+    setDoc(doc(this.db, "users", uid), data);
+  };
 }
+
+// eslint-disable-next-line no-restricted-globals
+// if (location.hostname === "localhost") {
+//   Firebase.db.useEmulator("localhost", 8080);
+//   Firebase.auth.useEmulator("http://localhost:9099/", {
+//     disableWarnings: true,
+//   });
+// }
 
 export default Firebase;
