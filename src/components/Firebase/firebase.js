@@ -1,7 +1,8 @@
-import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore";
 import app from "firebase/compat/app";
 import "firebase/compat/auth";
-import { collection, doc, setDoc, getDocs } from "firebase/firestore";
+import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore";
+import { collection, doc, setDoc, getDoc, getDocs } from "firebase/firestore";
+import { seedStartupData } from "./databaseSeeder";
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -17,8 +18,12 @@ class Firebase {
     app.initializeApp(config);
     this.auth = app.auth();
     this.db = getFirestore();
-    connectFirestoreEmulator(this.db, "localhost", 8080);
-    this.auth.useEmulator("http://localhost:9099");
+    // eslint-disable-next-line no-restricted-globals
+    if (location.hostname === "localhost") {
+      connectFirestoreEmulator(this.db, "localhost", 8080);
+      this.auth.useEmulator("http://localhost:9099");
+    }
+    // seedStartupData(this.db);
   }
   // *** AUTH API ***
   doCreateUserWithEmailAndPassword = (email, password) =>
@@ -29,18 +34,20 @@ class Firebase {
   doPasswordReset = (email) => this.auth.sendPasswordResetEmail(email);
   doPasswordUpdate = (password) =>
     this.auth.currentUser.updatePassword(password);
+
   // *** USER API ***
   doAddNewUserToDB = (uid, data) => {
     setDoc(doc(this.db, "users", uid), data);
   };
-}
+  getAllUsers = () => getDocs(collection(this.db, "users"));
 
-// eslint-disable-next-line no-restricted-globals
-// if (location.hostname === "localhost") {
-//   Firebase.db.useEmulator("localhost", 8080);
-//   Firebase.auth.useEmulator("http://localhost:9099/", {
-//     disableWarnings: true,
-//   });
-// }
+  // *** STARTUP API ***
+  addStartup = (data) => {
+    const docRef = doc(collection(this.db, "startups"));
+    setDoc(docRef, { ...data, uid: docRef.id });
+  };
+  getStartupByID = (uid) => getDoc(doc(this.db, "startups", uid));
+  getAllStartups = () => getDocs(collection(this.db, "startups"));
+}
 
 export default Firebase;
