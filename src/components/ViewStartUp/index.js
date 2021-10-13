@@ -1,4 +1,3 @@
-import { doc, getDoc } from "@firebase/firestore";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { withFirebase } from "../Firebase";
@@ -11,8 +10,7 @@ const ViewStartUpPage = (props) => {
   useEffect(() => {
     const fetchStartup = async () => {
       try {
-        const docRef = doc(props.firebase.db, "startups", uid);
-        const docSnap = await getDoc(docRef);
+        const docSnap = await props.firebase.getStartupByID(uid);
         let data = docSnap.data();
         setStartup(() => data);
       } catch (error) {
@@ -20,7 +18,7 @@ const ViewStartUpPage = (props) => {
       }
     };
     fetchStartup();
-  }, [props.firebase.db, uid]);
+  }, [props.firebase, uid]);
 
   return (
     <div>

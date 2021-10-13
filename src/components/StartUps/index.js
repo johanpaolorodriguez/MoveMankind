@@ -6,31 +6,46 @@ import firebase from "../Firebase/firebase";
 import { posts } from "./data";
 
 import Card from "../Card/card.component";
+import { withFirebase } from "../Firebase";
 
-const fb = new firebase();
-const db = fb.db;
+// const fb = new firebase();
+// const db = fb.db;
 
 // Adds data.js to firebase (already ran!)
-const addStartupsData = async () => {
-  try {
-    posts.map(async (post) => {
-      //adds a UID for reference to startups
-      const docRef = doc(collection(db, "startups"));
-      await setDoc(docRef, { ...post, uid: docRef.id });
-    });
-    console.log("Documents added");
-  } catch (e) {
-    console.error("Error adding documents: ", e);
-  }
-};
+// const addStartupsData = async () => {
+//   try {
+//     posts.map(async (post) => {
+//       //adds a UID for reference to startups
+//       // const docRef = doc(collection(db, "startups"));
+//       // await setDoc(docRef, { ...post, uid: docRef.id });
+//     });
+//     console.log("Documents added");
+//   } catch (e) {
+//     console.error("Error adding documents: ", e);
+//   }
+// };
 
-const StartUpsPage = () => {
+const StartUpsPage = (props) => {
   const [posts, setPosts] = useState([]);
+
+  const addStartupsData = async () => {
+    try {
+      posts.map(async (post) => {
+        //adds a UID for reference to startups
+        // const docRef = doc(collection(db, "startups"));
+        // await setDoc(docRef, { ...post, uid: docRef.id });
+        await props.firebase.addStartup(post);
+      });
+      console.log("Documents added");
+    } catch (e) {
+      console.error("Error adding documents: ", e);
+    }
+  };
 
   useEffect(() => {
     // addStartupsData();
     const readStartupsData = async () => {
-      const querySnapshot = await getDocs(collection(db, "startups"));
+      const querySnapshot = await props.firebase.getAllStartups();
       querySnapshot.forEach((doc) => {
         setPosts((prevPosts) => {
           return [...prevPosts, doc.data()];
@@ -39,7 +54,7 @@ const StartUpsPage = () => {
     };
 
     readStartupsData();
-  }, []);
+  }, [props.firebase]);
 
   return (
     <div>
@@ -55,4 +70,4 @@ const StartUpsPage = () => {
   );
 };
 
-export default StartUpsPage;
+export default withFirebase(StartUpsPage);
