@@ -4,7 +4,7 @@ const LandingPage = () => {
   return (
     <main className="px-4 mx-auto mt-10 max-w-7xl">
       <div className="text-center">
-        <h1 className="text-4xl font-extrabold text-gray-900">
+        <h1 className="text-4xl font-extrabold text-gray-900 font-montserrat">
           This is the landing Page
         </h1>
         <p className="mt-3 text-base text-gray-500">
