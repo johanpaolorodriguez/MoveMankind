@@ -2,7 +2,7 @@ import app from "firebase/compat/app";
 import "firebase/compat/auth";
 import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore";
 import { collection, doc, setDoc, getDoc, getDocs } from "firebase/firestore";
-import { seedStartupData } from "./databaseSeeder";
+import { seedAllCollections } from "./databaseSeeder";
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -23,7 +23,7 @@ class Firebase {
       connectFirestoreEmulator(this.db, "localhost", 8080);
       this.auth.useEmulator("http://localhost:9099");
     }
-    // seedStartupData(this.db);
+    seedAllCollections(this.db);
   }
   // *** AUTH API ***
   doCreateUserWithEmailAndPassword = (email, password) =>
