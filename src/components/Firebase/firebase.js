@@ -2,6 +2,7 @@ import app from "firebase/compat/app";
 import "firebase/compat/auth";
 import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore";
 import { collection, doc, setDoc, getDoc, getDocs } from "firebase/firestore";
+import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { seedAllCollections } from "./databaseSeeder";
 
 const config = {
@@ -18,12 +19,14 @@ class Firebase {
     app.initializeApp(config);
     this.auth = app.auth();
     this.db = getFirestore();
+    this.storage = getStorage();
     // eslint-disable-next-line no-restricted-globals
     if (location.hostname === "localhost") {
-      connectFirestoreEmulator(this.db, "localhost", 8080);
       this.auth.useEmulator("http://localhost:9099");
+      connectFirestoreEmulator(this.db, "localhost", 8080);
+      // connectStorageEmulator(this.storage, "localhost", 9199);
     }
-    seedAllCollections(this.db);
+    // seedAllCollections(this.db);
   }
   // *** AUTH API ***
   doCreateUserWithEmailAndPassword = (email, password) =>
@@ -46,8 +49,25 @@ class Firebase {
     const docRef = doc(collection(this.db, "startups"));
     setDoc(docRef, { ...data, uid: docRef.id });
   };
-  getStartupByID = (uid) => getDoc(doc(this.db, "startups", uid));
   getAllStartups = () => getDocs(collection(this.db, "startups"));
+  getStartupByID = (uid) => getDoc(doc(this.db, "startups", uid));
+  getStartupSubsectors = async (uid) => {
+    const subSectorIDs = [];
+    const querySnapshot = await getDocs(
+      collection(this.db, `startups/${uid}/subSectors`)
+    );
+    await querySnapshot.forEach((doc) => {
+      subSectorIDs.push(doc.id);
+    });
+    const subSectorDocs = await Promise.all(
+      subSectorIDs.map(async (id) => {
+        const docSnap = await getDoc(doc(this.db, "subSectors", id));
+        return docSnap.data();
+      })
+    );
+    console.log(subSectorDocs);
+    return subSectorDocs;
+  };
 }
 
 export default Firebase;

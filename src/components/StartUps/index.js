@@ -1,54 +1,17 @@
 import React, { useState, useEffect } from "react";
-
-import { collection, setDoc, getDocs, doc } from "firebase/firestore";
-
-import firebase from "../Firebase/firebase";
-import { posts } from "./data";
-
-import Card from "../Card/card.component";
 import { withFirebase } from "../Firebase";
-
-// const fb = new firebase();
-// const db = fb.db;
-
-// Adds data.js to firebase (already ran!)
-// const addStartupsData = async () => {
-//   try {
-//     posts.map(async (post) => {
-//       //adds a UID for reference to startups
-//       // const docRef = doc(collection(db, "startups"));
-//       // await setDoc(docRef, { ...post, uid: docRef.id });
-//     });
-//     console.log("Documents added");
-//   } catch (e) {
-//     console.error("Error adding documents: ", e);
-//   }
-// };
+import { Link } from "react-router-dom";
 
 const StartUpsPage = (props) => {
-  const [posts, setPosts] = useState([]);
-
-  const addStartupsData = async () => {
-    try {
-      posts.map(async (post) => {
-        //adds a UID for reference to startups
-        // const docRef = doc(collection(db, "startups"));
-        // await setDoc(docRef, { ...post, uid: docRef.id });
-        await props.firebase.addStartup(post);
-      });
-      console.log("Documents added");
-    } catch (e) {
-      console.error("Error adding documents: ", e);
-    }
-  };
+  const [startups, setStartups] = useState([]);
 
   useEffect(() => {
     // addStartupsData();
     const readStartupsData = async () => {
       const querySnapshot = await props.firebase.getAllStartups();
       querySnapshot.forEach((doc) => {
-        setPosts((prevPosts) => {
-          return [...prevPosts, doc.data()];
+        setStartups((prevStartups) => {
+          return [...prevStartups, doc.data()];
         });
       });
     };
@@ -58,14 +21,31 @@ const StartUpsPage = (props) => {
 
   return (
     <div>
-      <h1>StartUps</h1>
-      {posts ? (
-        posts.map((post) => {
-          return <Card {...post} />;
-        })
-      ) : (
-        <p>Couldn't load posts</p>
-      )}
+      <h1 className="py-24 text-4xl text-center">Startups</h1>
+      <div className="grid items-start grid-cols-4 mx-auto max-w-7xl">
+        {/* <h1>StartUps</h1> */}
+        {startups.map((startup, index) => {
+          return (
+            <div className="w-full h-full max-w-sm col-span-1 px-3 py-6">
+              <Link to={`/startups/${startup.uid}`}>
+                <div className="overflow-hidden bg-white border border-transparent rounded-lg shadow-xl hover:border-primary">
+                  <img
+                    src={startup.featureImage}
+                    alt=""
+                    className="object-cover object-center w-full h-56"
+                  />
+                  <div className="p-4">
+                    <p className="font-semibold text-md">{startup.name}</p>
+                    <p className="text-sm">{startup.country}</p>
+                    <p className="text-sm">{startup.headQuarters}</p>
+                    <p className="text-sm">{startup.description}</p>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
