@@ -102,7 +102,7 @@ async function seedStartupSectors(db) {
 async function seedStartupSubsectors(db) {
   try {
     for (const startupId of startupIDs) {
-      let randNum = Math.floor(Math.random() * 3);
+      let randNum = Math.floor(Math.random() * 3) + 1;
       for (let i = 0; i <= randNum; i++) {
         const subSectorId =
           subSectorIDs[Math.floor(Math.random() * subSectorIDs.length)];
