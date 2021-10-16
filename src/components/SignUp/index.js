@@ -61,7 +61,7 @@ const SignUpFormBase = (props) => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 | sm:px-5 | lg:px-8">
-      <div class="w-full max-w-md space-y-8">
+      <div className="w-full max-w-md space-y-8">
         <div>
           <img
             className="w-auto h-12 mx-auto"
@@ -144,7 +144,7 @@ const SignUpFormBase = (props) => {
 
 const SignUpLink = () => (
   <p className="mt-2 text-sm text-center text-gray-600">
-    <span class="text-gray-600 font-medium">
+    <span className="font-medium text-gray-600">
       Don't have an account?{" "}
       <Link className="hover:gray-indigo-500" to={ROUTES.SIGN_UP}>
         Sign Up
