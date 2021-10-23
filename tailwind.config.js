@@ -10,10 +10,10 @@ module.exports = {
       colors: {
         primary: "#232535",
         secondary: "#585C7D",
-        accent1: "#FF9AA2",
-        accent2: "#FFDAC1",
-        accent3: "#E2F0CB",
-        accent4: "#C7CEEA",
+        accent1: "#00D0FF",
+        accent2: "#00FFAF",
+        accent3: "#D0FF00",
+        accent4: "#D3D3D3",
       },
       height: {
         "screen-1/3": "33vh",
@@ -22,7 +22,11 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      display: ["group-hover"],
+      opacity: ["disabled"],
+      pointerEvents: ["disabled"],
+    },
   },
   plugins: [],
 };
