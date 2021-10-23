@@ -1,15 +1,23 @@
 export const CATEGORIES = [
   {
-    name: "Global Warming",
+    name: "Environment",
+    description:
+      "Innovative Environment investment products for growth-focused investors.",
   },
   {
     name: "Artificial Inteligence",
+    description:
+      "Innovative Environment investment products for growth-focused investors.",
   },
   {
     name: "BioTechnology",
+    description:
+      "Innovative Environment investment products for growth-focused investors.",
   },
   {
     name: "Space",
+    description:
+      "Innovative Environment investment products for growth-focused investors.",
   },
 ];
 

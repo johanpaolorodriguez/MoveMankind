@@ -1,16 +1,32 @@
 import * as DATA from "./data";
-import { collection, setDoc, doc, writeBatch } from "firebase/firestore";
+import {
+  collection,
+  setDoc,
+  doc,
+  writeBatch,
+  serverTimestamp,
+  arrayUnion,
+} from "firebase/firestore";
 
 const startupIDs = [];
 const categoryIDs = [];
 const sectorIDs = [];
 const subSectorIDs = [];
 
+function stringClean(string) {
+  return string.replace(/[^A-Z0-9]+/gi, "").toLowerCase();
+}
+
 async function seedStartupData(db) {
   try {
     for (const startup of DATA.STARTUPS) {
-      const docRef = doc(collection(db, "startups"));
-      await setDoc(docRef, { ...startup, uid: docRef.id });
+      const docID = stringClean(startup.name);
+      const docRef = doc(db, "startups", docID);
+      await setDoc(docRef, {
+        ...startup,
+        uid: docRef.id,
+        createdAt: serverTimestamp(),
+      });
       startupIDs.push(docRef.id);
     }
   } catch (error) {
@@ -21,8 +37,13 @@ async function seedStartupData(db) {
 async function seedCategories(db) {
   try {
     for (const category of DATA.CATEGORIES) {
-      const docRef = doc(collection(db, "categories"));
-      await setDoc(docRef, { ...category, uid: docRef.id });
+      const docID = stringClean(category.name);
+      const docRef = doc(db, "categories", docID);
+      await setDoc(docRef, {
+        ...category,
+        uid: docRef.id,
+        createdAt: serverTimestamp(),
+      });
       categoryIDs.push(docRef.id);
     }
   } catch (error) {
@@ -33,8 +54,13 @@ async function seedCategories(db) {
 async function seedSectors(db) {
   try {
     for (const sector of DATA.SECTORS) {
-      const docRef = doc(collection(db, "sectors"));
-      await setDoc(docRef, { ...sector, uid: docRef.id });
+      const docID = stringClean(sector.name);
+      const docRef = doc(db, "sectors", docID);
+      await setDoc(docRef, {
+        ...sector,
+        uid: docRef.id,
+        createdAt: serverTimestamp(),
+      });
       sectorIDs.push(docRef.id);
     }
   } catch (error) {
@@ -45,8 +71,13 @@ async function seedSectors(db) {
 async function seedSubSectors(db) {
   try {
     for (const subSector of DATA.SUBSECTORS) {
-      const docRef = doc(collection(db, "subSectors"));
-      await setDoc(docRef, { ...subSector, uid: docRef.id });
+      const docID = stringClean(subSector.name);
+      const docRef = doc(db, "subSectors", docID);
+      await setDoc(docRef, {
+        ...subSector,
+        uid: docRef.id,
+        createdAt: serverTimestamp(),
+      });
       subSectorIDs.push(docRef.id);
     }
   } catch (error) {
@@ -59,18 +90,20 @@ async function seedStartupCategories(db) {
     for (const startupId of startupIDs) {
       const categoryId =
         categoryIDs[Math.floor(Math.random() * categoryIDs.length)];
-      const startupRef = doc(
-        db,
-        `categories/${categoryId}/startups/${startupId}`
-      );
-      const categoryRef = doc(
-        db,
-        `startups/${startupId}/categories/${categoryId}`
-      );
-      //attach category subcollection to startups and vice versa
       const batch = writeBatch(db);
-      batch.set(startupRef, {});
-      batch.set(categoryRef, {});
+      //get startup and add the field categories which contains an array of categoryIDs
+      const startupRef = doc(db, "startups", startupId);
+      batch.update(startupRef, {
+        categories: arrayUnion(categoryId),
+        [`categoriesMap.${categoryId}`]: true,
+      });
+      //get categories and add the field startups which contains an array of startupIDs
+      const categoryRef = doc(db, "categories", categoryId);
+      batch.update(categoryRef, {
+        startups: arrayUnion(startupId),
+        [`startupsMap.${startupId}`]: true,
+      });
+
       await batch.commit();
     }
   } catch (error) {
@@ -85,12 +118,20 @@ async function seedStartupSectors(db) {
       for (let i = 0; i <= randNum; i++) {
         const sectorId =
           sectorIDs[Math.floor(Math.random() * sectorIDs.length)];
-        const startupRef = doc(db, `sectors/${sectorId}/startups/${startupId}`);
-        const sectorRef = doc(db, `startups/${startupId}/sectors/${sectorId}`);
-        //attach sector subcollection to startups and vice versa
         const batch = writeBatch(db);
-        batch.set(startupRef, {});
-        batch.set(sectorRef, {});
+        //get startup and add the field sectors which contains an array of sectorIDs
+        const startupRef = doc(db, "startups", startupId);
+        batch.update(startupRef, {
+          sectors: arrayUnion(sectorId),
+          [`sectorsMap.${sectorId}`]: true,
+        });
+        //get sectors and add the field startups which contains an array of startupIDs
+        const categoryRef = doc(db, "sectors", sectorId);
+        batch.update(categoryRef, {
+          startups: arrayUnion(startupId),
+          [`startupsMap.${startupId}`]: true,
+        });
+
         await batch.commit();
       }
     }
@@ -106,18 +147,20 @@ async function seedStartupSubsectors(db) {
       for (let i = 0; i <= randNum; i++) {
         const subSectorId =
           subSectorIDs[Math.floor(Math.random() * subSectorIDs.length)];
-        const startupRef = doc(
-          db,
-          `subSectors/${subSectorId}/startups/${startupId}`
-        );
-        const subSectorRef = doc(
-          db,
-          `startups/${startupId}/subSectors/${subSectorId}`
-        );
-        //attach subSector subcollection to startups and vice versa
         const batch = writeBatch(db);
-        batch.set(startupRef, {});
-        batch.set(subSectorRef, {});
+        //get startup and add the field subSectors which contains an array of sectorIDs
+        const startupRef = doc(db, "startups", startupId);
+        batch.update(startupRef, {
+          subSectors: arrayUnion(subSectorId),
+          [`subSectorsMap.${subSectorId}`]: true,
+        });
+        //get subSectors and add the field startups which contains an array of startupIDs
+        const subSectorRef = doc(db, "subSectors", subSectorId);
+        batch.update(subSectorRef, {
+          startups: arrayUnion(startupId),
+          [`startupsMap.${startupId}`]: true,
+        });
+
         await batch.commit();
       }
     }
