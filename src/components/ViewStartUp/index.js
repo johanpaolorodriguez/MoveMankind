@@ -107,21 +107,7 @@ const ViewStartUpPage = (props) => {
                   </div>
                 </div>
                 <article className="col-span-3 pl-32 mx-auto text-3xl max-w-7xl">
-                  <p className="">
-                    ABL is committed to the national security of the United
-                    States and our allies. Our innovative vehicle and launch
-                    systems enable space resiliency. We are made in the USA,
-                    ensuring all suppliers and sub-suppliers are highly vetted
-                    and technically audited.
-                  </p>
-                  <p className="">
-                    We are a tight team with big goals. That means we need all
-                    hands on deck. At ABL, every person takes ownership of their
-                    work, and understands how it impacts our mission. Accessing
-                    space doesn’t need to be expensive, complicated, or
-                    difficult, and we’re building the systems, CONOPS, and
-                    organization to prove it.
-                  </p>
+                  <p className="">{startup.about}</p>
                 </article>
               </div>
             </section>

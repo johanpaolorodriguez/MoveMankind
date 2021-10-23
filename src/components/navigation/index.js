@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 import { AuthUserContext } from "../Session";
 import SignoutButton from "../SignOut";
@@ -36,19 +36,20 @@ const Navigation = () => {
                   </div>
                   {/* Logo */}
                   <div className="flex-1 flex item-center justify-center | sm:items-stretch sm:justify-start">
-                    <div className="flex items-center flex-shrink-0">
-                      <img
-                        src={logo}
-                        alt="Move Mankind Logo"
-                        className="block w-auto h-8 | lg:hidden"
-                      />
-
-                      <img
-                        src={logo}
-                        alt="Move Mankind Logo"
-                        className="hidden h-8 w-auto | lg:block"
-                      />
-                    </div>
+                    <Link to={"/"}>
+                      <div className="flex items-center flex-shrink-0">
+                        <img
+                          src={logo}
+                          alt="Move Mankind Logo"
+                          className="block w-auto h-8 | lg:hidden"
+                        />
+                        <img
+                          src={logo}
+                          alt="Move Mankind Logo"
+                          className="hidden h-8 w-auto | lg:block"
+                        />
+                      </div>
+                    </Link>
                   </div>
                   {/* Nav Links */}
                   <div className="hidden | sm:block sm:ml-6">

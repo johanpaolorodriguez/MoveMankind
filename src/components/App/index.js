@@ -12,6 +12,7 @@ import AccountPage from "../Account";
 import AdminPage from "../Admin";
 import StartUpsPage from "../StartUps";
 import ViewStartUpPage from "../ViewStartUp";
+import ViewCategoryPage from "../ViewCategory";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
       <Route exact path={ROUTES.LANDING} component={LandingPage} />
       <Route exact path={ROUTES.STARTUPS} component={StartUpsPage} />
       <Route path="/startups/:uid" component={ViewStartUpPage} />
+      <Route path="/categories/:uid" component={ViewCategoryPage} />
     </Router>
   );
 };
