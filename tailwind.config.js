@@ -3,11 +3,18 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      zIndex: {
+        "-10": "-10",
+        "-20": "-20",
+        "-30": "-30",
+        "-40": "-40",
+      },
       fontFamily: {
         primary: ["Montserrat"],
         secondary: ["Open Sans"],
       },
       colors: {
+        document: "#FAFBFF",
         primary: "#232535",
         secondary: "#585C7D",
         accent1: "#00D0FF",
