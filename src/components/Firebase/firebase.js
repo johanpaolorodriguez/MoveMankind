@@ -1,6 +1,11 @@
 import app from "firebase/compat/app";
 import "firebase/compat/auth";
-import { getFirestore, connectFirestoreEmulator } from "@firebase/firestore";
+import {
+  getFirestore,
+  connectFirestoreEmulator,
+  writeBatch,
+  arrayUnion,
+} from "@firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { seedAllCollections } from "./databaseSeeder";
 import {
@@ -31,11 +36,11 @@ class Firebase {
     this.db = getFirestore();
     this.storage = getStorage();
     // eslint-disable-next-line no-restricted-globals
-    if (location.hostname === "localhost") {
-      this.auth.useEmulator("http://localhost:9099");
-      connectFirestoreEmulator(this.db, "localhost", 8080);
-      connectStorageEmulator(this.storage, "localhost", 9199);
-    }
+    // if (location.hostname === "localhost") {
+    //   // this.auth.useEmulator("http://localhost:9099");
+    //   connectFirestoreEmulator(this.db, "localhost", 8080);
+    //   connectStorageEmulator(this.storage, "localhost", 9199);
+    // }
     // seedAllCollections(this.db).then(console.log("Seed successful."));
   }
   // *** AUTH API ***
@@ -56,6 +61,22 @@ class Firebase {
   doAddNewUserToDB = (uid, data) => {
     setDoc(doc(this.db, "users", uid), data);
   };
+  doInvestAsUser = (db, userId, startupId) => {
+    const batch = writeBatch(db);
+    //get startup and add the field investors which contains an array of userIds
+    const startupRef = doc(db, "startups", startupId);
+    batch.update(startupRef, {
+      investors: arrayUnion(userId),
+      [`investorsMap.${userId}`]: true,
+    });
+    //get users and add the field investedIn which contains an array of startupIds
+    const userRef = doc(db, "users", userId);
+    batch.update(userRef, {
+      investedIn: arrayUnion(userId),
+      [`investedInMap.${userId}`]: true,
+    });
+  };
+
   getAllUsers = () => getDocs(collection(this.db, "users"));
 
   // *** STARTUP API ***
@@ -64,7 +85,14 @@ class Firebase {
     setDoc(docRef, { ...data, uid: docRef.id });
   };
 
-  getAllStartups = () => getDocs(collection(this.db, "startups"));
+  getAllStartups = async () => {
+    let startups = [];
+    const querySnaphshot = await getDocs(collection(this.db, "startups"));
+    querySnaphshot.forEach((doc) => {
+      startups = [...startups, doc.data()];
+    });
+    return startups;
+  };
 
   getStartupByID = (uid) => getDoc(doc(this.db, "startups", uid));
 
@@ -86,6 +114,25 @@ class Firebase {
       })
     );
     return subSectorDocs;
+  };
+
+  getAllStartupsWithFilters = async (filters) => {
+    let startups = [];
+    //map the filters to a where clause
+    const constraints = filters.map((filter) => where(filter, "==", true));
+    //get all startups in a category
+    const startupsRef = collection(this.db, "startups");
+    const categories = query(
+      startupsRef,
+      //destructure the constraints to be included in the query
+      ...constraints
+    );
+
+    const querySnapshot = await getDocs(categories);
+    querySnapshot.forEach((doc) => {
+      startups = [...startups, doc.data()];
+    });
+    return startups;
   };
 
   getAllStartupsInCategory = async (CategoryUID, filters) => {
