@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "movemankind"
-  }
+    "default": "movemankind",
+    "movemankind": "movemankind-76fb5"
+  },
+  "targets": {}
 }
