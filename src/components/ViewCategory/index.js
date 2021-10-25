@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router";
 import { withFirebase } from "../Firebase";
 import Tags from "../Tags";
+import { LocationMarkerIcon } from "@heroicons/react/solid";
 
 const hex = {
   //colors defined in tailwind.config.js
@@ -70,8 +71,6 @@ const ViewCategoryPage = (props) => {
     fetchSubSectors();
   }, [props.firebase, uid]);
 
-  console.log(subSectors);
-
   const filterWithId = (field, id) => {
     //TODO: check if field is in filters []
     setFilters((filters) => [...filters, `${field}.${id}`]);
@@ -84,19 +83,24 @@ const ViewCategoryPage = (props) => {
     setFilters(newFilters);
   };
   return (
-    <div>
+    <div className="mt-16 space-y-12">
       {/* category page {hex[uid]} */}
-      <h1 className="mt-10 text-3xl font-bold text-center text-primary font-primary">
-        <span
-          className={`highlight-background-b bg-gradient-to-r from-${hex[uid]} to-${hex[uid]}`}
-        >
-          {category.name}
-        </span>
-      </h1>
-      <p className="text-center">{category.description}</p>
-      <section className="grid grid-cols-4 mx-auto max-w-7xl">
+      <div>
+        <h1 className="text-3xl font-bold text-center text-primary font-primary">
+          <span
+            className={`highlight-background-b bg-gradient-to-r from-${hex[uid]} to-${hex[uid]}`}
+          >
+            {category.name}
+          </span>
+        </h1>
+        <p className="text-center">{category.description}</p>
+      </div>
+      <section className="flex justify-center mx-auto space-x-6 max-w-7xl">
         {/* tags */}
-        <div className="flex flex-col col-span-1 space-y-6">
+        <div className="flex flex-col space-y-6">
+          <p className="w-64 p-4 mt-10 text-base text-center text-gray-500 bg-white rounded-md">
+            start exploring ventrues by adding a tag!
+          </p>
           <Tags
             filterWithId={filterWithId}
             removeFilterWithId={removeFilterWithId}
@@ -113,21 +117,25 @@ const ViewCategoryPage = (props) => {
           />
         </div>
         {/* card */}
-        <div className="col-span-3">
+        <div className="space-y-2">
           {startups.map((startup) => {
             return (
-              <article className="w-full px-3 py-6" key={startup.uid}>
+              <article className="max-w-2xl" key={startup.uid}>
                 <Link to={`/startups/${startup.uid}`}>
-                  <div className="w-full overflow-hidden bg-white border border-transparent rounded-lg shadow-xl hover:border-primary">
+                  <div className="flex w-full space-y-2 overflow-hidden bg-white border border-transparent rounded-lg filter drop-shadow-xl hover:border-primary">
                     <img
-                      src={startup.featureImage}
+                      src={startup.logo}
                       alt=""
-                      className="object-cover object-center w-full h-56"
+                      className="object-contain object-center w-40 h-40 p-4"
                     />
                     <div className="p-4">
-                      <p className="font-semibold text-md">{startup.name}</p>
-                      <p className="text-sm">{startup.country}</p>
-                      <p className="text-sm">{startup.headQuarters}</p>
+                      <p className="text-2xl font-bold">{startup.name}</p>
+                      <p className="flex items-center space-x-1 text-base font-semibold">
+                        <LocationMarkerIcon className="inline w-4 h-4" />
+                        <span>
+                          {startup.headQuarters}, {startup.country}
+                        </span>
+                      </p>
                       <p className="text-sm">{startup.description}</p>
                     </div>
                   </div>

@@ -6,6 +6,7 @@ import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
 import { useInput } from "../Hooks/input-hook";
 import { PasswordForgetLink } from "../PasswordForget";
+import logo from "../../assets/move_mankind_logo.svg";
 
 const SignInPage = () => (
   <div>
@@ -40,11 +41,7 @@ const SignInFormBase = (props) => {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 | sm:px-5 | lg:px-8">
       <div className="w-full max-w-md space-y-8">
         <div>
-          <img
-            className="w-auto h-12 mx-auto"
-            src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-            alt="Workflow"
-          />
+          <img className="w-auto h-12 mx-auto" src={logo} alt="Workflow" />
           <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
             Sign In
           </h2>
@@ -104,7 +101,7 @@ const SignInFormBase = (props) => {
             </div>
 
             <button
-              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-gray-600 border border-transparent rounded-md group hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md bg-primary group hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
               type="submit"
             >
               Sign In

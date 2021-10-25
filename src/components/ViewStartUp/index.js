@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { withFirebase } from "../Firebase";
-import { LocationMarkerIcon } from "@heroicons/react/solid";
-import Search from "../Search";
+import { LocationMarkerIcon, ExternalLinkIcon } from "@heroicons/react/solid";
+import { Link } from "react-router-dom";
+import FrequentlyAskedQuestions from "../Faq";
+import InvestButton from "../InvestAsUser";
 
 const ViewStartUpPage = (props) => {
   const { uid } = useParams();
   const [startup, setStartup] = useState({});
+  const [startupTags, setStartupTags] = useState([]);
   const [subSectors, setSubSectors] = useState([]);
 
   useEffect(() => {
@@ -15,6 +18,14 @@ const ViewStartUpPage = (props) => {
         const docSnap = await props.firebase.getStartupByID(uid);
         let data = docSnap.data();
         setStartup(data);
+        if (data) {
+          let tags = data.categories.concat(
+            data.country,
+            data.sectors,
+            data.subSectors
+          );
+          setStartupTags(tags);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -35,111 +46,108 @@ const ViewStartUpPage = (props) => {
   }, [props.firebase, uid]);
 
   return (
-    <div className="mb-24">
+    <main>
       {startup && (
-        <main className="w-full">
-          <img
-            src={startup.featureImage}
-            alt={`${startup.name}`}
-            className="block object-cover object-center w-full h-screen-1/2"
-          />
-          <section className="bg-primary">
-            <div className="flex items-center justify-between mx-auto max-w-7xl">
-              <div className="flex items-center">
-                <div className="flex items-center justify-center w-24 h-24 bg-gray-900 rounded-full">
-                  <img
-                    src={startup.logo}
-                    alt={`${startup.name} logo`}
-                    className="block w-auto h-16"
-                  />
-                </div>
-                <div className="flex flex-col p-4">
-                  <h1 className="text-3xl font-bold leading-8 text-white font-primary">
-                    {startup.name}
-                  </h1>
-                  <p className="flex items-center text-xl text-white font-secondary">
-                    <LocationMarkerIcon className="w-5 h-5 text-white" />
-                    {startup.country}
-                  </p>
-                </div>
-              </div>
-              <button className="h-full px-8 py-2 font-bold bg-gray-100 rounded-full text-primary">
-                Contact
-              </button>
-            </div>
-          </section>
-          <div className="divide-y-4">
-            <section className="py-12">
-              <div className="grid grid-cols-2 py-24 mx-auto gap-y-12 gap-x-48 max-w-7xl">
-                <div className="flex justify-between col-span-1">
-                  <span className="text-3xl font-bold">$ 112,321,291</span>
-                  <span className="text-3xl font-medium">raised</span>
-                </div>
-                <div className="flex justify-between col-span-1">
-                  <span className="text-3xl font-bold">$ 112.30</span>
-                  <span className="text-3xl font-medium">
-                    minimum investment
+        <div className="max-w-5xl mx-auto my-16">
+          <section className="bg-white shadow-md">
+            <article className="flex justify-between p-8">
+              <div>
+                <h1 className="text-4xl font-bold font-primary text-primary">
+                  {startup.name}
+                </h1>
+                <p className="flex items-center space-x-2 text-2xl font-bold text-primary">
+                  <LocationMarkerIcon className="w-6 h-6" />
+                  <span>
+                    {startup.headQuarters}, {startup.country}
                   </span>
-                </div>
-                <div className="flex justify-between col-span-1">
-                  <span className="text-3xl font-bold">1132</span>
-                  <span className="text-3xl font-medium">investors</span>
-                </div>
-                <div className="flex justify-between col-span-1">
-                  <span className="text-3xl font-bold">$1.4B</span>
-                  <span className="text-3xl font-medium">valuation</span>
+                </p>
+                <img
+                  src={startup.logo}
+                  alt=""
+                  className="object-contain object-center h-auto w-96"
+                />
+                <div className="flex flex-wrap max-w-xl py-4 space-x-2">
+                  {startupTags.map((tag) => (
+                    <span className="w-auto px-4 py-1 my-1 font-semibold bg-gray-200 rounded-md text-primary font-primary">
+                      {tag}
+                    </span>
+                  ))}
                 </div>
               </div>
-              <div className="grid grid-cols-4 mx-auto max-w-7xl">
-                <div className="col-span-1">
-                  <div className="flex flex-col w-full space-y-4 text-xl">
-                    <span className="w-full font-bold">Tags</span>
-                    {subSectors.map((subSector) => {
-                      return (
-                        <span
-                          key={subSector.name}
-                          className="w-full px-4 py-2 font-bold shadow-md bg-accent1 text-primary"
-                        >
-                          {subSector.name}
-                        </span>
-                      );
-                    })}
-                  </div>
+              <div className="divide-y divide-gray-200 text-md w-96 divide font-secondary">
+                <div className="pb-4">
+                  <p className="text-4xl font-bold">$10,646,500</p>
+                  <p className="text-gray-500">Raised with Move Mankind</p>
                 </div>
-                <article className="col-span-3 pl-32 mx-auto text-3xl max-w-7xl">
-                  <p className="">{startup.about}</p>
-                </article>
+                <div className="flex justify-between py-4">
+                  <p className="text-gray-500">Round</p>
+                  <p className="font-bold">Series B</p>
+                </div>
+                <div className="flex justify-between py-4">
+                  <p className="text-gray-500">Price per security</p>
+                  <p className="font-bold">$100</p>
+                </div>
+                <div className="flex justify-between py-4">
+                  <p className="text-gray-500">Allocation</p>
+                  <p className="font-bold">$11M</p>
+                </div>
+                <div className="flex justify-between py-4">
+                  <p className="text-gray-500">Pre-money Valuation</p>
+                  <p className="font-bold">$67.38M</p>
+                </div>
+                <div className="flex justify-between py-4">
+                  <p className="text-gray-500">Minimum Investment</p>
+                  <p className="font-bold">$10K</p>
+                </div>
+                <div className="flex justify-between py-4">
+                  <p className="text-gray-500">Instrument</p>
+                  <p className="font-bold">Common Equity</p>
+                </div>
+                <div className="flex justify-between py-4">
+                  <p className="text-gray-500">Deadline</p>
+                  <p className="font-bold">December 4, 2021</p>
+                </div>
+                <InvestButton name={startup.name} id={startup.uid} />
               </div>
-            </section>
-            <section className="py-12 mx-auto space-y-4 max-w-7xl">
-              <h2 className="text-3xl font-bold">Resources</h2>
-              <p className="text-xl">
-                Learn more about ABL Space Systems by viewing the following
-                links and videos.
-              </p>
-              <span className="block w-full px-8 py-4 font-bold text-white bg-secondary">
-                RSI Development
-              </span>
-              <span className="block w-full px-8 py-4 font-bold text-white bg-secondary">
-                RSI Development
-              </span>
-              <span className="block w-full px-8 py-4 font-bold text-white bg-secondary">
-                RSI Development
-              </span>
-              <span className="block w-full px-8 py-4 font-bold text-white bg-secondary">
-                RSI Development
-              </span>
-            </section>
-            <section className="py-12 mx-auto space-y-4 space-y-12 max-w-7xl">
-              <h2 className="text-5xl font-bold text-center">
-                Make a New Search
-              </h2>
-              <Search />
-            </section>
-          </div>
-        </main>
+            </article>
+
+            <article className="p-8 space-y-8">
+              <h2 className="text-3xl font-bold text-primary">About</h2>
+              <img src={startup.featureImage} alt="" className="" />
+              <p className="tesxt-base">{startup.about}</p>
+            </article>
+
+            <article className="p-8 space-y-8">
+              <h2 className="text-3xl font-bold text-primary">Resources</h2>
+              <p className="Learn more abut the current project"></p>
+              <div className="flex items-center space-x-4">
+                <button disabled className="">
+                  1. <span className="underline">RSI Development</span>
+                </button>
+                <ExternalLinkIcon className="w-4 h-4" />
+              </div>
+              <div className="flex items-center space-x-4">
+                <button disabled className="">
+                  1. <span className="underline">RSI Development</span>
+                </button>
+                <ExternalLinkIcon className="w-4 h-4" />
+              </div>
+              <div className="flex items-center space-x-4">
+                <button disabled className="">
+                  1. <span className="underline">RSI Development</span>
+                </button>
+                <ExternalLinkIcon className="w-4 h-4" />
+              </div>
+            </article>
+
+            <article className="p-8 space-y-8">
+              <h2 className="text-3xl font-bold text-primary">FAQ</h2>
+              <FrequentlyAskedQuestions />
+            </article>
+          </section>
+        </div>
       )}
-    </div>
+    </main>
   );
 };
 

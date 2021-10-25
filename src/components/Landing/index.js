@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { withFirebase } from "../Firebase";
-import Search from "../Search";
-import globalWarmingPng from "../../assets/global_warming.png";
-import spacePng from "../../assets/space.png";
-import bioTechPng from "../../assets/biotechnology.png";
-import AIPng from "../../assets/artificial_intelligence.png";
-// import palceholderPng from "../../assets/placeholder_venture.png";
+import HeroSvg from "../../assets/hero_svg.svg";
+
+const hex = {
+  //colors defined in tailwind.config.js
+  artificialinteligence: "accent1",
+  biotechnology: "accent2",
+  environment: "accent3",
+  space: "accent4",
+};
 
 const LandingPage = (props) => {
   const [startup, setStartup] = useState({});
+  const [startupTags, setStartupTags] = useState([]);
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -17,7 +21,14 @@ const LandingPage = (props) => {
       try {
         const data = await props.firebase.getMostRecentStartup();
         setStartup(data);
-        // await props.firebase.getAllStartupsInCategory("artificialinteligence");
+        if (data) {
+          let tags = data.categories.concat(
+            data.country,
+            data.sectors,
+            data.subSectors
+          );
+          setStartupTags(tags);
+        }
         const categoriesData = await props.firebase.getAllCategories();
         setCategories(categoriesData);
       } catch (error) {
@@ -26,42 +37,50 @@ const LandingPage = (props) => {
     };
     getFeaturedStartup();
   }, [props.firebase]);
-  console.log(categories);
   return (
-    <main className="px-4 mx-auto max-w-7xl">
-      <div className="text-center">
-        <h1 className="py-40 text-6xl font-extrabold text-primary font-primary">
-          Move Mankind
-        </h1>
-
-        <p className="py-16 text-4xl text-primary">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Aliquet
-          bibendum enim facilisis gravida neque convallis a. Vitae proin
-          sagittis nisl rhoncus mattis rhoncus urna. Neque aliquam vestibulum
-          morbi blandit. Ac turpis egestas sed tempus.
-        </p>
+    <main className="max-w-6xl mx-auto">
+      <div className="relative px-4 mx-auto my-10 sm:my-12 sm:px-6 md:my-16 lg:my-32">
+        <div className="sm:text-center lg:text-left">
+          <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 font-primary sm:text-5xl md:text-6xl">
+            <span className="block text-secondary">Move</span>{" "}
+            <span className="block ">Mankind</span>
+          </h1>
+          <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+            MoveMankind is a Hong Kong based startup with a mission in assisting
+            in the development of ventures that helps aid in matters of
+            existential risk.
+          </p>
+          <Link
+            className="inline-block px-8 py-2 mt-6 text-lg font-semibold text-white bg-blue-500 rounded-md font-primary hover:bg-primary"
+            to={`/startups`}
+          >
+            Discover Ventures
+          </Link>
+        </div>
+        <div className="absolute right-0 -top-24 w-80">
+          <img className="" src={HeroSvg} alt="" />
+        </div>
       </div>
 
-      <h2 className="text-3xl font-bold text-primary font-primary">
+      {/* <h2 className="px-8 text-3xl font-bold text-primary font-primary">
         Discover Ventures.
-      </h2>
-      <div className="flex mx-auto mt-10 space-x-16 text-center">
+      </h2> */}
+      <div className="relative z-10 flex justify-center mx-auto mt-10 space-x-8 text-center">
         {categories.map((category) => {
           return (
             <Link to={`/categories/${category.uid}`}>
-              <div className="flex flex-col items-center justify-center p-4 space-y-4 border border-gray-200 shadow-md rounded-3xl w-80 h-96">
+              <div className="flex flex-col items-center justify-center p-4 space-y-4 bg-white border border-gray-200 shadow-lg w-60 rounded-3xl h-96 hover:bg-gray-100">
                 <img
                   className="w-24 h-24 rounded-full"
-                  src={spacePng}
+                  src={category.logo}
                   alt="space category"
                 />
-                <h2 className="text-lg font-medium text-gray-900">
+                <h2 className="text-xl font-bold text-gray-900">
                   {category.name}
                 </h2>
+                <div className={`bg-${hex[category.uid]} h-4 w-40`}></div>
                 <p className="text-base text-gray-500">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do
+                  {category.description}
                 </p>
               </div>
             </Link>
@@ -69,12 +88,30 @@ const LandingPage = (props) => {
         })}
       </div>
 
-      <div className="mt-24 space-y-12">
-        <h2 className="mt-2 text-4xl font-bold text-center text-gray-900">
-          Venture of the Week
+      <div className="max-w-6xl px-8 py-32 space-y-6">
+        <h2 className="text-3xl font-bold text-primary font-primary">
+          Venture of the Week.
         </h2>
-        <img className="w-full h-full" src={startup.featureImage} alt="" />
-        <p className="pb-32 mt-3 text-3xl text-gray-500">{startup.about}</p>
+        <img className="w-4/5" src={startup.featureImage} alt="" />
+        <h3 className="text-3xl font-bold text-primary font-primary">
+          {startup.name}
+        </h3>
+        <div className="flex flex-wrap max-w-3xl space-x-2">
+          {startupTags.map((tag) => (
+            <span className="w-auto px-4 py-1 my-1 font-semibold text-white rounded-md bg-primary font-primary">
+              {tag}
+            </span>
+          ))}
+        </div>
+        <p className="mt-3 text-base leading-tight text-gray-500">
+          {startup.about}
+        </p>
+        <Link
+          className="inline-block px-8 py-2 text-lg font-semibold text-white bg-blue-500 rounded-md font-primary hover:bg-primary"
+          to={`/startups/${startup.uid}`}
+        >
+          Learn More
+        </Link>
       </div>
     </main>
   );
