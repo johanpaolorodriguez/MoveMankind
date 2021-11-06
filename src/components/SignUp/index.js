@@ -47,7 +47,7 @@ const SignUpFormBase = (props) => {
       resetEmail();
       resetPasswordOne();
       resetPasswordTwo();
-      props.history.push(ROUTES.HOME);
+      props.history.push(ROUTES.STARTUPS);
     } catch (event) {
       setError(error);
       console.log(error);
@@ -143,7 +143,7 @@ const SignUpLink = () => (
   <p className="mt-2 text-sm text-center text-gray-600">
     <span className="font-medium text-gray-600">
       Don't have an account?{" "}
-      <Link className="hover:gray-indigo-500" to={ROUTES.SIGN_UP}>
+      <Link className="text-blue-500 hover:text-indigo-500" to={ROUTES.SIGN_UP}>
         Sign Up
       </Link>
     </span>

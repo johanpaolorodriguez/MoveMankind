@@ -29,7 +29,7 @@ const SignInFormBase = (props) => {
       .then((authUser) => {
         resetEmail();
         resetPassword();
-        props.history.push(ROUTES.HOME);
+        props.history.push(ROUTES.STARTUPS);
       })
       .catch((error) => {
         setError(error);

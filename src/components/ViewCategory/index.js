@@ -99,7 +99,7 @@ const ViewCategoryPage = (props) => {
         {/* tags */}
         <div className="flex flex-col space-y-6">
           <p className="w-64 p-4 mt-10 text-base text-center text-gray-500 bg-white rounded-md">
-            start exploring ventrues by adding a tag!
+            start exploring ventures by adding a tag!
           </p>
           <Tags
             filterWithId={filterWithId}
