@@ -1,7 +1,6 @@
 import React from "react";
 
 export function Item({ hit, components }) {
-  console.log(hit);
   return (
     <a href={`/${hit.path}`} className="aa-ItemLink">
       <div className="aa-ItemContent">

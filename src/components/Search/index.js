@@ -1,20 +1,42 @@
-// import algoliasearch from "algoliasearch/lite";
-// import { InstantSearch, SearchBox, Hits } from "react-instantsearch-dom";
+import { getAlgoliaResults } from "@algolia/autocomplete-js";
+import algoliasearch from "algoliasearch";
+import React from "react";
+import { Autocomplete } from "./autocomplete";
+import { Item } from "./item";
 
-// const searchClient = algoliasearch(
-//   "AE8N5KDNLZ",
-//   "569924e2daf5f197637b79d47480a100"
-// );
+const appId = "AE8N5KDNLZ";
+const apiKey = "569924e2daf5f197637b79d47480a100";
+const searchClient = algoliasearch(appId, apiKey);
 
-// const SearchInterface = () => (
-//   <InstantSearch searchClient={searchClient} indexName="startups">
-//     <SearchBox />
-//     <Hits />
-//   </InstantSearch>
-// );
+const Search = () => {
+  return (
+    <div className="flex-shrink-0 w-96">
+      <Autocomplete
+        openOnFocus={true}
+        getSources={({ query }) => [
+          {
+            sourceId: "startups",
+            getItems() {
+              return getAlgoliaResults({
+                searchClient,
+                queries: [
+                  {
+                    indexName: "startups",
+                    query,
+                  },
+                ],
+              });
+            },
+            templates: {
+              item({ item, components }) {
+                return <Item hit={item} components={components} />;
+              },
+            },
+          },
+        ]}
+      />
+    </div>
+  );
+};
 
-// export default SearchInterface;
-import Autocomplete from "./autocomplete";
-import ProductItem from "./item";
-
-export { Autocomplete, ProductItem };
+export default Search;
