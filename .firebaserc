@@ -1,7 +1,8 @@
 {
   "projects": {
-    "default": "movemankind",
-    "movemankind": "movemankind-76fb5"
+    "default": "movemankind-76fb5",
+    "movemankind": "movemankind-76fb5",
+    "deploying": "movemankind-76fb5"
   },
   "targets": {}
 }
