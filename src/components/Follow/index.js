@@ -31,7 +31,7 @@ const FollowButton = (props) => {
   }, [authUser, props.firebase.db]);
 
   const userIsFollowingStartup = () => {
-    if (userData) {
+    if (userData && userData.following) {
       return userData.following.includes(props.startupUid);
     } else {
       return false;
