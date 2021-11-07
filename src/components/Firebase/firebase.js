@@ -5,6 +5,9 @@ import {
   connectFirestoreEmulator,
   writeBatch,
   arrayUnion,
+  onSnapshot,
+  arrayRemove,
+  deleteField,
 } from "@firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { seedAllCollections } from "./databaseSeeder";
@@ -67,15 +70,69 @@ class Firebase {
     const startupRef = doc(db, "startups", startupId);
     batch.update(startupRef, {
       investors: arrayUnion(userId),
-      [`investorsMap.${userId}`]: true,
+      // [`investorsMap.${userId}`]: true,
     });
     //get users and add the field investedIn which contains an array of startupIds
     const userRef = doc(db, "users", userId);
     batch.update(userRef, {
       investedIn: arrayUnion(userId),
-      [`investedInMap.${userId}`]: true,
+      // [`investedInMap.${userId}`]: true,
     });
   };
+
+  doFollowStartupAsUser = async (userId, startupId) => {
+    try {
+      const batch = writeBatch(this.db);
+      //get startup and add the field following which contains an array of userIds
+      const startupRef = doc(this.db, "startups", startupId);
+      batch.update(startupRef, {
+        followers: arrayUnion(userId),
+        [`followersMap.${userId}`]: true,
+      });
+      //get user and add the field investedIn which contains an array of startupIds
+      const userRef = doc(this.db, "users", userId);
+      batch.update(userRef, {
+        following: arrayUnion(startupId),
+        [`followingMap.${startupId}`]: true,
+      });
+
+      await batch.commit();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  doUnfollowStartupAsUser = async (userId, startupId) => {
+    try {
+      const batch = writeBatch(this.db);
+      //get startup and add the field following which contains an array of userIds
+      const startupRef = doc(this.db, "startups", startupId);
+      batch.update(startupRef, {
+        followers: arrayRemove(userId),
+        [`followersMap.${userId}`]: deleteField(),
+      });
+      //get user and add the field investedIn which contains an array of startupIds
+      const userRef = doc(this.db, "users", userId);
+      batch.update(userRef, {
+        following: arrayRemove(startupId),
+        [`followingMap.${startupId}`]: deleteField(),
+      });
+
+      await batch.commit();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  getUserByID = (uid) => getDoc(doc(this.db, "users", uid));
+
+  // getUserSnapshotByID = (uid) => {
+  //   const unsub = onSnapshot(doc(this.db, "users", uid), (doc) => {
+  //     if (doc.exists()) {
+  //       return doc.data();
+  //     }
+  //   });
+  // };
 
   getAllUsers = () => getDocs(collection(this.db, "users"));
 
@@ -103,7 +160,7 @@ class Firebase {
       collection(this.db, `startups/${uid}/subSectors`)
     );
     //push the IDs of the documents into an array
-    await querySnapshot.forEach((doc) => {
+    querySnapshot.forEach((doc) => {
       subSectorIDs.push(doc.id);
     });
     const subSectorDocs = await Promise.all(
