@@ -66,7 +66,7 @@ const StartUpsPage = (props) => {
   };
 
   return (
-    <section className="flex flex-col justify-center space-x-6">
+    <section className="flex flex-col justify-center">
       {/* Filters/Tags */}
       {Object.keys(tags).length !== 0 ? (
         <FilterGroup
