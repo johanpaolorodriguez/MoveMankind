@@ -14,15 +14,17 @@ const FollowButton = (props) => {
 
   useEffect(() => {
     const getUserData = () => {
-      try {
-        const unsubscribe = onSnapshot(
-          doc(props.firebase.db, "users", authUser.authUser.uid),
-          (doc) => {
-            setUserData(doc.data());
-          }
-        );
-      } catch (error) {
-        console.log(error);
+      if (authUser) {
+        try {
+          const unsubscribe = onSnapshot(
+            doc(props.firebase.db, "users", authUser.authUser.uid),
+            (doc) => {
+              setUserData(doc.data());
+            }
+          );
+        } catch (error) {
+          console.log(error);
+        }
       }
     };
     getUserData();
@@ -39,6 +41,7 @@ const FollowButton = (props) => {
   const handleOnClick = async () => {
     if (authUser === null) {
       history.push(ROUTES.SIGN_IN);
+      return;
     }
     try {
       if (userIsFollowingStartup()) {
