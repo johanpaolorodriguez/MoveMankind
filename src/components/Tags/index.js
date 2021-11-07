@@ -71,7 +71,7 @@ export default function FilterGroup({
           if (activeTab === i) {
             return (
               <div
-                className="grid max-w-6xl grid-cols-5 py-8 mx-auto place-items-start auto-cols-max "
+                className="grid max-w-6xl grid-cols-5 py-8 mx-auto place-items-start auto-cols-max"
                 key={i}
               >
                 {items.map((item, i) => (
@@ -95,7 +95,11 @@ export default function FilterGroup({
         })}
       </div>
       {/* Selected Tags */}
-      <div className="flex w-full max-w-6xl mx-auto my-4 space-x-2">
+      <div
+        className={`${
+          activeTab !== null ? "flex" : "hidden"
+        } w-full max-w-6xl mx-auto my-4 space-x-2`}
+      >
         {selectedTags.map((tag) => (
           <button
             className="flex items-center w-auto px-4 py-1 space-x-1 font-bold text-white rounded-md bg-primary font-primary group hover:bg-red-500"
