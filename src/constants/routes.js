@@ -6,6 +6,9 @@ export const HOME = "/home";
 export const ACCOUNT = "/account";
 export const ADMIN = "/admin";
 export const PASSWORD_FORGET = "/pw-forget";
+export const STARTUP = "/startups/:uid";
+export const CATEGORY = "/categories/:paramFilter";
+export const PROFILE = "/user/:uid";
 
 export const ITEMS = [
   { name: "Startups", href: STARTUPS, current: false, restricted: true },

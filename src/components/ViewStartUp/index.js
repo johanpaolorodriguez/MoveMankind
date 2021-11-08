@@ -2,21 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { withFirebase } from "../Firebase";
 import { LocationMarkerIcon, ExternalLinkIcon } from "@heroicons/react/solid";
-import { Link } from "react-router-dom";
 import FrequentlyAskedQuestions from "../Faq";
-import InvestButton from "../InvestAsUser";
+import FollowButton from "../Follow";
 
 const ViewStartUpPage = (props) => {
   const { uid } = useParams();
   const [startup, setStartup] = useState({});
   const [startupTags, setStartupTags] = useState([]);
-  const [subSectors, setSubSectors] = useState([]);
 
   useEffect(() => {
     const fetchStartup = async () => {
       try {
-        const docSnap = await props.firebase.getStartupByID(uid);
-        let data = docSnap.data();
+        const data = await props.firebase.getStartupByID(uid);
         setStartup(data);
         if (data) {
           let tags = data.categories.concat(
@@ -33,18 +30,6 @@ const ViewStartUpPage = (props) => {
     fetchStartup();
   }, [props.firebase, uid]);
 
-  useEffect(() => {
-    const fetchSubSectors = async () => {
-      try {
-        let data = await props.firebase.getStartupSubsectors(uid);
-        setSubSectors(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchSubSectors();
-  }, [props.firebase, uid]);
-
   return (
     <main>
       {startup && (
@@ -52,7 +37,12 @@ const ViewStartUpPage = (props) => {
           <section className="bg-white shadow-md">
             <article className="flex justify-between p-8">
               <div>
-                <h1 className="text-4xl font-bold font-primary text-primary">
+                <img
+                  src={startup.logo}
+                  alt=""
+                  className="object-contain object-center w-auto h-48 border border-gray-200"
+                />
+                <h1 className="pt-6 text-4xl font-bold font-primary text-primary">
                   {startup.name}
                 </h1>
                 <p className="flex items-center space-x-2 text-2xl font-bold text-primary">
@@ -61,14 +51,17 @@ const ViewStartUpPage = (props) => {
                     {startup.headQuarters}, {startup.country}
                   </span>
                 </p>
-                <img
-                  src={startup.logo}
-                  alt=""
-                  className="object-contain object-center h-auto w-96"
-                />
+
+                <p className="flex items-center max-w-lg space-x-2 text-2xl font-medium text-primary">
+                  {startup.description}
+                </p>
+
                 <div className="flex flex-wrap max-w-xl py-4 space-x-2">
                   {startupTags.map((tag) => (
-                    <span className="w-auto px-4 py-1 my-1 font-semibold bg-gray-200 rounded-md text-primary font-primary">
+                    <span
+                      key={tag}
+                      className="w-auto px-4 py-1 my-1 font-semibold bg-gray-200 rounded-md text-primary font-primary"
+                    >
                       {tag}
                     </span>
                   ))}
@@ -107,13 +100,22 @@ const ViewStartUpPage = (props) => {
                   <p className="text-gray-500">Deadline</p>
                   <p className="font-bold">December 4, 2021</p>
                 </div>
-                <InvestButton name={startup.name} id={startup.uid} />
+                <div className="flex pt-4 space-x-4">
+                  <FollowButton startupUid={startup.uid} />
+                  <button className="flex justify-center w-full px-8 py-4 text-base font-semibold text-white bg-blue-500 rounded-md font-primary">
+                    Contact
+                  </button>
+                </div>
               </div>
             </article>
 
             <article className="p-8 space-y-8">
               <h2 className="text-3xl font-bold text-primary">About</h2>
-              <img src={startup.featureImage} alt="" className="" />
+              <img
+                src={startup.featureImage}
+                alt=""
+                className="object-cover object-center w-full h-96"
+              />
               <p className="tesxt-base">{startup.about}</p>
             </article>
 

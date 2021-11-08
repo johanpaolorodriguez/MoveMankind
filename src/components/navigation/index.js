@@ -181,6 +181,19 @@ const Navigation = () => {
                               )}
                             </Menu.Item> */}
                               <Menu.Item>
+                                <button
+                                  type="button"
+                                  className="block w-full px-4 py-2 text-sm font-semibold text-left text-primary hover:bg-blue-500"
+                                  onClick={() =>
+                                    history.push(
+                                      `/user/${authUser.authUser.uid}`
+                                    )
+                                  }
+                                >
+                                  My Profile
+                                </button>
+                              </Menu.Item>
+                              <Menu.Item>
                                 <SignoutButton />
                               </Menu.Item>
                             </Menu.Items>

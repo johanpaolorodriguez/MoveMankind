@@ -124,7 +124,10 @@ class Firebase {
     }
   };
 
-  getUserByID = (uid) => getDoc(doc(this.db, "users", uid));
+  getUserByID = async (uid) => {
+    let user = await getDoc(doc(this.db, "users", uid));
+    return user.data();
+  };
 
   // getUserSnapshotByID = (uid) => {
   //   const unsub = onSnapshot(doc(this.db, "users", uid), (doc) => {
@@ -151,7 +154,10 @@ class Firebase {
     return startups;
   };
 
-  getStartupByID = (uid) => getDoc(doc(this.db, "startups", uid));
+  getStartupByID = async (uid) => {
+    let startup = await getDoc(doc(this.db, "startups", uid));
+    return startup.data();
+  };
 
   getStartupSubsectors = async (uid) => {
     const subSectorIDs = [];
@@ -177,18 +183,25 @@ class Firebase {
     let startups = [];
     //map the filters to a where clause
     const constraints = filters.map((filter) => where(filter, "==", true));
-    //get all startups in a category
     const startupsRef = collection(this.db, "startups");
-    const categories = query(
+    const data = query(
       startupsRef,
       //destructure the constraints to be included in the query
       ...constraints
     );
 
-    const querySnapshot = await getDocs(categories);
+    const querySnapshot = await getDocs(data);
     querySnapshot.forEach((doc) => {
       startups = [...startups, doc.data()];
     });
+    return startups;
+  };
+
+  getAllStartupsWithID = async (startupIDs) => {
+    // const startups = startupIDs.map((id) => this.getStartupByID(id));
+    const startups = await Promise.all(
+      startupIDs.map((id) => this.getStartupByID(id))
+    );
     return startups;
   };
 
