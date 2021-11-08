@@ -33,16 +33,14 @@ const Table = ({ startups }) => {
             {startups.map((startup) => (
               <tr key={startup.uid} className="h-20 px-6 py-4 my-2 bg-white">
                 <td className="p-2 border border-gray-300 rounded-tl-lg rounded-bl-lg">
-                  <div
-                    className="flex items-center hover:text-blue-500"
-                    onClick={() => handleClick(startup.uid)}
-                  >
-                    <img
-                      src={startup.logo}
-                      alt=""
-                      className="object-contain object-center w-12 h-12 p-4 rounded-full"
-                    />
-                    {startup.name}
+                  <div className="flex items-center space-x-2 font-semibold">
+                    <FollowButton startupUid={startup.uid} />
+                    <span
+                      className="underline  hover:text-blue-500 text-primary"
+                      onClick={() => handleClick(startup.uid)}
+                    >
+                      {startup.name}
+                    </span>
                   </div>
                 </td>
                 <td className="p-2 border-t border-b border-r border-gray-300">
@@ -51,11 +49,8 @@ const Table = ({ startups }) => {
                 <td className="p-2 border-t border-b border-r border-gray-300">
                   {startup.description}
                 </td>
-                <td className="p-2 border-t border-b border-gray-300">
-                  {startup.headQuarters}, {startup.country}
-                </td>
                 <td className="p-2 border-t border-b border-r border-gray-300 rounded-tr-lg rounded-br-lg">
-                  <FollowButton startupUid={startup.uid} />
+                  {startup.headQuarters}, {startup.country}
                 </td>
               </tr>
             ))}

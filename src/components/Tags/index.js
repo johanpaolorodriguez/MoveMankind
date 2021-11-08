@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/outline";
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/solid";
 
@@ -6,10 +6,25 @@ export default function FilterGroup({
   data,
   filterWithId,
   removeFilterWithId,
+  paramFilter,
 }) {
   const [tags] = useState(data);
   const [activeTab, setActiveTab] = useState(null);
   const [selectedTags, setSelectedTags] = useState([]);
+
+  useEffect(() => {
+    if (paramFilter) {
+      let categoryFilter = data.Categories.find(
+        (category) => category.uid === paramFilter
+      );
+      filterWithId(categoryFilter.field, categoryFilter.uid);
+      handleAddTagOnClick(
+        categoryFilter.uid,
+        categoryFilter.name,
+        categoryFilter.field
+      );
+    }
+  }, [paramFilter]);
 
   //TODO: move logic to main component
   const handleAddTagOnClick = (uid, name, field) => {
@@ -97,7 +112,7 @@ export default function FilterGroup({
       {/* Selected Tags */}
       <div
         className={`${
-          activeTab !== null ? "flex" : "hidden"
+          selectedTags !== null ? "flex" : "hidden"
         } w-full max-w-6xl mx-auto my-4 space-x-2`}
       >
         {selectedTags.map((tag) => (
