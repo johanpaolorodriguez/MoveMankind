@@ -14,6 +14,7 @@ import StartUpsPage from "../StartUps";
 import ViewStartUpPage from "../ViewStartUp";
 import ViewCategoryPage from "../ViewCategory";
 import UserProfilePage from "../UserProfile";
+import Footer from "../Footer";
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
       <Route path={ROUTES.STARTUP} component={ViewStartUpPage} />
       <Route path={ROUTES.CATEGORY} component={StartUpsPage} />
       <Route path={ROUTES.PROFILE} component={UserProfilePage} />
+      <Footer />
     </Router>
   );
 };
