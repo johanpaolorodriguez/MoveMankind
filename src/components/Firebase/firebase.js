@@ -179,10 +179,13 @@ class Firebase {
     return subSectorDocs;
   };
 
-  getAllStartupsWithFilters = async (filters) => {
+  getAllStartupsWithFilters = async (filters, limitBy) => {
     let startups = [];
     //map the filters to a where clause
     const constraints = filters.map((filter) => where(filter, "==", true));
+    if (limitBy) {
+      constraints.push(limit(limitBy));
+    }
     const startupsRef = collection(this.db, "startups");
     const data = query(
       startupsRef,
@@ -196,6 +199,8 @@ class Firebase {
     });
     return startups;
   };
+
+  // getRelatedStartups = async();
 
   getAllStartupsWithID = async (startupIDs) => {
     // const startups = startupIDs.map((id) => this.getStartupByID(id));
