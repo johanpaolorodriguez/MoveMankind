@@ -53,7 +53,7 @@ const ViewStartUpPage = (props) => {
       {startup && (
         <div className="max-w-6xl mx-auto my-8">
           <article className="flex justify-between">
-            <div>
+            <div className="space-y-3">
               <img
                 src={startup.logo}
                 alt=""
@@ -138,7 +138,7 @@ const ViewStartUpPage = (props) => {
                 <p className="text-base">{startup.about}</p>
               </article>
               <article className="pt-16 space-y-8">
-                <div>
+                <div className="space-y-2">
                   <h2 className="text-3xl font-bold text-primary">Resources</h2>
                   <p className="">Learn more about our project:</p>
                 </div>
@@ -211,7 +211,7 @@ const ViewStartUpPage = (props) => {
             </article>
           </section>
 
-          <section className="pt-16">
+          <section className="pt-16 space-y-6">
             <h2 className="text-3xl font-bold text-primary">
               Related Ventures
             </h2>
