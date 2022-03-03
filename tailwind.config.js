@@ -1,5 +1,5 @@
 module.exports = {
-  purge: [],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
@@ -26,13 +26,6 @@ module.exports = {
         "screen-1/3": "33vh",
         "screen-1/2": "50vh",
       },
-    },
-  },
-  variants: {
-    extend: {
-      display: ["group-hover"],
-      opacity: ["disabled"],
-      pointerEvents: ["disabled"],
     },
   },
   plugins: [],

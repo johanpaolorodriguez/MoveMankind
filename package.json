@@ -13,19 +13,20 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "algoliasearch": "^4.11.0",
-    "firebase": "^9.1.0",
+    "concurrently": "^7.0.0",
+    "firebase": "^9.6.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-instantsearch-dom": "^6.13.0",
     "react-router-dom": "^5.3.0",
-    "react-scripts": "4.0.3",
+    "react-scripts": "^5.0.0",
     "recompose": "^0.30.0",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -47,8 +48,9 @@
     ]
   },
   "devDependencies": {
-    "autoprefixer": "^9.8.6",
-    "postcss": "^7.0.36",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.14"
+    "autoprefixer": "^10.4.2",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.7",
+    "tailwindcss": "^3.0.23"
   }
 }
