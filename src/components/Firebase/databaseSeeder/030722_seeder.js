@@ -20,7 +20,7 @@ const tagIDs = [];
 async function seedStartupData(db) {
   try {
     for (const startup of DATA.STARTUPS) {
-      const startupDocID = stringClean(startup.Name);
+      const startupDocID = stringClean(startup.name);
       const startupDocRef = doc(db, "startups", startupDocID);
       const tags = stringToArray(startup.Tags);
       const startupTagIDs = [];
