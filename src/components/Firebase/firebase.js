@@ -10,7 +10,7 @@ import {
   deleteField,
 } from "@firebase/firestore";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
-import { seedAllCollections } from "./databaseSeeder";
+import { seedAllCollections } from "./databaseSeeder/030722_seeder";
 import {
   collection,
   doc,
@@ -39,12 +39,11 @@ class Firebase {
     this.db = getFirestore();
     this.storage = getStorage();
     // eslint-disable-next-line no-restricted-globals
-    // if (location.hostname === "localhost") {
-    //   // this.auth.useEmulator("http://localhost:9099");
-    //   connectFirestoreEmulator(this.db, "localhost", 8080);
-    //   connectStorageEmulator(this.storage, "localhost", 9199);
-    // }
-    // seedAllCollections(this.db).then(console.log("Seed successful."));
+    if (location.hostname === "localhost") {
+      connectFirestoreEmulator(this.db, "localhost", 8080);
+      connectStorageEmulator(this.storage, "localhost", 9199);
+    }
+    seedAllCollections(this.db).then(console.log("Seed successful."));
   }
   // *** AUTH API ***
   doCreateUserWithEmailAndPassword = (email, password) =>

@@ -1,4 +1,4 @@
-import * as DATA from "./data";
+import * as DATA from "./11272021_data";
 import {
   collection,
   setDoc,
