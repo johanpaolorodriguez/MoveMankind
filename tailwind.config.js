@@ -12,6 +12,7 @@ module.exports = {
       fontFamily: {
         primary: ["Montserrat"],
         secondary: ["Open Sans"],
+        tertiary: ["Montserrat Alternates"],
       },
       colors: {
         document: "#FAFBFF",
