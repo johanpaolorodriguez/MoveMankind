@@ -12,19 +12,19 @@ export default function FilterGroup({
   const [activeTab, setActiveTab] = useState(null);
   const [selectedTags, setSelectedTags] = useState([]);
 
-  useEffect(() => {
-    if (paramFilter) {
-      let categoryFilter = data.Categories.find(
-        (category) => category.uid === paramFilter
-      );
-      filterWithId(categoryFilter.field, categoryFilter.uid);
-      handleAddTagOnClick(
-        categoryFilter.uid,
-        categoryFilter.name,
-        categoryFilter.field
-      );
-    }
-  }, [paramFilter]);
+  // useEffect(() => {
+  //   if (paramFilter) {
+  //     let categoryFilter = data.Categories.find(
+  //       (category) => category.uid === paramFilter
+  //     );
+  //     filterWithId(categoryFilter.field, categoryFilter.uid);
+  //     handleAddTagOnClick(
+  //       categoryFilter.uid,
+  //       categoryFilter.name,
+  //       categoryFilter.field
+  //     );
+  //   }
+  // }, [paramFilter]);
 
   //TODO: move logic to main component
   const handleAddTagOnClick = (uid, name, field) => {
@@ -46,13 +46,10 @@ export default function FilterGroup({
   };
 
   return (
-    <div className="flex flex-col w-full py-4">
-      <div className="flex w-full max-w-6xl mx-auto">
-        <p className="w-64 p-4 text-base text-center text-gray-500 bg-white rounded-md">
-          start exploring ventures by adding a tag!
-        </p>
+    <div className="flex-col w-full py-4 bg-gray-50 md:flex">
+      <div className="flex w-full mx-auto max-w-[90rem] max-w">
         {/* Tag Navigation */}
-        <div className="flex justify-end w-full p-1 space-x-28 rounded-xl">
+        <div className="flex justify-start w-full p-5 space-x-6 md:space-x-12 lg:space-x-28 rounded-xl">
           {Object.keys(tags).map((tag, i) => (
             <button
               key={i}
@@ -60,10 +57,8 @@ export default function FilterGroup({
                 activeTab !== i ? setActiveTab(i) : setActiveTab(null)
               }
               className={`${
-                activeTab === i
-                  ? "text-blue-500 border-b-2 border-blue-500"
-                  : "text-primary"
-              } font-bold text-lg space-x-2 flex items-center py-4`}
+                activeTab === i ? "text-blue-500" : "text-primary"
+              } text-sm md:text-md font-bold lg:text-lg space-x-2 flex items-center py-4`}
             >
               <span>{tag}</span>
               <ChevronDownIcon
@@ -86,7 +81,7 @@ export default function FilterGroup({
           if (activeTab === i) {
             return (
               <div
-                className="grid max-w-6xl grid-cols-5 py-8 mx-auto place-items-start auto-cols-max"
+                className="max-w-[90rem] grid-cols-5 px-5 py-8 mx-auto md:grid justify-items-start place-items-start auto-cols-max"
                 key={i}
               >
                 {items.map((item, i) => (
@@ -95,7 +90,7 @@ export default function FilterGroup({
                       filterWithId(item.field, item.uid);
                       handleAddTagOnClick(item.uid, item.name, item.field);
                     }}
-                    className="flex items-center p-2 space-x-2 text-sm font-semibold hover:text-blue-500 text-primary font-primary disabled:opacity-50 disabled:pointer-events-none"
+                    className="w-full p-2 space-x-2 text-xs font-semibold text-left hover:text-blue-500 text-primary font-primary disabled:opacity-50 disabled:pointer-events-none"
                     key={i}
                     disabled={isInSelectedTags(item.uid)}
                   >
@@ -113,11 +108,11 @@ export default function FilterGroup({
       <div
         className={`${
           selectedTags !== null ? "flex" : "hidden"
-        } w-full max-w-6xl mx-auto my-4 space-x-2`}
+        } w-full max-w-[90rem] mx-auto my-4 space-x-2 px-5`}
       >
         {selectedTags.map((tag) => (
           <button
-            className="flex items-center w-auto px-4 py-1 space-x-1 font-bold text-white rounded-md bg-primary font-primary group hover:bg-red-500"
+            className="flex items-center w-auto px-4 py-1 space-x-1 text-xs font-bold text-white rounded-md bg-primary font-primary group hover:bg-red-500"
             onClick={() => {
               handleRemoveTagOnClick(tag.uid);
               removeFilterWithId(tag.field, tag.uid);

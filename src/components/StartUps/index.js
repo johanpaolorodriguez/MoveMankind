@@ -40,23 +40,17 @@ const StartUpsPage = (props) => {
   useEffect(() => {
     const fetchTags = async () => {
       try {
-        const categories = await props.firebase.getAllCategories();
         const sectors = await props.firebase.getAllSectors();
         const subSectors = await props.firebase.getAllSubSectors();
-
         setTags((prev) => ({
           ...prev,
-          Categories: categories.map((obj) => ({
-            ...obj,
-            field: "categoriesMap",
-          })),
           Sectors: sectors.map((obj) => ({
             ...obj,
-            field: "sectorsMap",
+            field: "tagsMap",
           })),
           Subsectors: subSectors.map((obj) => ({
             ...obj,
-            field: "subSectorsMap",
+            field: "tagsMap",
           })),
         }));
       } catch (error) {

@@ -1,8 +1,8 @@
 import { useContext, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { doc, onSnapshot } from "@firebase/firestore";
-import { StarIcon } from "@heroicons/react/outline";
-import { StarIcon as StarIconFilled } from "@heroicons/react/solid";
+import { BookmarkIcon } from "@heroicons/react/outline";
+import { BookmarkIcon as BookmarkIconFilled } from "@heroicons/react/solid";
 import { AuthUserContext } from "../Session";
 import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
@@ -63,9 +63,9 @@ const FollowButton = (props) => {
   return (
     <button onClick={() => handleOnClick()}>
       {userIsFollowingStartup() ? (
-        <StarIconFilled className="w-6 h-6 text-blue-500" />
+        <BookmarkIconFilled className="w-6 h-6 text-blue-500" />
       ) : (
-        <StarIcon className="w-6 h-6 text-blue-500" />
+        <BookmarkIcon className="w-6 h-6 text-blue-500" />
       )}
     </button>
   );

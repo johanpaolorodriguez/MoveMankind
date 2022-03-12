@@ -24,7 +24,6 @@ const ViewStartUpPage = (props) => {
       try {
         const data = await props.firebase.getStartupByID(uid);
         setStartup(data);
-        console.log(data.categories);
         const categoriesFilter = data.categories.map(
           (categoryUID) => `categoriesMap.${categoryUID}`
         );
