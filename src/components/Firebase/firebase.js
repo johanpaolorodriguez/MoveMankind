@@ -36,16 +36,26 @@ class Firebase {
   constructor() {
     app.initializeApp(config);
     this.auth = app.auth();
+    this.auth_ = app.auth;
     this.db = getFirestore();
     this.storage = getStorage();
+    //constructor
     // eslint-disable-next-line no-restricted-globals
     if (location.hostname === "localhost") {
       connectFirestoreEmulator(this.db, "localhost", 8080);
-      connectStorageEmulator(this.storage, "localhost", 9199);
+      // connectStorageEmulator(this.storage, "localhost", 9199);
     }
-    seedAllCollections(this.db).then(console.log("Seed successful."));
+    // seedAllCollections(this.db, this.storage).then(
+    //   console.log("Seed successful.")
+    // );
   }
+
   // *** AUTH API ***
+  doSignInWithGoogle = () => {
+    const provider = new this.auth_.GoogleAuthProvider();
+    this.auth.signInWithPopup(provider);
+  };
+
   doCreateUserWithEmailAndPassword = (email, password) =>
     this.auth.createUserWithEmailAndPassword(email, password);
 
@@ -260,7 +270,8 @@ class Firebase {
   //*** SECTOR API ***
   getAllSectors = async () => {
     let sectors = [];
-    const querySnaphshot = await getDocs(collection(this.db, "sectors"));
+    const q = query(collection(this.db, "tags"), where("sector", "==", true));
+    const querySnaphshot = await getDocs(q);
     querySnaphshot.forEach((doc) => {
       sectors = [...sectors, doc.data()];
     });
@@ -270,7 +281,11 @@ class Firebase {
   //*** SUBSECTOR API ***
   getAllSubSectors = async () => {
     let subSectors = [];
-    const querySnaphshot = await getDocs(collection(this.db, "subSectors"));
+    const q = query(
+      collection(this.db, "tags"),
+      where("subsector", "==", true)
+    );
+    const querySnaphshot = await getDocs(q);
     querySnaphshot.forEach((doc) => {
       subSectors = [...subSectors, doc.data()];
     });
