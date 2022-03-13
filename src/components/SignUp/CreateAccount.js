@@ -1,51 +1,28 @@
-import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
-import { SignUpLink } from "../SignUp";
-import { compose } from "recompose";
-import { withFirebase } from "../Firebase";
-import * as ROUTES from "../../constants/routes";
-import { useInput } from "../Hooks/input-hook";
-import { PasswordForgetLink } from "../PasswordForget";
-import logo from "../../assets/move_mankind_logo.svg";
-import SigninWiithGroup from "./SigninWiithGroup";
+import React from "react";
+import SignInWithGroup from "../SignIn/SigninWiithGroup";
+import ProgressBar from "./ProgressBar";
 
-const SignInPage = () => (
-  <div>
-    <SignInForm />
-  </div>
-);
-
-const SignInFormBase = (props) => {
-  const { value: email, bind: bindEmail, reset: resetEmail } = useInput("");
-  const {
-    value: password,
-    bind: bindPassword,
-    reset: resetPassword,
-  } = useInput("");
-  const [error, setError] = useState(null);
-
-  const onSubmit = (event) => {
-    props.firebase
-      .doSignInWithEmailAndPassword(email, password)
-      .then((authUser) => {
-        resetEmail();
-        resetPassword();
-        props.history.push(ROUTES.STARTUPS);
-      })
-      .catch((error) => {
-        setError(error);
-      });
-    event.preventDefault();
-  };
-
+const CreateAccount = ({
+  bindUsername,
+  bindEmail,
+  bindPasswordOne,
+  bindPasswordTwo,
+  onSubmit,
+  isInvalid,
+  error,
+  step,
+}) => {
   return (
     <div className="flex items-center justify-center bg-white px-10 py-12 | sm:px-5 | lg:px-8">
       <div className="w-full max-w-md space-y-8">
+        <ProgressBar step={step} />
         <div>
           <h2 className="mt-6 text-[28px] font-extrabold font-tertiary text-slate-900">
             Welcome!
           </h2>
-          <p className="font-medium text-gray-400">Sign in to your account</p>
+          <p className="font-medium text-gray-400">
+            Let's get started by creating an account
+          </p>
         </div>
 
         <form onSubmit={onSubmit} className="mt-8 space-y-6">
@@ -77,7 +54,7 @@ const SignInFormBase = (props) => {
                 Password
               </label>
               <input
-                {...bindPassword}
+                {...bindPasswordOne}
                 className="relative block w-full h-12 px-3 py-2 text-sm text-blue-600 placeholder-blue-400 border border-blue-300 rounded-md bg-blue-50 appearance-no ne focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                 id="passwordOne"
                 name="passwordOne"
@@ -92,20 +69,16 @@ const SignInFormBase = (props) => {
               // disabled={isInvalid}
               type="submit"
             >
-              Sign In
+              Create account
             </button>
             {error && <p>{error.message}</p>}
           </div>
         </form>
 
-        <SigninWiithGroup />
+        <SignInWithGroup />
       </div>
     </div>
   );
 };
 
-const SignInForm = compose(withRouter, withFirebase)(SignInFormBase);
-
-export default SignInPage;
-
-export { SignInForm };
+export default CreateAccount;

@@ -9,13 +9,22 @@ const withAuthentication = (Component) => {
     useEffect(() => {
       //get the authenticated user from Firebase
       let listener = props.firebase.auth.onAuthStateChanged((authUser) => {
-        authUser ? setAuthUser({ authUser }) : setAuthUser(null);
+        if (authUser) {
+          const getUserData = async () => {
+            const userData = await props.firebase.getUserByID(authUser.uid);
+            authUser.data = userData;
+            setAuthUser({ authUser });
+          };
+          getUserData();
+        } else {
+          setAuthUser(null);
+        }
       });
 
       return () => {
         listener();
       };
-    }, [props.firebase.auth]);
+    }, [props.firebase.auth, props.firebase]);
 
     return (
       <AuthUserContext.Provider value={authUser}>

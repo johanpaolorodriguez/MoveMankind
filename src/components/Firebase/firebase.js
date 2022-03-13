@@ -16,6 +16,7 @@ import {
   doc,
   setDoc,
   getDoc,
+  updateDoc,
   getDocs,
   query,
   orderBy,
@@ -52,8 +53,19 @@ class Firebase {
 
   // *** AUTH API ***
   doSignInWithGoogle = () => {
-    const provider = new this.auth_.GoogleAuthProvider();
-    this.auth.signInWithPopup(provider);
+    this.auth.signInWithPopup(new this.auth_.GoogleAuthProvider());
+  };
+
+  doSignInWithFacebook = () => {
+    this.auth.signInWithPopup(new this.auth_.FacebookAuthProvider());
+  };
+
+  doSignInWithTwitter = () => {
+    this.auth.signInWithPopup(new this.auth_.TwitterAuthProvider());
+  };
+
+  doSignInWithGithub = () => {
+    this.auth.signInWithPopup(new this.auth_.GithubAuthProvider());
   };
 
   doCreateUserWithEmailAndPassword = (email, password) =>
@@ -73,6 +85,14 @@ class Firebase {
   doAddNewUserToDB = (uid, data) => {
     setDoc(doc(this.db, "users", uid), data);
   };
+
+  doAddUserInfo = (data) => {
+    const user = this.auth.currentUser.uid;
+    updateDoc(doc(this.db, "users", user), {
+      ...data,
+    });
+  };
+
   doInvestAsUser = (db, userId, startupId) => {
     const batch = writeBatch(db);
     //get startup and add the field investors which contains an array of userIds

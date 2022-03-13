@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { compose } from "recompose";
 import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
 import { useInput } from "../Hooks/input-hook";
-import logo from "../../assets/move_mankind_logo.svg";
+import CreateAccount from "./CreateAccount";
+import UserInfo from "./UserInfo";
+import InvestmentPreferences from "./InvestmentPreferences";
+import { AuthUserContext } from "../Session";
 
 const SignUpPage = () => (
   <div>
@@ -13,130 +16,169 @@ const SignUpPage = () => (
 );
 
 const SignUpFormBase = (props) => {
+  const authUser = useContext(AuthUserContext);
+  const [step, setStep] = useState(null);
   const {
     value: username,
     bind: bindUsername,
     reset: resetUsername,
   } = useInput("");
   const { value: email, bind: bindEmail, reset: resetEmail } = useInput("");
+
   const {
     value: passwordOne,
     bind: bindPasswordOne,
     reset: resetPasswordOne,
   } = useInput("");
+
+  const { value: name, bind: bindName, reset: resetName } = useInput("");
+
   const {
-    value: passwordTwo,
-    bind: bindPasswordTwo,
-    reset: resetPasswordTwo,
+    value: country,
+    bind: bindCountry,
+    reset: resetCountry,
   } = useInput("");
+
+  const {
+    value: headline,
+    bind: bindHeadline,
+    reset: resetHeadline,
+  } = useInput("");
+
+  const {
+    value: website,
+    bind: bindWebsite,
+    reset: resetWebsite,
+  } = useInput("");
+
+  const {
+    value: linkedin,
+    bind: bindLinkedin,
+    reset: resetLinkedin,
+  } = useInput("");
+
+  const {
+    value: twitter,
+    bind: bindTwitter,
+    reset: resetTwitter,
+  } = useInput("");
+
   const [error, setError] = useState(null);
 
-  const onSubmit = async (event) => {
+  useEffect(() => {
+    const getOnboardingStep = async () => {
+      if (!authUser) {
+        setStep(1);
+      }
+      if (authUser && !authUser.authUser.data.name) {
+        setStep(2);
+      }
+      if (authUser && authUser.authUser.data.name) {
+        setStep(3);
+      }
+    };
+    getOnboardingStep();
+  }, [authUser]);
+
+  const prevStep = () => {
+    if (step > 1) {
+      setStep(step - 1);
+    }
+  };
+
+  const nextStep = () => {
+    setStep(step + 1);
+  };
+
+  const onSubmitCreateAccount = async (event) => {
     event.preventDefault();
     try {
-      const authUser = await props.firebase.doCreateUserWithEmailAndPassword(
+      const newUser = await props.firebase.doCreateUserWithEmailAndPassword(
         email,
         passwordOne
       );
       //add user to firestore database
-      await props.firebase.doAddNewUserToDB(authUser.user.uid, {
+      await props.firebase.doAddNewUserToDB(newUser.user.uid, {
         username: username,
         email: email,
       });
       resetUsername();
       resetEmail();
       resetPasswordOne();
-      resetPasswordTwo();
-      props.history.push(ROUTES.STARTUPS);
-    } catch (event) {
+      nextStep();
+    } catch (error) {
       setError(error);
+    }
+  };
+
+  const onSumbitUserInfo = async (event) => {
+    event.preventDefault();
+    try {
+      await props.firebase.doAddUserInfo({
+        name: name,
+        country: country,
+        headline: headline,
+        website: website,
+        twitter: twitter,
+        linkedin: linkedin,
+      });
+      nextStep();
+    } catch (error) {
       console.log(error);
     }
   };
 
-  const isInvalid =
-    passwordOne !== passwordTwo ||
-    passwordOne === "" ||
-    email === "" ||
-    username === "";
+  const onSubmitInvestmentPreferences = async (event) => {
+    event.preventDefault();
+    try {
+      await props.firebase.doAddUserInfo({
+        //
+      });
+      props.history.push(ROUTES.STARTUPS);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 | sm:px-5 | lg:px-8">
-      <div className="w-full max-w-md space-y-8">
-        <div>
-          <img className="w-auto h-12 mx-auto" src={logo} alt="Workflow" />
-          <h2 className="mt-6 text-3xl font-extrabold text-center text-gray-900">
-            Sign Up
-          </h2>
-        </div>
+  switch (step) {
+    case 1:
+      return (
+        <>
+          <CreateAccount
+            bindUsername={bindUsername}
+            bindEmail={bindEmail}
+            bindPasswordOne={bindPasswordOne}
+            onSubmit={onSubmitCreateAccount}
+            error={error}
+            step={step}
+          />
+        </>
+      );
 
-        <form onSubmit={onSubmit} className="mt-8 space-y-6">
-          <div className="space-y-4 rounded-md shadow-sm">
-            <div className="space-y-2">
-              <label htmlFor="username" className="sr-only">
-                Username
-              </label>
-              <input
-                {...bindUsername}
-                className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm"
-                id="username"
-                name="username"
-                type="text"
-                placeholder="Username"
-                autoComplete="username"
-                required
-              />
-              <label htmlFor="email-address" className="sr-only">
-                Email address
-              </label>
-              <input
-                {...bindEmail}
-                className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm"
-                id="email-address"
-                name="email"
-                type="email"
-                placeholder="Email Address"
-                autoComplete="email"
-                required
-              />
-              <label htmlFor="passwordOne" className="sr-only">
-                Password
-              </label>
-              <input
-                {...bindPasswordOne}
-                className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm"
-                id="passwordOne"
-                name="passwordOne"
-                type="password"
-                placeholder="Password"
-                required
-              />
-              <label htmlFor="passwordTwo" className="sr-only">
-                Confirm Password
-              </label>
-              <input
-                {...bindPasswordTwo}
-                className="relative block w-full px-3 py-2 text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-gray-500 focus:border-gray-500 focus:z-10 sm:text-sm"
-                id="passwordTwo"
-                name="passwordTwo"
-                type="password"
-                placeholder="Confirm Password"
-                required
-              />
-            </div>
-            <button
-              className="relative flex justify-center w-full px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md bg-primary group hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-              disabled={isInvalid}
-              type="submit"
-            >
-              Sign Up
-            </button>
-            {error && <p>{error.message}</p>}
-          </div>
-        </form>
-      </div>
-    </div>
-  );
+    case 2:
+      return (
+        <UserInfo
+          bindName={bindName}
+          bindCountry={bindCountry}
+          bindHeadline={bindHeadline}
+          bindWebsite={bindWebsite}
+          bindLinkedin={bindLinkedin}
+          bindTwitter={bindTwitter}
+          onSubmit={onSumbitUserInfo}
+          step={step}
+        />
+      );
+
+    case 3:
+      return (
+        <InvestmentPreferences
+          onSubmit={onSubmitInvestmentPreferences}
+          step={step}
+        />
+      );
+    default:
+      return null;
+  }
 };
 
 const SignUpLink = () => (
