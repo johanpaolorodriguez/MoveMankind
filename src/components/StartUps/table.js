@@ -81,7 +81,7 @@ const Table = ({ startups }) => {
                 ))}
               </div>
               <span className="md:col-span-2 | lg:col-span-1">
-                <RegisterInterestButton />
+                <RegisterInterestButton startupUid={startup.uid} />
               </span>
             </div>
           </div>

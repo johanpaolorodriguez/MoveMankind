@@ -42,10 +42,10 @@ class Firebase {
     this.storage = getStorage();
     //constructor
     // eslint-disable-next-line no-restricted-globals
-    if (location.hostname === "localhost") {
-      connectFirestoreEmulator(this.db, "localhost", 8080);
-      // connectStorageEmulator(this.storage, "localhost", 9199);
-    }
+    // if (location.hostname === "localhost") {
+    //   connectFirestoreEmulator(this.db, "localhost", 8080);
+    // connectStorageEmulator(this.storage, "localhost", 9199);
+    // }
     // seedAllCollections(this.db, this.storage).then(
     //   console.log("Seed successful.")
     // );
@@ -131,6 +131,28 @@ class Firebase {
     }
   };
 
+  doRegisterStartupAsUser = async (userId, startupId) => {
+    try {
+      const batch = writeBatch(this.db);
+      //get startup and add the field following which contains an array of userIds
+      const startupRef = doc(this.db, "startups", startupId);
+      batch.update(startupRef, {
+        interested: arrayUnion(userId),
+        [`interestedMap.${userId}`]: true,
+      });
+      //get user and add the field investedIn which contains an array of startupIds
+      const userRef = doc(this.db, "users", userId);
+      batch.update(userRef, {
+        interestedIn: arrayUnion(startupId),
+        [`interestedInMap.${startupId}`]: true,
+      });
+
+      await batch.commit();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   doUnfollowStartupAsUser = async (userId, startupId) => {
     try {
       const batch = writeBatch(this.db);
@@ -145,6 +167,28 @@ class Firebase {
       batch.update(userRef, {
         following: arrayRemove(startupId),
         [`followingMap.${startupId}`]: deleteField(),
+      });
+
+      await batch.commit();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  doUnregisterStartupAsUser = async (userId, startupId) => {
+    try {
+      const batch = writeBatch(this.db);
+      //get startup and add the field following which contains an array of userIds
+      const startupRef = doc(this.db, "startups", startupId);
+      batch.update(startupRef, {
+        interested: arrayRemove(userId),
+        [`interestedMap.${userId}`]: deleteField(),
+      });
+      //get user and add the field investedIn which contains an array of startupIds
+      const userRef = doc(this.db, "users", userId);
+      batch.update(userRef, {
+        interestedIn: arrayRemove(startupId),
+        [`interestedInMap.${startupId}`]: deleteField(),
       });
 
       await batch.commit();
