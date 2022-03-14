@@ -4,8 +4,8 @@ import * as ROUTES from "../../constants/routes";
 import { AuthUserContext } from "../Session";
 import SignoutButton from "../SignOut";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { MenuIcon, XIcon } from "@heroicons/react/outline";
-import logo from "../../assets/move_mankind_logo.svg";
+import { MenuIcon, XIcon, SearchIcon } from "@heroicons/react/outline";
+import logo from "../../assets/logo.svg";
 import Search from "../Search";
 
 const Navigation = () => {
@@ -15,28 +15,29 @@ const Navigation = () => {
     <Disclosure as="nav" className="bg-primary">
       {({ open }) => (
         <Fragment>
-          <div className="px-2 mx-auto max-w-7xl | sm:px-6 | lg:px-8">
-            <div className="relative flex items-center justify-between h-16">
+          <div className="px-5 mx-auto max-w-7xl | sm:px-6 | lg:px-8">
+            <div className="relative flex items-center justify-between w-full h-20">
               {/* Mobile menu button */}
-              <div className="absolute inset-y-0 left-0 flex items-center | sm:hidden">
-                <Disclosure.Button className="inline-flex items-center justify-center p-2 text-gray-400 rounded-md hover:tesxt-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+              <div className=" flex items-center | sm:hidden">
+                <Disclosure.Button className="inline-flex items-center justify-center w-8 h-8 text-white rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
-                    <XIcon className="block w-6 h-6" aria-hidden="true" />
+                    <XIcon className="block" aria-hidden="true" />
                   ) : (
-                    <MenuIcon className="block w-6 h-6" aria-hidden="true" />
+                    <MenuIcon className="block" aria-hidden="true" />
                   )}
                 </Disclosure.Button>
               </div>
+
               <div className="flex items-center w-full">
                 {/* Logo */}
-                <div className="flex item-center | sm:items-stretch sm:justify-start">
+                <div className="flex items-center justify-center w-full | sm:items-stretch md:justify-start">
                   <Link to={"/"}>
                     <div className="flex items-center flex-shrink-0">
                       <img
                         src={logo}
                         alt="Move Mankind Logo"
-                        className="block w-auto h-8 | lg:hidden"
+                        className="block w-auto h-6 | lg:hidden"
                       />
                       <img
                         src={logo}
@@ -49,99 +50,12 @@ const Navigation = () => {
                 {/* Nav Links */}
                 <div className="hidden w-full | sm:block sm:ml-6">
                   <div className="flex w-full space-x-4">
-                    {/* Algolia Search Component */}
-                    <Search />
-
-                    <div className="flex items-center justify-end w-full">
-                      <NavbarLink to={"/about"} name={"About"} exact />
-
-                      <Menu as="div" className="relative ml-3">
-                        <div>
-                          <Menu.Button className="block px-3 py-2 text-base font-medium text-white rounded-md hover:bg-gray-700 hover:text-white">
-                            <span className="sr-only">Open Directory menu</span>
-                            <span className="">Directory</span>
-                          </Menu.Button>
-                        </div>
-                        <Transition
-                          as={Fragment}
-                          enter="transition ease-out duration-100"
-                          enterFrom="transform opacity-0 scale-95"
-                          enterTo="transform opacity-100 scale-100"
-                          leave="transition ease-in duration-75"
-                          leaveFrom="transform opacity-100 scale-100"
-                          leaveTo="transform opacity-0 scale-95"
-                        >
-                          <Menu.Items className="absolute right-0 z-50 w-48 py-1 mt-2 text-white origin-top-right shadow-lg bg-primary ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            {/* TODO: make dynamic */}
-                            <Menu.Item>
-                              <button
-                                type="button"
-                                className="block w-full px-4 py-2 text-sm font-semibold text-left text-white hover:bg-blue-500"
-                                onClick={() => history.push(`/startups`)}
-                              >
-                                All Ventures
-                              </button>
-                            </Menu.Item>
-
-                            <Menu.Item>
-                              <button
-                                type="button"
-                                className="block w-full px-4 py-2 text-sm font-semibold text-left text-white hover:bg-blue-500"
-                                onClick={() =>
-                                  history.push(
-                                    `/categories/artificialinteligence`
-                                  )
-                                }
-                              >
-                                Artificial Intelligence
-                              </button>
-                            </Menu.Item>
-
-                            <Menu.Item>
-                              <button
-                                type="button"
-                                className="block w-full px-4 py-2 text-sm font-semibold text-left text-white hover:bg-blue-500"
-                                onClick={() =>
-                                  history.push(`/categories/biotechnology`)
-                                }
-                              >
-                                Biotechnology
-                              </button>
-                            </Menu.Item>
-
-                            <Menu.Item>
-                              <button
-                                type="button"
-                                className="block w-full px-4 py-2 text-sm font-semibold text-left text-white hover:bg-blue-500"
-                                onClick={() =>
-                                  history.push(`/categories/environment`)
-                                }
-                              >
-                                Environment
-                              </button>
-                            </Menu.Item>
-
-                            <Menu.Item>
-                              <button
-                                type="button"
-                                className="block w-full px-4 py-2 text-sm font-semibold text-left text-white hover:bg-blue-500"
-                                onClick={() =>
-                                  history.push(`/categories/space`)
-                                }
-                              >
-                                Space
-                              </button>
-                            </Menu.Item>
-                          </Menu.Items>
-                        </Transition>
-                      </Menu>
-
+                    <div className="flex items-center justify-end w-full space-x-4">
+                      <NavbarLink to={"/startups"} name={"Directory"} exact />
+                      {/* Algolia Search Component */}
+                      <Search />
                       {!authUser && (
-                        <NavbarLink
-                          to={ROUTES.SIGN_IN}
-                          name={"Log in/Sign up"}
-                          exact
-                        />
+                        <NavbarLink to={ROUTES.SIGN_IN} name={"Log In"} exact />
                       )}
                       {/* Profile dropdown */}
                       {authUser && (
@@ -204,6 +118,9 @@ const Navigation = () => {
                   </div>
                 </div>
               </div>
+              <div>
+                <SearchIcon className="inline-flex items-center justify-center w-8 h-8 text-white rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white | md:hidden" />
+              </div>
             </div>
           </div>
 
@@ -230,6 +147,7 @@ const Navigation = () => {
                 }
                 return null;
               })}
+              {authUser && <SignoutButton />}
             </div>
           </Disclosure.Panel>
         </Fragment>
