@@ -20,18 +20,16 @@ const App = () => {
   return (
     <Router>
       <Navigation />
-      <main className="min-h-screen">
-        <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
-        <Route path={ROUTES.SIGN_IN} component={SignInPage} />
-        <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
-        <Route path={ROUTES.ACCOUNT} component={AccountPage} />
-        <Route path={ROUTES.ADMIN} component={AdminPage} />
-        <Route exact path={ROUTES.LANDING} component={LandingPage} />
-        <Route exact path={ROUTES.STARTUPS} component={StartUpsPage} />
-        <Route path={ROUTES.STARTUP} component={ViewStartUpPage} />
-        <Route path={ROUTES.CATEGORY} component={StartUpsPage} />
-        <Route path={ROUTES.PROFILE} component={UserProfilePage} />
-      </main>
+      <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
+      <Route path={ROUTES.SIGN_IN} component={SignInPage} />
+      <Route path={ROUTES.PASSWORD_FORGET} component={PasswordForgetPage} />
+      <Route path={ROUTES.ACCOUNT} component={AccountPage} />
+      <Route path={ROUTES.ADMIN} component={AdminPage} />
+      <Route exact path={ROUTES.LANDING} component={LandingPage} />
+      <Route exact path={ROUTES.STARTUPS} component={StartUpsPage} />
+      {/* <Route path={ROUTES.STARTUP} component={ViewStartUpPage} /> */}
+      <Route path={ROUTES.CATEGORY} component={StartUpsPage} />
+      <Route path={ROUTES.PROFILE} component={UserProfilePage} />
       {/* <Footer /> */}
     </Router>
   );
