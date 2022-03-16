@@ -1,20 +1,29 @@
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import FollowButton from "../Follow";
 import RegisterInterestButton from "../RegisterInterest";
 
 const Table = ({ startups }) => {
+  const [selected, setSelected] = useState(null);
   const history = useHistory();
+
   const handleClick = (uid) => {
-    history.push(`/startups/${uid}`);
+    setSelected(uid);
   };
+
+  const isSelected = (uid) => {
+    return selected === uid;
+  };
+
   return (
     <div className="w-full">
       {/* mobile */}
-      <div className="flex flex-col divide-y divide-solid max-w-[90rem] w-full mx-auto mb-24 ">
+      <div className="flex flex-col divide-y divide-solid max-w-[90rem] w-full mx-auto mb-24">
         {startups.map((startup, key) => (
           <div
+            onClick={() => handleClick(startup.uid)}
             key={startup.uid}
-            className="flex min-h-[14rem] p-5 space-x-2 | md:min-h-0"
+            className="flex min-h-[14rem] p-5 cursor-pointer space-x-2 | md:min-h-0"
           >
             <div className="flex-none w-24 | md:w-10 md:hidden">
               <img
@@ -51,6 +60,12 @@ const Table = ({ startups }) => {
                   <FollowButton startupUid={startup.uid} />
                 </span>
 
+                {selected === startup.uid && (
+                  <span className="hidden text-sm font-semibold md:block">
+                    {startup["funding type"]}
+                  </span>
+                )}
+
                 <div className="hidden text-[0.6rem] space-x-2 | md:flex md:flex-wrap">
                   {startup.tags.map((tag) => (
                     <span
@@ -62,8 +77,20 @@ const Table = ({ startups }) => {
                   ))}
                 </div>
               </div>
-              <div className="md:col-span-5 lg:col-span-6 md:flex md:flex-col md:justify-between md:justify-self-start">
-                <p className="text-sm line-clamp-2">{startup.description}</p>
+              <div className="space-y-2 md:col-span-5 lg:col-span-6 md:flex md:flex-col md:justify-between md:justify-self-start">
+                <p
+                  className={`${
+                    isSelected(startup.uid) ? "" : "line-clamp-3"
+                  } text-sm max-w-3xl`}
+                >
+                  {startup.description}
+                </p>
+                {selected === startup.uid && (
+                  <span className="text-sm font-semibold md:hidden">
+                    {startup["funding type"]}
+                  </span>
+                )}
+
                 {startup.investors ? (
                   <p className="text-sm">Investors: {startup.investors}</p>
                 ) : (
