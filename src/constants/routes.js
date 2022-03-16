@@ -1,5 +1,5 @@
 export const LANDING = "/";
-export const STARTUPS = "/startups";
+export const STARTUPS = "/directory";
 export const SIGN_UP = "/signup";
 export const SIGN_IN = "/signin";
 export const HOME = "/home";

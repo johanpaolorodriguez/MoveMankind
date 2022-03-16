@@ -51,9 +51,9 @@ const Navigation = () => {
                 <div className="hidden w-full | sm:block sm:ml-6">
                   <div className="flex w-full space-x-4">
                     <div className="flex items-center justify-end w-full space-x-4">
-                      <NavbarLink to={"/startups"} name={"Directory"} exact />
+                      <NavbarLink to={"/directory"} name={"Directory"} exact />
                       {/* Algolia Search Component */}
-                      <Search />
+                      {/* <Search /> */}
                       {!authUser && (
                         <NavbarLink to={ROUTES.SIGN_IN} name={"Log In"} exact />
                       )}
