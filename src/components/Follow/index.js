@@ -1,38 +1,18 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import { doc, onSnapshot } from "@firebase/firestore";
 import { BookmarkIcon } from "@heroicons/react/outline";
 import { BookmarkIcon as BookmarkIconFilled } from "@heroicons/react/solid";
-import { AuthUserContext } from "../Session";
 import { withFirebase } from "../Firebase";
 import * as ROUTES from "../../constants/routes";
+import { AuthUserContext } from "../Session";
 
-const FollowButton = (props) => {
+const FollowButton = ({ firebase, startupUid, userData }) => {
   const authUser = useContext(AuthUserContext);
-  const [userData, setUserData] = useState(null);
   const history = useHistory();
-
-  useEffect(() => {
-    const getUserData = () => {
-      if (authUser) {
-        try {
-          const unsubscribe = onSnapshot(
-            doc(props.firebase.db, "users", authUser.authUser.uid),
-            (doc) => {
-              setUserData(doc.data());
-            }
-          );
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-    getUserData();
-  }, [authUser, props.firebase.db]);
 
   const userIsFollowingStartup = () => {
     if (userData && userData.following) {
-      return userData.following.includes(props.startupUid);
+      return userData.following.includes(startupUid);
     } else {
       return false;
     }
@@ -45,15 +25,12 @@ const FollowButton = (props) => {
     }
     try {
       if (userIsFollowingStartup()) {
-        await props.firebase.doUnfollowStartupAsUser(
+        await firebase.doUnfollowStartupAsUser(
           authUser.authUser.uid,
-          props.startupUid
+          startupUid
         );
       } else {
-        await props.firebase.doFollowStartupAsUser(
-          authUser.authUser.uid,
-          props.startupUid
-        );
+        await firebase.doFollowStartupAsUser(authUser.authUser.uid, startupUid);
       }
     } catch (error) {
       console.log(error);
