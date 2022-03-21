@@ -7,14 +7,12 @@ import LandingPage from "../Landing";
 import SignUpPage from "../SignUp";
 import SignInPage from "../SignIn";
 import PasswordForgetPage from "../PasswordForget";
-import HomePage from "../Home";
 import AccountPage from "../Account";
 import AdminPage from "../Admin";
 import StartUpsPage from "../StartUps";
-import ViewStartUpPage from "../ViewStartUp";
-import ViewCategoryPage from "../ViewCategory";
 import UserProfilePage from "../UserProfile";
 import Footer from "../Footer";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   return (
@@ -27,10 +25,9 @@ const App = () => {
       <Route path={ROUTES.ADMIN} component={AdminPage} />
       <Route exact path={ROUTES.LANDING} component={LandingPage} />
       <Route exact path={ROUTES.STARTUPS} component={StartUpsPage} />
-      {/* <Route path={ROUTES.STARTUP} component={ViewStartUpPage} /> */}
       <Route path={ROUTES.CATEGORY} component={StartUpsPage} />
       <Route path={ROUTES.PROFILE} component={UserProfilePage} />
-      {/* <Footer /> */}
+      <Toaster position="top-right" reverseOrder={false} />
     </Router>
   );
 };
