@@ -1,11 +1,34 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { doc, onSnapshot } from "@firebase/firestore";
 import FollowButton from "../Follow";
+import { AuthUserContext } from "../Session";
 import RegisterInterestButton from "../RegisterInterest";
+import SignInOrUpPrompt from "../SignIn/SignInOrUpPrompt.js";
+import { withFirebase } from "../Firebase";
 
-const Table = ({ startups }) => {
+const Table = ({ startups, firebase }) => {
   const [selected, setSelected] = useState(null);
-  const history = useHistory();
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const authUser = useContext(AuthUserContext);
+
+  useEffect(() => {
+    const getUserData = () => {
+      if (authUser) {
+        try {
+          const unsubscribe = onSnapshot(
+            doc(firebase.db, "users", authUser.authUser.uid),
+            (doc) => {
+              setUserData(doc.data());
+            }
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+    getUserData();
+  }, [authUser, firebase.db]);
 
   const handleClick = (uid) => {
     setSelected(uid);
@@ -17,6 +40,7 @@ const Table = ({ startups }) => {
 
   return (
     <div className="w-full">
+      <SignInOrUpPrompt isOpen={isDialogOpen} setIsOpen={setDialogOpen} />
       {/* mobile */}
       <div className="flex flex-col divide-y divide-solid max-w-[90rem] w-full mx-auto mb-24">
         {startups.map((startup, key) => (
@@ -37,7 +61,7 @@ const Table = ({ startups }) => {
               style={{ minWidth: 0 }}
             >
               <div className="hidden pt-2 | md:flex w-full md:justify-evenly">
-                <FollowButton startupUid={startup.uid} />
+                <FollowButton startupUid={startup.uid} userData={userData} />
 
                 <img
                   src={startup.logo}
@@ -108,56 +132,18 @@ const Table = ({ startups }) => {
                 ))}
               </div>
               <span className="md:col-span-2 | lg:col-span-1">
-                <RegisterInterestButton startupUid={startup.uid} />
+                <RegisterInterestButton
+                  startupUid={startup.uid}
+                  setIsOpen={setDialogOpen}
+                  userData={userData}
+                />
               </span>
             </div>
           </div>
         ))}
       </div>
-
-      {/* tablet/ laptop */}
-      {/* <div className="hidden max-w-6xl mx-auto | md:block">
-        <table
-          className="text-left border-separate"
-          style={{ borderSpacing: "0px 1rem" }}
-        >
-          <tbody className="">
-            {startups.map((startup) => (
-              <tr key={startup.uid} className="h-20 px-6 py-4 my-2 bg-white">
-                <td className="p-2 border border-gray-300 rounded-tl-lg rounded-bl-lg">
-                  <div className="flex items-center space-x-2 font-semibold">
-                    <FollowButton startupUid={startup.uid} />
-                    <div className="flex-none w-8">
-                      <img
-                        src={startup.logo}
-                        alt=""
-                        className="object-contain"
-                      />
-                    </div>
-                    <span
-                      className="underline hover:text-blue-500 text-primary"
-                      onClick={() => handleClick(startup.uid)}
-                    >
-                      {startup.name}
-                    </span>
-                  </div>
-                </td>
-                <td className="p-2 border-t border-b border-r border-gray-300">
-                  {startup.categories}
-                </td>
-                <td className="p-2 border-t border-b border-r border-gray-300">
-                  {startup.description}
-                </td>
-                <td className="p-2 border-t border-b border-r border-gray-300 rounded-tr-lg rounded-br-lg">
-                  {startup.headQuarters}, {startup.country}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div> */}
     </div>
   );
 };
 
-export default Table;
+export default withFirebase(Table);
