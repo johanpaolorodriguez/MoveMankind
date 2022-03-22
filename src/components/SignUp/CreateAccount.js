@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import SignInWithGroup from "../SignIn/SigninWiithGroup";
 import ProgressBar from "./ProgressBar";
 
@@ -22,6 +23,15 @@ const CreateAccount = ({
           </h2>
           <p className="font-medium text-gray-400">
             Let's get started by creating an account
+          </p>
+          <p className="mt-2 text-sm text-gray-600">
+            Or{" "}
+            <Link
+              to={"/signup"}
+              className="font-medium text-blue-600 hover:text-blue-500"
+            >
+              Sign In
+            </Link>
           </p>
         </div>
 

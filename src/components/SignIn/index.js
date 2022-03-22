@@ -8,6 +8,7 @@ import { useInput } from "../Hooks/input-hook";
 import { PasswordForgetLink } from "../PasswordForget";
 import logo from "../../assets/move_mankind_logo.svg";
 import SigninWiithGroup from "./SigninWiithGroup";
+import { Link } from "react-router-dom";
 
 const SignInPage = () => (
   <div>
@@ -46,6 +47,15 @@ const SignInFormBase = (props) => {
             Welcome!
           </h2>
           <p className="font-medium text-gray-400">Sign in to your account</p>
+          <p className="mt-2 text-sm text-gray-600">
+            Or{" "}
+            <Link
+              to={"/signup"}
+              className="font-medium text-blue-600 hover:text-blue-500"
+            >
+              Sign Up
+            </Link>
+          </p>
         </div>
 
         <form onSubmit={onSubmit} className="mt-8 space-y-6">
