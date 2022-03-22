@@ -7,6 +7,7 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon, SearchIcon } from "@heroicons/react/outline";
 import logo from "../../assets/logo.svg";
 import Search from "../Search";
+import Gravatar from "react-gravatar";
 
 const Navigation = () => {
   const authUser = useContext(AuthUserContext);
@@ -59,14 +60,14 @@ const Navigation = () => {
                       )}
                       {/* Profile dropdown */}
                       {authUser && (
-                        <Menu as="div" className="relative ml-3">
+                        <Menu as="div" className="relative z-50 ml-3">
                           <div>
                             <Menu.Button className="flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                               <span className="sr-only">Open user menu</span>
-                              <img
+                              <Gravatar
+                                email={authUser.authUser.email}
                                 className="w-8 h-8 rounded-full"
-                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                alt=""
+                                default="retro"
                               />
                             </Menu.Button>
                           </div>
