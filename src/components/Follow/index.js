@@ -3,12 +3,10 @@ import { useHistory } from "react-router-dom";
 import { BookmarkIcon } from "@heroicons/react/outline";
 import { BookmarkIcon as BookmarkIconFilled } from "@heroicons/react/solid";
 import { withFirebase } from "../Firebase";
-import * as ROUTES from "../../constants/routes";
 import { AuthUserContext } from "../Session";
 
-const FollowButton = ({ firebase, startupUid, userData }) => {
+const FollowButton = ({ firebase, setIsOpen, startupUid, userData }) => {
   const authUser = useContext(AuthUserContext);
-  const history = useHistory();
 
   const userIsFollowingStartup = () => {
     if (userData && userData.following) {
@@ -20,7 +18,7 @@ const FollowButton = ({ firebase, startupUid, userData }) => {
 
   const handleOnClick = async () => {
     if (authUser === null) {
-      history.push(ROUTES.SIGN_IN);
+      setIsOpen(true);
       return;
     }
     try {

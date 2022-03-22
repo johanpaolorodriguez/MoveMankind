@@ -61,7 +61,11 @@ const Table = ({ startups, firebase }) => {
               style={{ minWidth: 0 }}
             >
               <div className="hidden pt-2 | md:flex w-full md:justify-evenly">
-                <FollowButton startupUid={startup.uid} userData={userData} />
+                <FollowButton
+                  startupUid={startup.uid}
+                  userData={userData}
+                  setIsOpen={setDialogOpen}
+                />
 
                 <img
                   src={startup.logo}
@@ -81,7 +85,11 @@ const Table = ({ startups, firebase }) => {
                   </h4>
                 </div>
                 <span className="md:hidden">
-                  <FollowButton startupUid={startup.uid} userData={userData} />
+                  <FollowButton
+                    startupUid={startup.uid}
+                    userData={userData}
+                    setIsOpen={setDialogOpen}
+                  />
                 </span>
 
                 {selected === startup.uid && (
