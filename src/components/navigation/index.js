@@ -122,7 +122,10 @@ const Navigation = () => {
               <div>
                 {/* <SearchIcon className="inline-flex items-center justify-center w-8 h-8 text-white rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white | md:hidden" /> */}
                 {authUser && (
-                  <Menu as="div" className="relative z-50 w-full ml-3">
+                  <Menu
+                    as="div"
+                    className="relative z-50 w-full ml-3 sm:hidden"
+                  >
                     <Menu.Button className="flex w-full text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                       <span className="sr-only">Open user menu</span>
                       <Gravatar
