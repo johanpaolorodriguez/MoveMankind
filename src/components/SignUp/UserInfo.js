@@ -1,6 +1,5 @@
 import React from "react";
 import ProgressBar from "./ProgressBar";
-
 const UserInfo = ({
   bindName,
   bindCountry,
@@ -65,7 +64,7 @@ const UserInfo = ({
                 htmlFor="headline"
                 className="font-semibold text-blue-800 text-medium"
               >
-                Headline/ Intro
+                Please introduce yourself in one sentence
                 <span className="text-orange-500"> *</span>
               </label>
               <input
@@ -116,7 +115,7 @@ const UserInfo = ({
                 htmlFor="twitter"
                 className="font-semibold text-blue-800 text-medium"
               >
-                Twitter Hanlde
+                Twitter Handle
               </label>
               <input
                 {...bindTwitter}
