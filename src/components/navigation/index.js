@@ -6,8 +6,8 @@ import SignoutButton from "../SignOut";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon, SearchIcon } from "@heroicons/react/outline";
 import logo from "../../assets/logo.svg";
-import Search from "../Search";
 import Gravatar from "react-gravatar";
+// import Search from "../Search";
 
 const Navigation = () => {
   const authUser = useContext(AuthUserContext);
@@ -120,7 +120,59 @@ const Navigation = () => {
                 </div>
               </div>
               <div>
-                <SearchIcon className="inline-flex items-center justify-center w-8 h-8 text-white rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white | md:hidden" />
+                {/* <SearchIcon className="inline-flex items-center justify-center w-8 h-8 text-white rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white | md:hidden" /> */}
+                {authUser && (
+                  <Menu as="div" className="relative z-50 w-full ml-3">
+                    <Menu.Button className="flex w-full text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                      <span className="sr-only">Open user menu</span>
+                      <Gravatar
+                        email={authUser.authUser.email}
+                        className="w-8 h-8 rounded-full"
+                        default="retro"
+                      />
+                    </Menu.Button>
+                    <Transition
+                      as={Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                      <Menu.Items className="absolute right-0 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        {/* <Menu.Item>
+                              {({ active }) => (
+                                //TODO:ADD PROPER HREF ATTRBS.
+                                <a
+                                  href="#"
+                                  className={classNames(
+                                    active ? "bg-gray-100" : "",
+                                    "block px-4 py-2 text-sm text-gray-700"
+                                  )}
+                                >
+                                  Your Profile
+                                </a>
+                              )}
+                            </Menu.Item> */}
+                        <Menu.Item>
+                          <button
+                            type="button"
+                            className="block w-full px-4 py-2 text-sm font-semibold text-left text-primary hover:bg-blue-500"
+                            onClick={() =>
+                              history.push(`/user/${authUser.authUser.uid}`)
+                            }
+                          >
+                            My Profile
+                          </button>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <SignoutButton />
+                        </Menu.Item>
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
+                )}
               </div>
             </div>
           </div>
@@ -148,7 +200,7 @@ const Navigation = () => {
                 }
                 return null;
               })}
-              {authUser && <SignoutButton />}
+              {/* {authUser && <SignoutButton />} */}
             </div>
           </Disclosure.Panel>
         </Fragment>
