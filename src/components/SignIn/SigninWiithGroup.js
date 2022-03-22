@@ -36,7 +36,8 @@ const SignInWithGroup = (props) => {
       </div>
 
       <button
-        className="flex items-center justify-center w-full p-2 space-x-4 text-lg font-semibold border border-blue-400 rounded-md appearance-none hover:bg-blue-500 hover:text-white col-span-full focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:bg-blue-500"
+        disabled
+        className="flex items-center justify-center w-full p-2 space-x-4 text-lg font-semibold border border-blue-400 rounded-md appearance-none hover:bg-blue-500 hover:text-white col-span-full focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:bg-blue-500 disabled:border-gray-300"
         onClick={() => onSignIn("Google")}
       >
         <svg
@@ -69,7 +70,8 @@ const SignInWithGroup = (props) => {
       </button>
 
       <button
-        className="flex items-center justify-center w-full col-span-1 p-2 space-x-4 text-lg font-semibold border border-blue-400 rounded-md appearance-none hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:bg-blue-500"
+        disabled
+        className="flex items-center justify-center w-full col-span-1 p-2 space-x-4 text-lg font-semibold border border-blue-400 rounded-md appearance-none hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:bg-blue-500 disabled:border-gray-300"
         onClick={() => onSignIn("Apple")}
       >
         <svg
@@ -85,7 +87,8 @@ const SignInWithGroup = (props) => {
       </button>
 
       <button
-        className="flex items-center justify-center w-full col-span-1 p-2 space-x-4 text-lg font-semibold border border-blue-400 rounded-md appearance-none hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:bg-blue-500"
+        disabled
+        className="flex items-center justify-center w-full col-span-1 p-2 space-x-4 text-lg font-semibold border border-blue-400 rounded-md appearance-none disabled:border-gray-300 hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:bg-blue-500"
         onClick={() => onSignIn("Facebook")}
       >
         <svg
@@ -103,7 +106,8 @@ const SignInWithGroup = (props) => {
       </button>
 
       <button
-        className="flex items-center justify-center w-full col-span-1 p-2 space-x-4 text-lg font-semibold border border-blue-400 rounded-md appearance-none hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:bg-blue-500"
+        disabled
+        className="flex items-center justify-center w-full col-span-1 p-2 space-x-4 text-lg font-semibold border border-blue-400 rounded-md appearance-none disabled:border-gray-300 hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:bg-blue-500 "
         onClick={() => onSignIn("Twitter")}
       >
         <svg
@@ -121,7 +125,8 @@ const SignInWithGroup = (props) => {
       </button>
 
       <button
-        className="flex items-center justify-center w-full col-span-1 p-2 space-x-4 text-lg font-semibold border border-blue-400 rounded-md appearance-none hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:bg-blue-500"
+        disabled
+        className="flex items-center justify-center w-full col-span-1 p-2 space-x-4 text-lg font-semibold border border-blue-400 rounded-md appearance-none disabled:border-gray-300 hover:bg-blue-500 hover:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:bg-blue-500"
         onClick={() => onSignIn("Github")}
       >
         <svg
