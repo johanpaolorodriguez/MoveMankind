@@ -81,7 +81,7 @@ const Table = ({ startups, firebase }) => {
                   </h4>
                 </div>
                 <span className="md:hidden">
-                  <FollowButton startupUid={startup.uid} />
+                  <FollowButton startupUid={startup.uid} userData={userData} />
                 </span>
 
                 {selected === startup.uid && (
