@@ -62,8 +62,9 @@ const InvestmentPreferences = ({ step, onSubmit }) => {
 
             <fieldset className="space-y-2">
               <legend className="text-xl font-bold text-medium font-tertiary">
-                What is your investment experience?
+                What is your investing experience?
               </legend>
+
               <div className="space-x-2">
                 <input
                   className="checked:bg-blue-500"
@@ -74,6 +75,7 @@ const InvestmentPreferences = ({ step, onSubmit }) => {
                 />
                 <label htmlFor="crowdfunding">Crowdfunding platforms</label>
               </div>
+
               <div className="space-x-2">
                 <input
                   type="checkbox"
@@ -83,6 +85,17 @@ const InvestmentPreferences = ({ step, onSubmit }) => {
                 />
                 <label htmlFor="tokens">Tokens</label>
               </div>
+
+              <div className="space-x-2">
+                <input
+                  type="checkbox"
+                  id="tokens"
+                  name="interest"
+                  value="tokens"
+                />
+                <label htmlFor="tokens">Public Equities</label>
+              </div>
+
               <div className="space-x-2">
                 <input
                   type="checkbox"
@@ -92,10 +105,12 @@ const InvestmentPreferences = ({ step, onSubmit }) => {
                 />
                 <label htmlFor="angel">Angel</label>
               </div>
+
               <div className="space-x-2">
                 <input type="checkbox" id="vc" name="interest" value="vc" />
                 <label htmlFor="vc">VC</label>
               </div>
+
               <div className="space-x-2">
                 <input type="checkbox" id="none" name="interest" value="none" />
                 <label htmlFor="none">none</label>
@@ -114,7 +129,7 @@ const InvestmentPreferences = ({ step, onSubmit }) => {
                   name="interest"
                   value="1-100"
                 />
-                <label htmlFor="1-100">1 - 100 USD($)</label>
+                <label htmlFor="1-100">US$ 1 - 100</label>
               </div>
               <div className="space-x-2">
                 <input
@@ -123,7 +138,7 @@ const InvestmentPreferences = ({ step, onSubmit }) => {
                   name="interest"
                   value="101-500"
                 />
-                <label htmlFor="101-500">101 - 500 USD($)</label>
+                <label htmlFor="101-500">US$ 101 - 500</label>
               </div>
               <div className="space-x-2">
                 <input
@@ -132,7 +147,7 @@ const InvestmentPreferences = ({ step, onSubmit }) => {
                   name="interest"
                   value="501-1000"
                 />
-                <label htmlFor="501-1000">501 - 1000 USD($)</label>
+                <label htmlFor="501-1000">US$ 501 - 1000</label>
               </div>
               <div className="space-x-2">
                 <input
@@ -141,7 +156,7 @@ const InvestmentPreferences = ({ step, onSubmit }) => {
                   name="interest"
                   value="5000+"
                 />
-                <label htmlFor="5000+">5001+ USD($)</label>
+                <label htmlFor="5000+">US$ 5001+</label>
               </div>
             </fieldset>
 
