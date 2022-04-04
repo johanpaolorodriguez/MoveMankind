@@ -11,7 +11,7 @@ export const CATEGORY = "/categories/:paramFilter";
 export const PROFILE = "/user/:uid";
 
 export const ITEMS = [
-  { name: "Startups", href: STARTUPS, current: false, restricted: true },
+  { name: "Directory", href: STARTUPS, current: false, restricted: true },
   // { name: "Home", href: HOME, current: false, restricted: true },
   // { name: "Account", href: ACCOUNT, current: false, restricted: true },
   // { name: "Admin", href: ADMIN, current: false, restricted: true },
