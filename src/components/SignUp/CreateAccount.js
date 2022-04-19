@@ -34,7 +34,7 @@ const CreateAccount = ({
           <p className="mt-2 text-sm text-gray-600">
             Or{" "}
             <Link
-              to={"/signup"}
+              to={"/signin"}
               className="font-medium text-blue-600 hover:text-blue-500"
             >
               Sign In
