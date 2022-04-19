@@ -6,7 +6,6 @@
     "@algolia/autocomplete-js": "^1.4.1",
     "@algolia/autocomplete-theme-classic": "^1.4.1",
     "@babel/runtime": "^7.15.4",
-    "@craco/craco": "^6.3.0",
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.4",
     "@testing-library/jest-dom": "^5.14.1",
