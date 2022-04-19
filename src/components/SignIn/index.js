@@ -9,6 +9,7 @@ import { PasswordForgetLink } from "../PasswordForget";
 import logo from "../../assets/move_mankind_logo.svg";
 import SigninWiithGroup from "./SigninWiithGroup";
 import { Link } from "react-router-dom";
+import { EyeIcon, EyeOffIcon } from "@heroicons/react/outline";
 
 const SignInPage = () => (
   <div>
@@ -37,6 +38,14 @@ const SignInFormBase = (props) => {
         setError(error);
       });
     event.preventDefault();
+  };
+
+  const [passwordInputType, setPasswordInputType] = useState("password");
+
+  const togglePassword = () => {
+    passwordInputType === "password"
+      ? setPasswordInputType("text")
+      : setPasswordInputType("password");
   };
 
   return (
@@ -86,15 +95,24 @@ const SignInFormBase = (props) => {
               >
                 Password
               </label>
-              <input
-                {...bindPassword}
-                className="relative block w-full h-12 px-3 py-2 text-sm text-blue-600 placeholder-blue-400 border border-blue-300 rounded-md bg-blue-50 appearance-no ne focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                id="passwordOne"
-                name="passwordOne"
-                type="password"
-                placeholder="8-20 characters, at least 1 number"
-                required
-              />
+              <div className="relative flex justify-between w-full h-12 text-sm text-blue-600 placeholder-blue-400 border border-blue-300 rounded-md bg-blue-50 appearance-no ne focus-within:outline-none focus-within:ring-blue-500 focus-within:border-blue-500 focus-within:z-10 sm:text-sm">
+                <input
+                  {...bindPassword}
+                  className="w-full h-full px-3 py-2 text-sm text-blue-600 placeholder-blue-400 bg-transparent autofill:bg-none focus:outline-none "
+                  id="passwordOne"
+                  name="passwordOne"
+                  type={passwordInputType}
+                  placeholder="8-20 characters, at least 1 number"
+                  required
+                />
+                <button className="p-2" type="button" onClick={togglePassword}>
+                  {passwordInputType === "password" ? (
+                    <EyeIcon className="w-5 h-5" />
+                  ) : (
+                    <EyeOffIcon className="w-5 h-5" />
+                  )}
+                </button>
+              </div>
             </div>
 
             <button
