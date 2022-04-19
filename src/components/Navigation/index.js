@@ -56,18 +56,7 @@ const Navigation = () => {
                       {/* Algolia Search Component */}
                       {/* <Search /> */}
                       {!authUser && (
-                        <NavbarLink
-                          to={ROUTES.SIGN_IN}
-                          name={"Sign In"}
-                          exact
-                        />
-                      )}
-                      {!authUser && (
-                        <NavbarLink
-                          to={ROUTES.SIGN_UP}
-                          name={"Sign Up"}
-                          exact
-                        />
+                        <NavbarLink to={ROUTES.SIGN_IN} name={"Log In"} exact />
                       )}
                       {/* Profile dropdown */}
                       {authUser && (
