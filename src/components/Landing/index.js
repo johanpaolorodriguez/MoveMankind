@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import { withFirebase } from "../Firebase";
 import HeroSvg from "../../assets/hero_svg.png";
-
+import {
+  CurrencyDollarIcon,
+  HeartIcon,
+  TrendingUpIcon,
+  RefreshIcon,
+} from "@heroicons/react/outline";
 const hex = {
   //colors defined in tailwind.config.js
   artificialinteligence: "accent1",
@@ -14,8 +18,8 @@ const hex = {
 const LandingPage = (props) => {
   return (
     <div className="relative min-h-[calc(100vh_-_5rem)] overflow-hidden bg-stone-900">
-      <div className="mx-auto max-w-7xl">
-        <div className="relative z-10 pb-8 flex flex-col justify-between | sm:pb-16 | md:pb-20 | lg:flex-row lg:w-full lg:pb-28 | xl:pb-32">
+      <div className="w-full bg-stone-900">
+        <div className="mx-auto max-w-7xl relative z-10 pb-8 flex flex-col justify-between | sm:pb-16 | md:pb-20 | lg:flex-row lg:w-full lg:pb-28 | xl:pb-32">
           <main className="mt-10 mx-auto max-w-7xl px-4 | sm:mt-12 sm:px-6 | md:mt-16 |  lg:max-w-2xl lg:mt-20 lg:px-8 | xl:mt-28">
             <div className="sm:text-center | lg:text-left">
               <h1 className="text-4xl tracking-tight font-extrabold text-white | sm:text-5xl | md:text-6xl">
@@ -54,6 +58,55 @@ const LandingPage = (props) => {
               alt=""
             />
           </div>
+        </div>
+      </div>
+      <div className="w-full bg-white">
+        <div className="flex flex-col justify-between py-8 mx-auto max-w-7xl text-center px-4 space-y-16 | sm:px-6 | md:px-8 | lg:justify-evenly lg:flex-row lg:space-y-0 lg:space-x-6">
+          <article className="flex basis-1/4 flex-col items-center justify-center space-y-3 | lg:justify-start">
+            <CurrencyDollarIcon className="w-10 h-10" />
+            <h3 className="text-xl font-bold tracking-tight text-primary">
+              Fundraise
+            </h3>
+            <p className="text-sm text-gray-600">
+              Existential risk ventures (e.g. businesses, think tanks,
+              nonprofits) can issue tokens representing their equity, debt or
+              exclusive product/service usage benefits
+            </p>
+          </article>
+
+          <article className="flex basis-1/4 flex-col items-center justify-center space-y-3 | lg:justify-start">
+            <HeartIcon className="w-10 h-10" />
+            <h3 className="text-xl font-bold tracking-tight text-primary">
+              Back
+            </h3>
+            <p className="text-sm text-gray-600">
+              Backers can purchase a venture's token. Hit the "I'm Interested"
+              button in the directory, and we'll let you know when the token is
+              available
+            </p>
+          </article>
+
+          <article className="flex basis-1/4 flex-col items-center justify-center space-y-3 | lg:justify-start">
+            <TrendingUpIcon className="w-10 h-10" />
+            <h3 className="text-xl font-bold tracking-tight text-primary">
+              Get payouts
+            </h3>
+            <p className="text-sm text-gray-600">
+              All For Future backers get dividend payouts when a venture
+              succeeds (have an exit that generates cash) - whether or not the
+              backer invested in the successful venture
+            </p>
+          </article>
+
+          <article className="flex basis-1/4 flex-col items-center justify-center space-y-3 | lg:justify-start">
+            <RefreshIcon className="w-10 h-10" />
+            <h3 className="text-xl font-bold tracking-tight text-primary">
+              Trade
+            </h3>
+            <p className="text-sm text-gray-600">
+              Trade tokens on For Future's exchange
+            </p>
+          </article>
         </div>
       </div>
     </div>
