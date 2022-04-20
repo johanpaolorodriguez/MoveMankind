@@ -1,7 +1,73 @@
-import React from "react";
+import React, { useState } from "react";
 import ProgressBar from "./ProgressBar";
 
-const InvestmentPreferences = ({ step, onSubmit }) => {
+const interests = [
+  { name: "Artificial Intelligence" },
+  { name: "BioTechnology" },
+  { name: "Environment" },
+  { name: "Space" },
+];
+
+const experience = [
+  { name: "Crowdfunding Platforms" },
+  { name: "Tokens" },
+  { name: "Public Equities" },
+  { name: "Angel Investing" },
+  { name: "Venture Capitalist" },
+  { name: "none" },
+];
+
+const power = [
+  { name: "US$ 1-100" },
+  { name: "US$ 101-500" },
+  { name: "US$ 501-1000" },
+  { name: "US$ 1000+" },
+];
+
+const InvestmentPreferences = ({
+  step,
+  onSubmit,
+  getUserInterests,
+  getUserExperience,
+  getUserPower,
+}) => {
+  const [checkedStateInterests, setCheckedStateInterests] = useState(
+    new Array(interests.length).fill(false)
+  );
+  const [checkedStateExperience, setCheckedStateEpxerience] = useState(
+    new Array(experience.length).fill(false)
+  );
+  const [selectedOptionPower, setSelectedOptionPower] = useState(null);
+
+  const handleOnChangeInterests = (position) => {
+    const updatedCheckedState = checkedStateInterests.map((item, index) =>
+      index === position ? !item : item
+    );
+    setCheckedStateInterests(updatedCheckedState);
+
+    const updatedUserInterests = interests.flatMap(({ name }, index) =>
+      updatedCheckedState[index] ? [name] : []
+    );
+    getUserInterests(updatedUserInterests);
+  };
+
+  const handleOnChangeExperience = (position) => {
+    const updatedSecondCheckedState = checkedStateExperience.map(
+      (item, index) => (index === position ? !item : item)
+    );
+    setCheckedStateEpxerience(updatedSecondCheckedState);
+
+    const updatedUserExperience = experience.flatMap(({ name }, index) =>
+      updatedSecondCheckedState[index] ? [name] : []
+    );
+    getUserExperience(updatedUserExperience);
+  };
+
+  const handleOnChangePower = (value) => {
+    setSelectedOptionPower(value);
+    getUserPower(value);
+  };
+
   return (
     <div className="flex items-center justify-center bg-white px-10 py-12 | sm:px-5 | lg:px-8">
       <div className="w-full max-w-md space-y-6">
@@ -19,45 +85,25 @@ const InvestmentPreferences = ({ step, onSubmit }) => {
               <legend className="text-xl font-bold text-medium font-tertiary">
                 What are you interested in?
               </legend>
-              <div className="space-x-2">
-                <input
-                  className="checked:bg-blue-500"
-                  type="checkbox"
-                  id="aritificialintelligence"
-                  name="interest"
-                  value="aritificialintelligence"
-                />
-                <label htmlFor="aritificialintelligence">
-                  Aritificial Intelligence
-                </label>
-              </div>
-              <div className="space-x-2">
-                <input
-                  type="checkbox"
-                  id="biotechnology"
-                  name="interest"
-                  value="biotechnology"
-                />
-                <label htmlFor="biotechnology">Biotechnology</label>
-              </div>
-              <div className="space-x-2">
-                <input
-                  type="checkbox"
-                  id="environment"
-                  name="interest"
-                  value="environment"
-                />
-                <label htmlFor="environment">Environment</label>
-              </div>
-              <div className="space-x-2">
-                <input
-                  type="checkbox"
-                  id="space"
-                  name="interest"
-                  value="space"
-                />
-                <label htmlFor="space">Space</label>
-              </div>
+
+              {interests.map(({ name }, index) => {
+                return (
+                  <div className="space-x-2" key={index}>
+                    <input
+                      type="checkbox"
+                      className="checked:bg-blue-500"
+                      id={`interests-checkbox-${index}`}
+                      name={name}
+                      value={name}
+                      checked={checkedStateInterests[index]}
+                      onChange={() => handleOnChangeInterests(index)}
+                    />
+                    <label htmlFor={`interests-checkbox-${index}`}>
+                      {name}
+                    </label>
+                  </div>
+                );
+              })}
             </fieldset>
 
             <fieldset className="space-y-2">
@@ -65,99 +111,47 @@ const InvestmentPreferences = ({ step, onSubmit }) => {
                 What is your investing experience?
               </legend>
 
-              <div className="space-x-2">
-                <input
-                  className="checked:bg-blue-500"
-                  type="checkbox"
-                  id="crowdfunding"
-                  name="interest"
-                  value="crowdfunding"
-                />
-                <label htmlFor="crowdfunding">Crowdfunding platforms</label>
-              </div>
-
-              <div className="space-x-2">
-                <input
-                  type="checkbox"
-                  id="tokens"
-                  name="interest"
-                  value="tokens"
-                />
-                <label htmlFor="tokens">Tokens</label>
-              </div>
-
-              <div className="space-x-2">
-                <input
-                  type="checkbox"
-                  id="tokens"
-                  name="interest"
-                  value="tokens"
-                />
-                <label htmlFor="tokens">Public Equities</label>
-              </div>
-
-              <div className="space-x-2">
-                <input
-                  type="checkbox"
-                  id="angel"
-                  name="interest"
-                  value="angel"
-                />
-                <label htmlFor="angel">Angel</label>
-              </div>
-
-              <div className="space-x-2">
-                <input type="checkbox" id="vc" name="interest" value="vc" />
-                <label htmlFor="vc">VC</label>
-              </div>
-
-              <div className="space-x-2">
-                <input type="checkbox" id="none" name="interest" value="none" />
-                <label htmlFor="none">none</label>
-              </div>
+              {experience.map(({ name }, index) => {
+                return (
+                  <div className="space-x-2" key={index}>
+                    <input
+                      type="checkbox"
+                      className="checked:bg-blue-500"
+                      id={`experience-checkbox-${index}`}
+                      name={name}
+                      value={name}
+                      checked={checkedStateExperience[index]}
+                      onChange={() => handleOnChangeExperience(index)}
+                    />
+                    <label htmlFor={`experience-checkbox-${index}`}>
+                      {name}
+                    </label>
+                  </div>
+                );
+              })}
             </fieldset>
 
             <fieldset className="space-y-2">
               <legend className="text-xl font-bold text-medium font-tertiary">
                 How much are you interested in investing?
               </legend>
-              <div className="space-x-2">
-                <input
-                  className="checked:bg-blue-500"
-                  type="checkbox"
-                  id="1-100"
-                  name="interest"
-                  value="1-100"
-                />
-                <label htmlFor="1-100">US$ 1 - 100</label>
-              </div>
-              <div className="space-x-2">
-                <input
-                  type="checkbox"
-                  id="101-500"
-                  name="interest"
-                  value="101-500"
-                />
-                <label htmlFor="101-500">US$ 101 - 500</label>
-              </div>
-              <div className="space-x-2">
-                <input
-                  type="checkbox"
-                  id="501-1000"
-                  name="interest"
-                  value="501-1000"
-                />
-                <label htmlFor="501-1000">US$ 501 - 1000</label>
-              </div>
-              <div className="space-x-2">
-                <input
-                  type="checkbox"
-                  id="5000+"
-                  name="interest"
-                  value="5000+"
-                />
-                <label htmlFor="5000+">US$ 5001+</label>
-              </div>
+
+              {power.map(({ name }, index) => {
+                return (
+                  <div className="space-x-2" key={index}>
+                    <input
+                      type="radio"
+                      className="checked:bg-blue-500"
+                      id={`power-radio-${index}`}
+                      name="power-radio"
+                      value={name}
+                      checked={selectedOptionPower === name}
+                      onChange={() => handleOnChangePower(name)}
+                    />
+                    <label htmlFor={`power-radio-${index}`}>{name}</label>
+                  </div>
+                );
+              })}
             </fieldset>
 
             <button

@@ -8,6 +8,7 @@ import CreateAccount from "./CreateAccount";
 import UserInfo from "./UserInfo";
 import InvestmentPreferences from "./InvestmentPreferences";
 import { AuthUserContext } from "../Session";
+import { arrayUnion } from "firebase/firestore";
 
 const SignUpPage = () => (
   <div>
@@ -63,7 +64,22 @@ const SignUpFormBase = (props) => {
     reset: resetTwitter,
   } = useInput("");
 
+  const [userInterests, setUserInterests] = useState([]);
+  const [userExperience, setUserExperience] = useState([]);
+  const [userPower, setUserPower] = useState(null);
   const [error, setError] = useState(null);
+
+  const getUserInterests = (data) => {
+    setUserInterests(data);
+  };
+
+  const getUserExperience = (data) => {
+    setUserExperience(data);
+  };
+
+  const getUserPower = (data) => {
+    setUserPower(data);
+  };
 
   useEffect(() => {
     const getOnboardingStep = async () => {
@@ -73,8 +89,15 @@ const SignUpFormBase = (props) => {
       if (authUser && !authUser.authUser.data.name) {
         setStep(2);
       }
-      if (authUser && authUser.authUser.data.name) {
+      if (
+        authUser &&
+        authUser.authUser.data.name &&
+        !authUser.authUser.data.onboard_interests
+      ) {
         setStep(3);
+      }
+      if (authUser && authUser.authUser.data.onboard_interests) {
+        props.history.push(ROUTES.STARTUPS);
       }
     };
     getOnboardingStep();
@@ -132,7 +155,9 @@ const SignUpFormBase = (props) => {
     event.preventDefault();
     try {
       await props.firebase.doAddUserInfo({
-        //
+        onboard_interests: arrayUnion(...userInterests),
+        onboard_experience: arrayUnion(...userExperience),
+        onboard_power: userPower,
       });
       props.history.push(ROUTES.STARTUPS);
     } catch (error) {
@@ -145,12 +170,12 @@ const SignUpFormBase = (props) => {
       return (
         <>
           <CreateAccount
+            step={step}
             bindUsername={bindUsername}
             bindEmail={bindEmail}
             bindPasswordOne={bindPasswordOne}
             onSubmit={onSubmitCreateAccount}
             error={error}
-            step={step}
           />
         </>
       );
@@ -158,6 +183,7 @@ const SignUpFormBase = (props) => {
     case 2:
       return (
         <UserInfo
+          step={step}
           bindName={bindName}
           bindCountry={bindCountry}
           bindHeadline={bindHeadline}
@@ -165,15 +191,17 @@ const SignUpFormBase = (props) => {
           bindLinkedin={bindLinkedin}
           bindTwitter={bindTwitter}
           onSubmit={onSumbitUserInfo}
-          step={step}
         />
       );
 
     case 3:
       return (
         <InvestmentPreferences
-          onSubmit={onSubmitInvestmentPreferences}
           step={step}
+          onSubmit={onSubmitInvestmentPreferences}
+          getUserExperience={getUserExperience}
+          getUserInterests={getUserInterests}
+          getUserPower={getUserPower}
         />
       );
     default:
