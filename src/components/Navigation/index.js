@@ -23,9 +23,12 @@ const Navigation = () => {
                 <Disclosure.Button className="inline-flex items-center justify-center w-8 h-8 text-white rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
-                    <XIcon className="block" aria-hidden="true" />
+                    <XIcon className="block w-full h-full" aria-hidden="true" />
                   ) : (
-                    <MenuIcon className="block" aria-hidden="true" />
+                    <MenuIcon
+                      className="block w-full h-full"
+                      aria-hidden="true"
+                    />
                   )}
                 </Disclosure.Button>
               </div>
