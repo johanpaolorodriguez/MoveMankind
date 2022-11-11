@@ -21,6 +21,7 @@ export const STARTUPS = [
 		"company type": "Private",
 		investors: ["At One Ventures"],
 		page: "",
+		bgimg: "https://firebasestorage.googleapis.com/v0/b/movemankind-76fb5.appspot.com/o/helios-main.jpg?alt=media&token=b8a4d78c-deda-42b5-952c-c7377f3e8142",
 	},
 	{
 		name: "ALLFED",
@@ -44,6 +45,7 @@ export const STARTUPS = [
 		"company type": "Private",
 		investors: ["At One Ventures"],
 		page: "",
+		bgimg: "https://firebasestorage.googleapis.com/v0/b/movemankind-76fb5.appspot.com/o/ALLFED-main.jpg?alt=media&token=13caf5bd-06d8-4288-a779-ee2b1a20ed8d",
 	},
 	{
 		name: "Onton",
@@ -67,6 +69,7 @@ export const STARTUPS = [
 		"company type": "Private",
 		investors: [],
 		page: "",
+		bgimg: "https://firebasestorage.googleapis.com/v0/b/movemankind-76fb5.appspot.com/o/onton.jpg?alt=media&token=ea10eb4b-99fa-4cb2-8dbe-49926ff762f6",
 	},
 	{
 		name: "SkyCool Systems",
@@ -89,5 +92,6 @@ export const STARTUPS = [
 		"company type": "Private",
 		investors: ["StartX", "Caltech Rocket Fund", "Argpa-e"],
 		page: "",
+		bgimg: "https://firebasestorage.googleapis.com/v0/b/movemankind-76fb5.appspot.com/o/SkyCool-main.jpg?alt=media&token=5b04c4bd-ebad-427c-b8a3-7b7af325e839",
 	},
 ];
