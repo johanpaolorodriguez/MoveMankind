@@ -132,6 +132,18 @@ class Firebase {
 		}
 	};
 
+	doEditStartupPageAsAdmin = async (startupId, data) => {
+		try {
+			const startupRef = doc(this.db, "startups", startupId);
+
+			await updateDoc(startupRef, {
+				...data,
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	doRegisterStartupAsUser = async (userId, startupId) => {
 		try {
 			const batch = writeBatch(this.db);
