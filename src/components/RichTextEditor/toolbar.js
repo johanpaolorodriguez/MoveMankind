@@ -11,7 +11,7 @@ import {
 	UNDO_COMMAND,
 	REDO_COMMAND,
 } from "lexical";
-
+import { INSERT_IMAGE_COMMAND } from "./plugins/ImagePlugin";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
 	faBold,
@@ -40,6 +40,12 @@ library.add(
 	faFloppyDisk
 );
 
+export function FillURL() {
+	const srcfile = prompt("Enter the URL of the image:", "");
+
+	return srcfile ?? "";
+}
+
 export default function Toolbar({ handleSave }) {
 	const [editor] = useLexicalComposerContext();
 	const [isBold, setIsBold] = useState(false);
@@ -47,7 +53,6 @@ export default function Toolbar({ handleSave }) {
 	const [isStrikethrough, setIsStrikethrough] = useState(false);
 	const [isUnderline, setIsUnderline] = useState(false);
 
-	console.log(editor);
 	const updateToolbar = useCallback(() => {
 		const selection = $getSelection();
 
@@ -68,6 +73,10 @@ export default function Toolbar({ handleSave }) {
 			})
 		);
 	}, [updateToolbar, editor]);
+
+	const onClickUploadImageURL = (payload) => {
+		editor.dispatchCommand(INSERT_IMAGE_COMMAND, payload);
+	};
 
 	return (
 		<div className="fixed z-20 shadow bottom-8 left-1/2 transform -translate-x-1/2 min-w-52 h-10 px-2 py-2 bg-[#1b2733] mb-4 space-x-2 flex items-center">
@@ -220,6 +229,23 @@ export default function Toolbar({ handleSave }) {
 				onClick={() => {
 					editor.dispatchCommand(REDO_COMMAND);
 				}}
+			>
+				<FontAwesomeIcon
+					icon="fa-solid fa-rotate-right"
+					className="text-white w-3.5 h-3.5"
+				/>
+			</button>
+
+			<button
+				className={clsx(
+					"px-1 bg-transparent hover:bg-gray-700 transition-colors duration-100 ease-in"
+				)}
+				onClick={() =>
+					onClickUploadImageURL({
+						altText: "URL image",
+						src: FillURL(),
+					})
+				}
 			>
 				<FontAwesomeIcon
 					icon="fa-solid fa-rotate-right"
