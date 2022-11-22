@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+.image-resizer {
+    display: inline-flex;
+    position: relative;
+    flex-grow: 0;
+ }
+.image-resizer .resize-trigger {
+  position: absolute;
+  right: -6px;
+  bottom: -9px;
+  opacity: 0;
+  transition: opacity .3s ease;
+  color: #3259a5;
+}
+.image-resizer:hover .resize-trigger {
+  opacity: 1;
+}
+
+
 @layer utilities {
 	.highlight-background-b {
 		/* background: linear-gradient(120deg, #fec34a 0%, #fec34a 100%); */
@@ -18,6 +36,14 @@
 }
 
 @layer components {
+	.tooltip {
+		@apply absolute invisible;
+	}
+
+	.has-tooltip:hover .tooltip {
+		@apply z-50 visible;
+	}
+
 	.text-h1 {
 		@apply font-semibold text-6xl
 	}
