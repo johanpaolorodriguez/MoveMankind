@@ -135,9 +135,10 @@ class Firebase {
 	doEditStartupPageAsAdmin = async (startupId, data) => {
 		try {
 			const startupRef = doc(this.db, "startups", startupId);
+			const key = Object.keys(data)[0];
 
 			await updateDoc(startupRef, {
-				...data,
+				[`page.${key}`]: data[key],
 			});
 		} catch (error) {
 			console.log(error);
