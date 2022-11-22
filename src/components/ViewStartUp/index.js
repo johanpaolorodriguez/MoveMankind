@@ -23,7 +23,9 @@ const ViewStartUpPage = (props) => {
 			try {
 				const data = await props.firebase.getStartupByID(uid);
 				setStartup(data);
-				setOverview(data.overview);
+				if (data.overview) {
+					setOverview(data.overview);
+				}
 			} catch (error) {
 				console.log(error);
 			}
@@ -31,17 +33,15 @@ const ViewStartUpPage = (props) => {
 		fetchStartup();
 	}, [props.firebase, uid]);
 
-	const saveContent = async (editorState) => {
-		console.log("viewstartups", editorState);
+	const saveContent = async (data) => {
 		try {
-			await props.firebase.doEditStartupPageAsAdmin(
-				startup.uid,
-				editorState
-			);
+			await props.firebase.doEditStartupPageAsAdmin(startup.uid, data);
 		} catch (error) {
 			console.log(error);
 		}
 	};
+
+	console.log(startup.page);
 
 	return (
 		<main className="max-w-screen-xl mx-auto">
@@ -137,30 +137,44 @@ const ViewStartUpPage = (props) => {
 						</div>
 					</header>
 
-					<Tab.Group as="section">
-						<Tab.List className="px-6 space-x-12 text-lg border-gray-300 border-y">
-							<Tab className="font-semibold py-6 focus:outline-none ui-selected:border-b-4 ui-selected:border-blue-500 ui-selected:text-blue-700 | ui-not-selected:text-gray-400">
-								Overview
-							</Tab>
-							<Tab className="focus:outline-none font-semibold py-6 ui-selected:border-b-4 ui-selected:border-blue-500 ui-selected:text-blue-700 | ui-not-selected:text-gray-400">
-								How to Contribute
-							</Tab>
-							<Tab className="focus:outline-none font-semibold py-6 ui-selected:border-b-4 ui-selected:border-blue-500 ui-selected:text-blue-700 | ui-not-selected:text-gray-400">
-								Faq
-							</Tab>
-						</Tab.List>
-						<Tab.Panels>
-							<Tab.Panel>
-								<RichTextEditor
-									saveContent={saveContent}
-									title={"overview"}
-									initialEditorState={overview}
-								/>
-							</Tab.Panel>
-							<Tab.Panel>Content 2</Tab.Panel>
-							<Tab.Panel>Content 3</Tab.Panel>
-						</Tab.Panels>
-					</Tab.Group>
+					{startup.page && (
+						<Tab.Group as="section">
+							<Tab.List className="px-6 space-x-12 text-lg border-gray-300 border-y">
+								{Object.keys(startup.page).map(
+									(key, index) => {
+										return (
+											<Tab
+												key={index}
+												className="font-semibold py-6 focus:outline-none ui-selected:border-b-4 ui-selected:border-blue-500 ui-selected:text-blue-700 | ui-not-selected:text-gray-400 capitalize"
+											>
+												{key}
+											</Tab>
+										);
+									}
+								)}
+							</Tab.List>
+
+							<Tab.Panels>
+								{Object.entries(startup.page).map(
+									([key, value]) => {
+										return (
+											<Tab.Panel key={key}>
+												<RichTextEditor
+													saveContent={
+														saveContent
+													}
+													title={key}
+													initialEditorState={
+														value
+													}
+												/>
+											</Tab.Panel>
+										);
+									}
+								)}
+							</Tab.Panels>
+						</Tab.Group>
+					)}
 				</>
 			)}
 		</main>

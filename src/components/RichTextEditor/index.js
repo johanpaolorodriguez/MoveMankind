@@ -1,66 +1,58 @@
-import React, { useRef } from "react";
-import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import LexicalErrorBoundary from "./LexicalErrorBoundary";
-import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
-import { ContentEditable } from "@lexical/react/LexicalContentEditable";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import SetInitialContentPlugin from "./plugins/SetInitialContentPlugin";
-import { ImageNode } from "./nodes/ImageNode";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
+import React, { useEffect } from "react";
 import Toolbar from "./toolbar";
-import ImagePlugin from "./plugins/ImagePlugin";
+import CustomImage from "./extensions/CustomImage";
+import CustomParagraph from "./extensions/CustomParagraph";
 
 export default function RichTextEditor({
 	saveContent,
 	title,
 	initialEditorState,
 }) {
-	const editorStateRef = useRef();
-	const editorConfig = {
-		theme: {
-			paragraph: "mb-1",
-			rtl: "text-right",
-			ltr: "text-left",
-			text: {
-				bold: "font-bold",
-				italic: "italic",
-				underline: "underline",
-				strikethrough: "line-through",
+	const editor = useEditor({
+		editorProps: {
+			attributes: {
+				class: "prose prose-slate m-5 focus:outline-none max-w-none",
 			},
 		},
-		onError(error) {
-			throw error;
-		},
-		nodes: [ImageNode],
-	};
+		extensions: [
+			StarterKit.configure({
+				paragraph: false,
+			}),
+			Underline,
+			CustomImage.configure({
+				inline: true,
+			}),
+			CustomParagraph,
 
-	function onChange(editorState) {
-		editorStateRef.current = editorState;
-	}
+			TextAlign.configure({
+				types: ["heading", "paragraph"],
+			}),
+		],
+		content: ``,
+	});
+
+	useEffect(() => {
+		if (editor && initialEditorState) {
+			const json = JSON.parse(initialEditorState);
+			editor.commands.setContent(json);
+		}
+	}, [editor, initialEditorState]);
 
 	const handleSave = () => {
-		if (editorStateRef.current) {
-			saveContent({
-				[title]: JSON.stringify(editorStateRef.current),
-			});
-		}
+		const json = editor.getJSON();
+		saveContent({
+			[title]: JSON.stringify(json),
+		});
 	};
 
 	return (
-		<div className="relative bg-white border border-gray-200 rounded-sm shadow-sm">
-			<LexicalComposer initialConfig={editorConfig}>
-				<SetInitialContentPlugin value={initialEditorState} />
-				<Toolbar handleSave={handleSave} />
-				<ImagePlugin captionsEnabled={false} />
-				<RichTextPlugin
-					contentEditable={
-						<ContentEditable className="min-h-[450px] outline-none py-[15px] px-2.5 resize-none overflow-hidden text-ellipsis" />
-					}
-					ErrorBoundary={LexicalErrorBoundary}
-				/>
-				<OnChangePlugin onChange={onChange} />
-				<HistoryPlugin />
-			</LexicalComposer>
+		<div>
+			<Toolbar editor={editor} handleSave={handleSave} />
+			<EditorContent editor={editor} />
 		</div>
 	);
 }
