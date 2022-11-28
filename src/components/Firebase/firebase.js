@@ -8,6 +8,7 @@ import {
 	arrayRemove,
 	deleteField,
 } from "@firebase/firestore";
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { seedAllCollections } from "./databaseSeeder/102222_seeder";
 import {
@@ -39,6 +40,7 @@ class Firebase {
 		this.auth_ = app.auth;
 		this.db = getFirestore();
 		this.storage = getStorage();
+		this.functions = getFunctions();
 
 		connectFirestoreEmulator(this.db, "localhost", 8080);
 		connectStorageEmulator(this.storage, "localhost", 9199);
@@ -50,6 +52,16 @@ class Firebase {
 		// } catch (error) {
 		// 	console.log(error);
 		// }
+
+		// const addDefaultAdmin = httpsCallable(this.functions, "addAdminRole");
+
+		// addDefaultAdmin({ email: "testing@test.com" })
+		// 	.then((res) => {
+		// 		console.log(res);
+		// 	})
+		// 	.catch((error) => {
+		// 		console.log(error);
+		// 	});
 	}
 
 	// *** AUTH API ***
