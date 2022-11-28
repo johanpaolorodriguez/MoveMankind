@@ -32,6 +32,7 @@ const App = () => {
 			<Route path={ROUTES.CATEGORY} component={StartUpsPage} />
 			<Route path={ROUTES.PROFILE} component={UserProfilePage} />
 			<Route path="/startups/:uid" component={ViewStartUpPage} />
+			<Footer />
 			<Toaster position="top-right" reverseOrder={false} />
 		</Router>
 	);
