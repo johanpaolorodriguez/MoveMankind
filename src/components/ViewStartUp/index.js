@@ -6,12 +6,14 @@ import { useLocation } from "react-router-dom";
 import { Tab } from "@headlessui/react";
 import { AuthUserContext } from "../Session";
 import RichTextEditor from "../RichTextEditor";
+import Banner from "../Banner";
+import AdminEditor from "../RichTextEditor/adminEditor";
 
 const ViewStartUpPage = (props) => {
 	const { uid } = useParams();
 	const authUser = useContext(AuthUserContext);
 	const [startup, setStartup] = useState({});
-	const [overview, setOverview] = useState("");
+	const [open, setOpen] = useState(false);
 
 	const location = useLocation();
 	useEffect(() => {
@@ -23,9 +25,6 @@ const ViewStartUpPage = (props) => {
 			try {
 				const data = await props.firebase.getStartupByID(uid);
 				setStartup(data);
-				if (data.overview) {
-					setOverview(data.overview);
-				}
 			} catch (error) {
 				console.log(error);
 			}
@@ -41,10 +40,16 @@ const ViewStartUpPage = (props) => {
 		}
 	};
 
-	console.log(startup.page);
-
 	return (
 		<main className="max-w-screen-xl mx-auto">
+			<AdminEditor
+				open={open}
+				setOpen={setOpen}
+				saveContent={saveContent}
+				page={startup.page}
+				// title={key}
+				// initialEditorState={value}
+			/>
 			{startup && (
 				<>
 					<header className="flex flex-col justify-around m-6 space-y-7 | md:space-y-14 md:m-12">
@@ -137,8 +142,12 @@ const ViewStartUpPage = (props) => {
 						</div>
 					</header>
 
+					{authUser?.authUser?.admin && (
+						<Banner setOpen={setOpen} />
+					)}
+
 					{startup.page && (
-						<Tab.Group as="section">
+						<Tab.Group as="section" className="min-h-screen">
 							<Tab.List className="px-6 space-x-12 text-lg border-gray-300 border-y">
 								{Object.keys(startup.page).map(
 									(key, index) => {
