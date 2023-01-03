@@ -1,5 +1,5 @@
 import React, { Fragment, useContext } from "react";
-import { NavLink, Link, useHistory } from "react-router-dom";
+import { NavLink, Link, useHistory, useLocation } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 import { AuthUserContext } from "../Session";
 import SignoutButton from "../SignOut";
@@ -7,13 +7,43 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon, SearchIcon } from "@heroicons/react/solid";
 import logo from "../../assets/logo.png";
 import Gravatar from "react-gravatar";
+import clsx from "clsx";
 // import Search from "../Search";
 
 const Navigation = () => {
 	const authUser = useContext(AuthUserContext);
 	const history = useHistory();
+	let location = useLocation();
+
+	const isSignupLocation = () => {
+		if (
+			[
+				// ROUTES.SIGN_UP,
+				ROUTES.SIGN_UP_ABOUT,
+				ROUTES.SIGN_UP_CONTRIBUTIONS,
+				ROUTES.SIGN_UP_TALENT,
+				ROUTES.SIGN_UP_INTERESTS,
+				// ROUTES.SIGN_UP + "/",
+				ROUTES.SIGN_UP_ABOUT + "/",
+				ROUTES.SIGN_UP_CONTRIBUTIONS + "/",
+				ROUTES.SIGN_UP_TALENT + "/",
+				ROUTES.SIGN_UP_INTERESTS + "/",
+			].includes(location.pathname)
+		) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
 	return (
-		<Disclosure as="nav" className="bg-primary">
+		<Disclosure
+			as="nav"
+			className={clsx(
+				"bg-primary",
+				isSignupLocation() ? "lg:hidden" : ""
+			)}
+		>
 			{({ open }) => (
 				<Fragment>
 					<div className="px-5 mx-auto max-w-7xl | sm:px-6 | lg:px-8">
@@ -90,28 +120,23 @@ const Navigation = () => {
 													as="div"
 													className="relative z-50 ml-3"
 												>
-													<div>
-														<Menu.Button className="flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-															<span className="sr-only">
-																Open
-																user
-																menu
-															</span>
-															<Gravatar
-																email={
-																	authUser
-																		.authUser
-																		.email
-																}
-																className="w-8 h-8 rounded-full"
-																default="retro"
-															/>
-														</Menu.Button>
-													</div>
+													<Menu.Button className="flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+														<span className="sr-only">
+															Open
+															user
+															menu
+														</span>
+														<Gravatar
+															email={
+																authUser
+																	.authUser
+																	.email
+															}
+															className="w-8 h-8 rounded-full"
+															default="retro"
+														/>
+													</Menu.Button>
 													<Transition
-														as={
-															Fragment
-														}
 														enter="transition ease-out duration-100"
 														enterFrom="transform opacity-0 scale-95"
 														enterTo="transform opacity-100 scale-100"
@@ -120,20 +145,6 @@ const Navigation = () => {
 														leaveTo="transform opacity-0 scale-95"
 													>
 														<Menu.Items className="absolute right-0 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-															{/* <Menu.Item>
-                              {({ active }) => (
-                                //TODO:ADD PROPER HREF ATTRBS.
-                                <a
-                                  href="#"
-                                  className={classNames(
-                                    active ? "bg-gray-100" : "",
-                                    "block px-4 py-2 text-sm text-gray-700"
-                                  )}
-                                >
-                                  Your Profile
-                                </a>
-                              )}
-                            </Menu.Item> */}
 															<Menu.Item>
 																<button
 																	type="button"
@@ -167,6 +178,7 @@ const Navigation = () => {
 										className="relative z-50 w-full ml-3 sm:hidden"
 									>
 										<Menu.Button className="flex w-full text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+											Try
 											<span className="sr-only">
 												Open user menu
 											</span>
@@ -180,6 +192,7 @@ const Navigation = () => {
 												default="retro"
 											/>
 										</Menu.Button>
+
 										<Transition
 											as={Fragment}
 											enter="transition ease-out duration-100"
@@ -260,24 +273,36 @@ const Navigation = () => {
 	);
 };
 
-const NavbarLink = (props) => (
+const NavbarLink = React.forwardRef((props, ref) => (
 	<NavLink
 		className="px-3 py-2 text-white rounded-md hover:bg-gray-700 hover:text-gray"
 		activeClassName="bg-gray-700"
+		ref={ref}
 		{...props}
 	>
 		<span className="flex-shrink-0">{props.name}</span>
 	</NavLink>
-);
+));
 
-const NavPanelLink = (props) => (
+// const NavbarLink = (props) => (
+// 	<NavLink
+// 		className="px-3 py-2 text-white rounded-md hover:bg-gray-700 hover:text-gray"
+// 		activeClassName="bg-gray-700"
+// 		{...props}
+// 	>
+// 		<span className="flex-shrink-0">{props.name}</span>
+// 	</NavLink>
+// );
+
+const NavPanelLink = React.forwardRef((props, ref) => (
 	<NavLink
 		className="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
 		activeClassName="bg-gray-900 text-white"
 		{...props}
+		ref={ref}
 	>
 		<span className="flex-shrink-0">{props.name}</span>
 	</NavLink>
-);
+));
 
 export default Navigation;
