@@ -15,6 +15,8 @@
     "@tiptap/extension-dropcursor": "^2.0.0-beta.202",
     "@tiptap/extension-image": "^2.0.0-beta.202",
     "@tiptap/extension-paragraph": "^2.0.0-beta.202",
+    "@tiptap/extension-task-item": "^2.0.0-beta.204",
+    "@tiptap/extension-task-list": "^2.0.0-beta.204",
     "@tiptap/extension-text-align": "^2.0.0-beta.202",
     "@tiptap/extension-underline": "^2.0.0-beta.202",
     "@tiptap/react": "^2.0.0-beta.202",
@@ -29,6 +31,7 @@
     "react-dom": "^17.0.2",
     "react-error-boundary": "^3.1.4",
     "react-gravatar": "^2.6.3",
+    "react-hook-form": "^7.40.0",
     "react-hot-toast": "^2.2.0",
     "react-instantsearch-dom": "^6.13.0",
     "react-router-dom": "^5.3.0",
@@ -37,7 +40,8 @@
     "react-select-country-list": "^2.2.3",
     "recompose": "^0.30.0",
     "tiptap-imagresize": "^1.0.2",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^1.1.2",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",
