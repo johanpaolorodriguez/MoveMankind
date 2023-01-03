@@ -42,8 +42,8 @@ class Firebase {
 		this.storage = getStorage();
 		this.functions = getFunctions();
 
-		connectFirestoreEmulator(this.db, "localhost", 8080);
-		connectStorageEmulator(this.storage, "localhost", 9199);
+		// connectFirestoreEmulator(this.db, "localhost", 8080);
+		// connectStorageEmulator(this.storage, "localhost", 9199);
 
 		// try {
 		// 	seedAllCollections(this.db, this.storage).then(
