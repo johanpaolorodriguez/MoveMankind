@@ -1,8 +1,37 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
+import * as ROUTES from "../../constants/routes";
 
 const Footer = () => {
+	let location = useLocation();
+
+	const isSignupLocation = () => {
+		if (
+			[
+				// ROUTES.SIGN_UP,
+				ROUTES.SIGN_UP_ABOUT,
+				ROUTES.SIGN_UP_CONTRIBUTIONS,
+				ROUTES.SIGN_UP_TALENT,
+				ROUTES.SIGN_UP_INTERESTS,
+				// ROUTES.SIGN_UP + "/",
+				ROUTES.SIGN_UP_ABOUT + "/",
+				ROUTES.SIGN_UP_CONTRIBUTIONS + "/",
+				ROUTES.SIGN_UP_TALENT + "/",
+				ROUTES.SIGN_UP_INTERESTS + "/",
+			].includes(location.pathname)
+		) {
+			return true;
+		} else {
+			return false;
+		}
+	};
+
+	if (isSignupLocation()) {
+		return null;
+	}
+
 	return (
-		<div className="flex items-center w-full h-20 bg-primary">
+		<div className="absolute bottom-0 flex items-center w-full h-20 bg-primary">
 			<div className="w-full px-6 mx-auto max-w-7xl | md:flex md:justify-between">
 				<p className="text-sm text-white font-base">
 					© 2021 For Future. All rights reserved.
