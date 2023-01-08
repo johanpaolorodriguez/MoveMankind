@@ -15,12 +15,10 @@ import UserProfilePage from "../UserProfile";
 import Footer from "../Footer";
 import ViewStartUpPage from "../ViewStartUp";
 import { Toaster } from "react-hot-toast";
-import { SignUpProvider } from "../SignUp/context";
 import { About } from "../SignUp/steps/About";
 import { Interests } from "../SignUp/steps/Interests";
 import { Talent } from "../SignUp/steps/Talent";
 import FinacialContributions from "../SignUp/steps/FinancialContributions";
-import Example from "../SignUp/InvestmentPreferences";
 
 createStore({
 	signUpFormData: {},
@@ -32,7 +30,6 @@ const App = () => {
 			<Router>
 				<div>
 					<Navigation />
-					<Route exact path={"/example"} component={Example} />
 					<Route
 						exact
 						path={ROUTES.SIGN_UP}
