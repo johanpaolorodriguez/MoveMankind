@@ -6,6 +6,8 @@ import React, { useEffect, useState } from "react";
 import Toolbar from "./toolbar";
 import CustomImage from "./extensions/CustomImage";
 import CustomParagraph from "./extensions/CustomParagraph";
+import TaskList from "@tiptap/extension-task-list";
+import TaskItem from "@tiptap/extension-task-item";
 
 export default function RichTextEditor({
 	saveContent,
@@ -13,8 +15,21 @@ export default function RichTextEditor({
 	initialEditorState,
 	isEditable = false,
 }) {
+	const [chosenContributions, setChosenContributions] = useState([]);
+
+	const appendChosenContributions = (node, checked) => {
+		let text = node.textContent;
+		if (checked) {
+			setChosenContributions((prev) => [...prev, text]);
+		} else {
+			setChosenContributions((prev) =>
+				prev.filter((item) => item !== text)
+			);
+		}
+	};
+
 	const editor = useEditor({
-		isEditable,
+		editable: isEditable,
 		editorProps: {
 			attributes: {
 				class: "prose prose-slate m-5 focus:outline-none max-w-none",
@@ -25,13 +40,32 @@ export default function RichTextEditor({
 				paragraph: false,
 			}),
 			Underline,
+
 			CustomImage.configure({
 				inline: true,
 			}),
+
 			CustomParagraph,
 
 			TextAlign.configure({
 				types: ["heading", "paragraph"],
+			}),
+			TaskList.configure({
+				HTMLAttributes: {
+					class: "list-none",
+				},
+			}),
+
+			TaskItem.configure({
+				HTMLAttributes: {
+					class: "flex not-prose space-x-4",
+				},
+				nested: true,
+				onReadOnlyChecked: (node, checked) => {
+					appendChosenContributions(node, checked);
+					//condition for title being contribute
+					return true;
+				},
 			}),
 		],
 		content: ``,
