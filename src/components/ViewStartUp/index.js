@@ -1,19 +1,23 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router";
-import { withFirebase } from "../Firebase";
-import FollowButton from "../Follow";
-import { useLocation } from "react-router-dom";
 import { Tab } from "@headlessui/react";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router";
+import { useLocation } from "react-router-dom";
 import { AuthUserContext } from "../Session";
-import RichTextEditor from "../RichTextEditor";
+import { withFirebase } from "../Firebase";
 import Banner from "../Banner";
+import FollowButton from "../Follow";
+import RichTextEditor from "../RichTextEditor";
 import AdminEditor from "../RichTextEditor/adminEditor";
+import SignInOrUpPrompt from "../SignIn/SignInOrUpPrompt";
+import ContributePrompt from "../ContributePrompt";
 
 const ViewStartUpPage = (props) => {
 	const { uid } = useParams();
 	const authUser = useContext(AuthUserContext);
 	const [startup, setStartup] = useState({});
-	const [open, setOpen] = useState(false);
+	const [isSignInOrUpPromptOpen, setSignInOrUpPromptOpen] = useState(false);
+	const [isAdminEditorOpen, setAdminEditorOpen] = useState(false);
+	const [isContributePromptOpen, setContributePromptOpen] = useState(false);
 
 	const location = useLocation();
 	useEffect(() => {
@@ -30,7 +34,7 @@ const ViewStartUpPage = (props) => {
 			}
 		};
 		fetchStartup();
-	}, [props.firebase, uid]);
+	}, [props.firebase, props.firebase.db, uid]);
 
 	const saveContent = async (data) => {
 		try {
@@ -42,13 +46,21 @@ const ViewStartUpPage = (props) => {
 
 	return (
 		<main className="max-w-screen-xl mx-auto">
+			<SignInOrUpPrompt
+				isOpen={isSignInOrUpPromptOpen}
+				setIsOpen={setSignInOrUpPromptOpen}
+			/>
+
+			<ContributePrompt
+				isOpen={isContributePromptOpen}
+				setIsOpen={setContributePromptOpen}
+			/>
+
 			<AdminEditor
-				open={open}
-				setOpen={setOpen}
+				open={isAdminEditorOpen}
+				setOpen={setAdminEditorOpen}
 				saveContent={saveContent}
 				page={startup.page}
-				// title={key}
-				// initialEditorState={value}
 			/>
 			{startup && (
 				<>
@@ -118,14 +130,23 @@ const ViewStartUpPage = (props) => {
 								</dl>
 
 								<div className="hidden | lg:flex lg:flex-col-reverse lg:space-y-7">
-									<button className="flex justify-center w-full px-8 py-4 text-white bg-blue-500 rounded-md text-button font-primary">
+									<button
+										onClick={() =>
+											setContributePromptOpen(
+												true
+											)
+										}
+										className="flex justify-center w-full px-8 py-4 text-white bg-blue-500 rounded-md text-button font-primary"
+									>
 										Contribute to this venture
 									</button>
-									<button className="flex justify-center w-full px-8 py-4 text-blue-500 bg-white border border-blue-500 rounded-md text-button font-primary | md:order-first">
-										Keep me updated
-									</button>
+
 									<FollowButton
 										startupUid={startup.uid}
+										setIsOpen={
+											setSignInOrUpPromptOpen
+										}
+										// userData={userData}
 									/>
 								</div>
 							</div>
@@ -135,55 +156,67 @@ const ViewStartUpPage = (props) => {
 							<button className="flex justify-center w-full px-8 py-4 text-white bg-blue-500 rounded-md text-button font-primary">
 								Contribute to this venture
 							</button>
-							<button className="flex justify-center w-full px-8 py-4 text-blue-500 bg-white border border-blue-500 rounded-md text-button font-primary | md:order-first">
-								Keep me updated
-							</button>
-							<FollowButton startupUid={startup.uid} />
+							<FollowButton
+								startupUid={startup.uid}
+								setIsOpen={() =>
+									setSignInOrUpPromptOpen(true)
+								}
+							/>
 						</div>
 					</header>
 
-					{authUser?.authUser?.admin && (
-						<Banner setOpen={setOpen} />
+					{authUser?.authUser.admin && (
+						<div className="pb-24">
+							<Banner setOpen={setAdminEditorOpen} />
+						</div>
 					)}
 
-					{startup.page && (
-						<Tab.Group as="section" className="min-h-screen">
-							<Tab.List className="px-6 space-x-12 text-lg border-gray-300 border-y">
-								{Object.keys(startup.page).map(
-									(key, index) => {
-										return (
-											<Tab
-												key={index}
-												className="font-semibold py-6 focus:outline-none ui-selected:border-b-4 ui-selected:border-blue-500 ui-selected:text-blue-700 | ui-not-selected:text-gray-400 capitalize"
-											>
-												{key}
-											</Tab>
-										);
-									}
-								)}
-							</Tab.List>
+					{startup?.page &&
+						Object.keys(startup.page).length !== 0 && (
+							<Tab.Group
+								as="section"
+								className="min-h-screen"
+							>
+								<Tab.List className="px-6 space-x-12 text-lg border-gray-300 border-y">
+									{Object.keys(startup.page).map(
+										(key, index) => {
+											return (
+												<Tab
+													key={index}
+													className="font-semibold py-6 focus:outline-none ui-selected:border-b-4 ui-selected:border-blue-500 ui-selected:text-blue-700 | ui-not-selected:text-gray-400 capitalize"
+												>
+													{key}
+												</Tab>
+											);
+										}
+									)}
+								</Tab.List>
 
-							<Tab.Panels>
-								{Object.entries(startup.page).map(
-									([key, value]) => {
-										return (
-											<Tab.Panel key={key}>
-												<RichTextEditor
-													saveContent={
-														saveContent
-													}
-													title={key}
-													initialEditorState={
-														value
-													}
-												/>
-											</Tab.Panel>
-										);
-									}
-								)}
-							</Tab.Panels>
-						</Tab.Group>
-					)}
+								<Tab.Panels>
+									{Object.entries(startup.page).map(
+										([key, value]) => {
+											return (
+												<Tab.Panel
+													key={key}
+												>
+													<RichTextEditor
+														saveContent={
+															saveContent
+														}
+														title={
+															key
+														}
+														initialEditorState={
+															value
+														}
+													/>
+												</Tab.Panel>
+											);
+										}
+									)}
+								</Tab.Panels>
+							</Tab.Group>
+						)}
 				</>
 			)}
 		</main>
