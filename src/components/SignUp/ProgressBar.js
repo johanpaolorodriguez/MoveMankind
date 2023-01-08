@@ -1,138 +1,170 @@
+import clsx from "clsx";
 import React from "react";
+import { Link } from "react-router-dom";
+import logo from "../../assets/logo.png";
 
-const ProgressBar = ({ step }) => {
-  return (
-    <span className="flex items-center mx-auto justify-evenly w-44">
-      {[1, 2, 3].includes(step) ? <Checked /> : <Unchecked />}
-      {[2, 3].includes(step) ? <Tracked /> : <Untracked />}
-      {[2, 3].includes(step) ? <Checked /> : <Unchecked />}
-      {[3].includes(step) ? <Tracked /> : <Untracked />}
-      {[3].includes(step) ? <Checked /> : <Unchecked />}
-    </span>
-  );
+const ProgressBar = ({ step, size = null }) => {
+	switch (size) {
+		case "lg":
+			return (
+				<div className="mt-24 flex flex-col justify-between mr-24 min-h-[330px] w-[300px]">
+					<Link to={"/"}>
+						<div className="flex items-center flex-shrink-0 mb-24">
+							<img
+								src={logo}
+								alt="Move Mankind Logo"
+								className="block w-14 h-14"
+							/>
+						</div>
+					</Link>
+
+					<span className="flex space-x-4">
+						{step === 0 ? <Checked /> : <Unchecked />}
+						<span
+							className={clsx(
+								"text-lg",
+								step === 0
+									? "text-white font-semibold"
+									: "text-gray-400"
+							)}
+						>
+							Create Account
+						</span>
+					</span>
+
+					<span className="flex-grow border-r-[3px] border-gray-300 shrink-0 min-h-[50px] w-[14px]"></span>
+
+					<span className="flex space-x-4">
+						{step === 1 ? <Checked /> : <Unchecked />}
+						<span
+							className={clsx(
+								"text-lg",
+								step === 1
+									? "text-white font-semibold"
+									: "text-gray-400"
+							)}
+						>
+							Set up profile
+						</span>
+					</span>
+
+					<span className="flex-grow border-r-[3px] border-gray-300 shrink-0 min-h-[50px] w-[14px]"></span>
+					<span className="flex space-x-4">
+						{step === 2 ? <Checked /> : <Unchecked />}
+						<span
+							className={clsx(
+								"text-lg",
+								step === 2
+									? "text-white font-semibold"
+									: "text-gray-400"
+							)}
+						>
+							Interests
+						</span>
+					</span>
+
+					<span className="flex-grow border-r-[3px] border-gray-300 shrink-0 min-h-[50px] w-[14px]"></span>
+					<span className="flex space-x-4">
+						{step === 3 ? <Checked /> : <Unchecked />}
+						<span
+							className={clsx(
+								"text-lg",
+								step === 3
+									? "text-white font-semibold"
+									: "text-gray-400"
+							)}
+						>
+							Talent Contributions
+						</span>
+					</span>
+
+					<span className="flex-grow border-r-[3px] border-gray-300 shrink-0 min-h-[50px] w-[14px]"></span>
+					<span className="flex space-x-4">
+						{step === 4 ? <Checked /> : <Unchecked />}
+						<span
+							className={clsx(
+								"text-lg",
+								step === 4
+									? "text-white font-semibold"
+									: "text-gray-400"
+							)}
+						>
+							Financial contributions
+						</span>
+					</span>
+				</div>
+			);
+
+		default:
+			return (
+				<div className="flex items-center justify-between w-full mx-auto">
+					{step === 1 ? <Checked /> : <Unchecked />}
+
+					<span className="flex-grow border-b-[3px] border-gray-300 shrink"></span>
+
+					{step === 2 ? <Checked /> : <Unchecked />}
+
+					<span className="flex-grow border-b-[3px] border-gray-300 shrink"></span>
+
+					{step === 3 ? <Checked /> : <Unchecked />}
+
+					<span className="flex-grow border-b-[3px] border-gray-300 shrink"></span>
+
+					{step === 4 ? <Checked /> : <Unchecked />}
+				</div>
+			);
+	}
 };
 const Unchecked = () => (
-  <svg
-    width="28"
-    height="28"
-    viewBox="0 0 28 28"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <rect
-      x="1.5"
-      y="26.5"
-      width="25"
-      height="25"
-      rx="2.5"
-      transform="rotate(-90 1.5 26.5)"
-      stroke="#91929A"
-      strokeWidth="3"
-    />
-  </svg>
+	<svg
+		width="28"
+		height="28"
+		viewBox="0 0 28 28"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<rect
+			x="26.5"
+			y="1.5"
+			width="25"
+			height="25"
+			rx="12.5"
+			transform="rotate(90 26.5 1.5)"
+			stroke="#CACACA"
+			strokeWidth="3"
+		/>
+	</svg>
 );
 
 const Checked = () => (
-  <svg
-    width="28"
-    height="28"
-    viewBox="0 0 28 28"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <rect
-      x="0.5"
-      y="27.5"
-      width="27"
-      height="27"
-      rx="3.5"
-      transform="rotate(-90 0.5 27.5)"
-      fill="#4661FF"
-    />
-    <rect
-      x="1.5"
-      y="26.5"
-      width="25"
-      height="25"
-      rx="2.5"
-      transform="rotate(-90 1.5 26.5)"
-      stroke="#23253!5"
-      strokeWidth="3"
-    />
-    <rect
-      x="8.40015"
-      y="19.5999"
-      width="11.2"
-      height="11.2"
-      rx="2"
-      transform="rotate(-90 8.40015 19.5999)"
-      fill="#232535"
-    />
-    <rect
-      x="0.5"
-      y="27.5"
-      width="27"
-      height="27"
-      rx="3.5"
-      transform="rotate(-90 0.5 27.5)"
-      stroke="black"
-    />
-  </svg>
+	<svg
+		width="28"
+		height="28"
+		viewBox="0 0 28 28"
+		fill="none"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<rect
+			x="26.5"
+			y="1.5"
+			width="25"
+			height="25"
+			rx="12.5"
+			transform="rotate(90 26.5 1.5)"
+			fill="#4661FF"
+			stroke="#4661FF"
+			strokeWidth="3"
+		/>
+		<rect
+			x="19.75"
+			y="8"
+			width="11.7505"
+			height="11.7505"
+			rx="5.87524"
+			transform="rotate(90 19.75 8)"
+			fill="#FAFBFF"
+		/>
+	</svg>
 );
 
-const Untracked = () => (
-  <svg
-    width="24"
-    height="4"
-    viewBox="0 0 24 4"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <rect
-      y="4"
-      width="4"
-      height="9"
-      rx="1"
-      transform="rotate(-90 0 4)"
-      fill="#91929A"
-    />
-    <rect
-      x="15"
-      y="4"
-      width="4"
-      height="9"
-      rx="1"
-      transform="rotate(-90 15 4)"
-      fill="#91929A"
-    />
-  </svg>
-);
-
-const Tracked = () => (
-  <svg
-    width="24"
-    height="4"
-    viewBox="0 0 24 4"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <rect
-      y="4"
-      width="4"
-      height="9"
-      rx="1"
-      transform="rotate(-90 0 4)"
-      fill="#333"
-    />
-    <rect
-      x="15"
-      y="4"
-      width="4"
-      height="9"
-      rx="1"
-      transform="rotate(-90 15 4)"
-      fill="#333"
-    />
-  </svg>
-);
 export default ProgressBar;
