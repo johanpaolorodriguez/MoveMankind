@@ -42,7 +42,6 @@ const StartUpsPage = (props) => {
 			}
 		};
 		fetchStartups();
-		console.log(filters);
 	}, [props.firebase, filters]);
 
 	const [tags, setTags] = useState({});
