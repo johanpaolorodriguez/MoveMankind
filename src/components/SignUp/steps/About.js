@@ -68,14 +68,14 @@ export const About = (props) => {
 						</Field>
 
 						<Field
-							label="Headline/intro"
+							label="Please introduce yourself in one sentence"
 							error={errors?.headline}
 						>
 							<Input
 								{...register("headline")}
 								type="text"
 								id="headline"
-								placeholder="Headline"
+								placeholder="Introduction"
 								autoComplete="headline"
 								required
 							/>
