@@ -178,7 +178,6 @@ const Navigation = () => {
 										className="relative z-50 w-full ml-3 sm:hidden"
 									>
 										<Menu.Button className="flex w-full text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
-											Try
 											<span className="sr-only">
 												Open user menu
 											</span>
