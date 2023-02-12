@@ -35,7 +35,7 @@ const Footer = () => {
 			<div className="w-full px-6 mx-auto max-w-7xl flex flex-col justify-center text-center | md:justify-between md:flex-row">
 				<a
 					className="flex items-center justify-center space-x-2 text-sm text-white | md:order-last"
-					href="/"
+					href="https://www.instagram.com/forfuture.ventures/"
 				>
 					<span>Follow Us</span>
 					<svg
