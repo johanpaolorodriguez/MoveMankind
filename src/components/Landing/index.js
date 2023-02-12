@@ -1,6 +1,9 @@
 import React from "react";
 import { withFirebase } from "../Firebase";
-import HeroSvg from "../../assets/hero_svg.png";
+import hero_desktop from "../../assets/hero_desktop.svg";
+import hero_tablet from "../../assets/hero_tablet.svg";
+import hero_mobile from "../../assets/hero_mobile.svg";
+import background from "../../assets/background.svg";
 import {
 	CurrencyDollarIcon,
 	HeartIcon,
@@ -8,51 +11,61 @@ import {
 	SearchCircleIcon,
 } from "@heroicons/react/outline";
 
-const LandingPage = (props) => {
+const LandingPage = () => {
 	return (
 		<div className="relative overflow-hidden">
-			<div className="relative w-full min-h-[calc(100vh_-_5rem)] bg-primary flex justify-center lg:justify-start">
-				<div className="max-w-7xl z-10 flex flex-col justify-between mx-auto | lg:w-full">
-					<main className=" space-y-12 mt-10 max-w-7xl px-4 | sm:text-center sm:mt-12 sm:px-6 | md:mt-16 |  lg:max-w-4xl lg:mt-20 lg:px-8 lg:text-left | xl:mt-28">
-						<h1 className="text-4xl tracking-tight font-semibold font-primary text-white | sm:text-5xl | md:text-6xl">
-							Discover and back ventures impacting
+			<div className="bg-[url('./assets/background.svg')] w-full bg-primary flex justify-center flex-col | lg:justify-start py-6">
+				<div className="max-w-7xl z-10 flex flex-col justify-between mx-auto | lg:flex-row lg:w-full">
+					<picture className="flex justify-center">
+						<source
+							media="(min-width:1024px)"
+							srcSet={hero_desktop}
+						/>
+						<source
+							media="(min-width:768px)"
+							srcSet={hero_tablet}
+						/>
+						<img
+							className="w-auto h-auto"
+							src={hero_mobile}
+							alt=""
+						/>
+					</picture>
+
+					<main className=" space-y-12 mt-10 px-6 | sm:mt-12 sm:px-6 | md:mt-16 |  lg:max-w-xl lg:mt-20 lg:px-0 lg:text-left lg:order-first">
+						<h1 className="text-3xl tracking-tight font-semibold font-primary text-white | md:text-4xl | lg:font-extrabold">
+							Discover and back the ventures impacting
 							humanity’s existential risks
 						</h1>
 
-						<p className="mt-3 text-base text-gray-200 | sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto | md:mt-5 md:text-xl | lg:mx-0">
+						<p className="mt-3 text-xl text-gray-200 | sm:mt-5 sm:text-lg | md:mt-5 md:text-2xl | lg:mx-0">
 							Climate, space, AI safety, and biotech
 							ventures are seeking funding, talent, advice,
-							and more.
+							and more. Join us to back the future.
 						</p>
 
-						<div className="mt-5 space-y-4 rounded-md shadow | sm:mt-8 sm:flex sm:justify-center max-w-[16rem] | md:max-w-none md:space-y-0 md:space-x-4 | lg:justify-start lg:max-w-xl">
+						<div className="mt-5 space-y-4 rounded-md shadow | sm:mt-8 sm:flex sm:justify-center | md:mx-auto md:max-w-sm md:flex-col | lg:space-y-0 lg:space-x-4 lg:flex-row lg:justify-start lg:max-w-xl">
 							<a
 								href={"/signup"}
-								className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
+								className="flex items-center justify-center w-full px-8 py-3 text-lg font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
 							>
 								Join For Future
 							</a>
 
 							<a
 								href={"/directory"}
-								className="flex items-center justify-center w-full px-8 py-3 text-base font-medium text-white border border-white rounded-md bg-none hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
+								className="flex items-center justify-center w-full px-8 py-3 text-lg font-medium text-white border border-white rounded-md bg-none hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
 							>
 								Explore Directory
 							</a>
 						</div>
 					</main>
 				</div>
-
-				<img
-					className="absolute right-0 bottom-0 object-cover w-auto h-auto | lg:inset-x-none lg:-right-20"
-					src={HeroSvg}
-					alt=""
-				/>
 			</div>
 
-			<div className="w-full bg-white lg:py-32">
-				<div className="flex flex-col justify-between py-8 mx-auto max-w-7xl text-center px-4 space-y-16 | sm:px-6 | md:px-8 | lg:justify-evenly lg:flex-row lg:space-y-0 lg:space-x-6">
-					<article className="flex basis-1/4 flex-col items-center justify-center space-y-3 | lg:justify-start">
+			<div className="pt-16 pb-32 w-full bg-gradient-to-b from-primary to-[#4661FF] lg:py-32">
+				<div className="flex flex-col justify-between py-8 mx-auto max-w-7xl text-center px-6 space-y-8 | md:px-8 | lg:px-0 lg:py-0 lg:justify-evenly lg:flex-row lg:space-y-0 lg:space-x-6">
+					<article className="bg-white rounded-xl px-6 py-8 flex basis-1/4 flex-col items-center justify-center space-y-3 | md:rounded-xl md:min-h-[220px] lg:justify-start">
 						<SearchCircleIcon className="w-10 h-10" />
 						<h3 className="text-xl font-bold tracking-tight text-primary">
 							Discover
@@ -66,7 +79,7 @@ const LandingPage = (props) => {
 						</p>
 					</article>
 
-					<article className="flex basis-1/4 flex-col items-center justify-center space-y-3 | lg:justify-start">
+					<article className="bg-white rounded-xl px-6 py-8 flex basis-1/4 flex-col items-center justify-center space-y-3 | md:rounded-xl md:min-h-[220px] lg:justify-start">
 						<PencilIcon className="w-10 h-10" />
 						<h3 className="text-xl font-bold tracking-tight text-primary">
 							Share your talent
@@ -78,7 +91,7 @@ const LandingPage = (props) => {
 						</p>
 					</article>
 
-					<article className="flex basis-1/4 flex-col items-center justify-center space-y-3 | lg:justify-start">
+					<article className="bg-white rounded-xl px-6 py-8 flex basis-1/4 flex-col items-center justify-center space-y-3 | md:rounded-xl md:min-h-[220px] lg:justify-start">
 						<CurrencyDollarIcon className="w-10 h-10" />
 						<h3 className="text-xl font-bold tracking-tight text-primary">
 							Contribute your money
@@ -89,7 +102,7 @@ const LandingPage = (props) => {
 						</p>
 					</article>
 
-					<article className="flex basis-1/4 flex-col items-center justify-center space-y-3 | lg:justify-start">
+					<article className="bg-white rounded-xl px-6 py-8 flex basis-1/4 flex-col items-center justify-center space-y-3 | md:rounded-xl md:min-h-[220px] lg:justify-start">
 						<HeartIcon className="w-10 h-10" />
 						<h3 className="text-xl font-bold tracking-tight text-primary">
 							Donate your time
