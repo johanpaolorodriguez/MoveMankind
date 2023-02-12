@@ -4,6 +4,7 @@ import { withFirebase } from "../Firebase";
 // import FilterGroup from "../Tags";
 import Table from "./table";
 import SectorFilters from "../SectorFilters";
+import NoResultsImage from "../../assets/Illustration-No Results.png";
 
 const StartUpsPage = (props) => {
 	const [startups, setStartups] = useState([]);
@@ -74,17 +75,14 @@ const StartUpsPage = (props) => {
 		}
 		if (startups.length === 0 && filters.length !== 0) {
 			return (
-				<div className="w-full max-w-6xl mx-auto space-y-6">
-					<p className="text-4xl font-bold text-primary">
-						Sorry, we weren't able to find a match
+				<div className="mx-auto mb-20 space-y-6">
+					<img src={NoResultsImage} alt="No Results" />
+					<p className="text-2xl font-semibold text-center md:text-4xl text-primary">
+						No results found
 					</p>
-					<p className="">
-						Check your spelling or try a different search
-						term.
-					</p>
-					<p className="">
-						Certain ventures may not be available for search
-						at this time.
+					<p className="text-xl text-center">
+						We couldn’t find any ventures with your criteria!
+						Please select another category.
 					</p>
 				</div>
 			);
@@ -119,7 +117,7 @@ const StartUpsPage = (props) => {
 	};
 
 	return (
-		<section className="flex flex-col justify-center">
+		<section className="flex flex-col justify-center mb-20">
 			{/* Filters/Tags */}
 			<SectorFilters
 				filterWithId={filterWithId}
