@@ -54,7 +54,7 @@ const LandingPage = () => {
 
 							<a
 								href={"/directory"}
-								className="flex items-center justify-center w-full px-8 py-3 text-lg font-medium text-white border border-white rounded-md bg-none hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
+								className="flex items-center justify-center w-full px-8 py-3 text-lg font-medium text-white border border-white rounded-md bg-indigo-500/10 bg-none hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
 							>
 								Explore Directory
 							</a>
