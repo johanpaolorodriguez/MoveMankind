@@ -70,7 +70,7 @@ const Navigation = () => {
 
 							<div className="flex items-center w-full">
 								{/* Logo */}
-								<div className="flex items-center justify-center w-full | sm:items-stretch md:justify-start">
+								<div className="flex items-center justify-center w-full space-x-3 | md:justify-start">
 									<Link to={"/"}>
 										<div className="flex items-center flex-shrink-0">
 											<img
@@ -80,6 +80,10 @@ const Navigation = () => {
 											/>
 										</div>
 									</Link>
+
+									<span className="text-xl font-semibold text-white hidden | md:block">
+										For Future
+									</span>
 								</div>
 								{/* Nav Links */}
 								<div className="hidden w-full | sm:block sm:ml-6">
