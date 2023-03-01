@@ -8,9 +8,11 @@ import CustomImage from "./extensions/CustomImage";
 import CustomParagraph from "./extensions/CustomParagraph";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
+import Link from "@tiptap/extension-link";
 
 export default function RichTextEditor({
 	saveContent,
+	deletePost,
 	title,
 	initialEditorState,
 	isEditable = false,
@@ -67,6 +69,7 @@ export default function RichTextEditor({
 					return true;
 				},
 			}),
+			Link,
 		],
 		content: ``,
 	});
@@ -100,10 +103,18 @@ export default function RichTextEditor({
 		});
 	};
 
+	const handleDelete = () => {
+		deletePost(title);
+	};
+
 	return (
 		<div>
 			{isEditable && (
-				<Toolbar editor={editor} handleSave={handleSave} />
+				<Toolbar
+					editor={editor}
+					handleSave={handleSave}
+					handleDelete={handleDelete}
+				/>
 			)}
 			<EditorContent editor={editor} />
 		</div>

@@ -7,7 +7,7 @@ const ToolTip = ({ text }) => (
 	</span>
 );
 
-export default function Toolbar({ editor, handleSave }) {
+export default function Toolbar({ editor, handleSave, handleDelete }) {
 	const addImage = useCallback(() => {
 		const url = window.prompt("URL");
 
@@ -15,6 +15,35 @@ export default function Toolbar({ editor, handleSave }) {
 			editor.chain().focus().setImage({ src: url }).run();
 		}
 	}, [editor]);
+
+	const setLink = useCallback(() => {
+		const previousUrl = editor.getAttributes("link").href;
+		const url = window.prompt("URL", previousUrl);
+
+		// cancelled
+		if (url === null) {
+			return;
+		}
+
+		// empty
+		if (url === "") {
+			editor.chain().focus().extendMarkRange("link").unsetLink().run();
+
+			return;
+		}
+
+		// update link
+		editor
+			.chain()
+			.focus()
+			.extendMarkRange("link")
+			.setLink({ href: url })
+			.run();
+	}, [editor]);
+
+	if (!editor) {
+		return null;
+	}
 
 	return (
 		<div className="fixed z-20 shadow bottom-8 left-1/2 transform -translate-x-1/2 min-w-52 h-10 px-2 py-2 bg-[#1b2733]">
@@ -590,6 +619,67 @@ export default function Toolbar({ editor, handleSave }) {
 
 					<span className="w-[1.5px] bg-gray-500 block h-5"></span>
 
+					{/* Links */}
+					<button
+						className={clsx(
+							"has-tooltip px-1 hover:bg-gray-700 transition-colors duration-100 ease-in relative",
+							editor.isActive("link")
+								? "bg-gray-700"
+								: "bg-transparent"
+						)}
+						onClick={setLink}
+						disabled={
+							!editor
+								.can()
+								.chain()
+								.focus()
+								.toggleBold()
+								.run()
+						}
+					>
+						<svg
+							className="w-5 h-5 text-gray-200 icon"
+							width="24"
+							height="24"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path fill="none" d="M0 0h24v24H0z" />
+							<path d="M18.364 15.536L16.95 14.12l1.414-1.414a5 5 0 1 0-7.071-7.071L9.879 7.05 8.464 5.636 9.88 4.222a7 7 0 0 1 9.9 9.9l-1.415 1.414zm-2.828 2.828l-1.415 1.414a7 7 0 0 1-9.9-9.9l1.415-1.414L7.05 9.88l-1.414 1.414a5 5 0 1 0 7.071 7.071l1.414-1.414 1.415 1.414zm-.708-10.607l1.415 1.415-7.071 7.07-1.415-1.414 7.071-7.07z" />
+						</svg>
+						<ToolTip text={"set link"} />
+					</button>
+
+					{/* unset Link */}
+					<button
+						className={clsx(
+							"has-tooltip px-1 hover:bg-gray-700 transition-colors duration-100 ease-in relative",
+							editor.isActive("link")
+								? "bg-gray-700"
+								: "bg-transparent"
+						)}
+						onClick={() =>
+							editor.chain().focus().unsetLink().run()
+						}
+						disabled={!editor.isActive("link")}
+					>
+						<svg
+							className="w-5 h-5 text-gray-200 icon"
+							width="24"
+							height="24"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path fill="none" d="M0 0h24v24H0z" />
+							<path d="M17 17h5v2h-3v3h-2v-5zM7 7H2V5h3V2h2v5zm11.364 8.536L16.95 14.12l1.414-1.414a5 5 0 1 0-7.071-7.071L9.879 7.05 8.464 5.636 9.88 4.222a7 7 0 0 1 9.9 9.9l-1.415 1.414zm-2.828 2.828l-1.415 1.414a7 7 0 0 1-9.9-9.9l1.415-1.414L7.05 9.88l-1.414 1.414a5 5 0 1 0 7.071 7.071l1.414-1.414 1.415 1.414zm-.708-10.607l1.415 1.415-7.071 7.07-1.415-1.414 7.071-7.07z" />
+						</svg>
+						<ToolTip text={"unset link"} />
+					</button>
+
+					<span className="w-[1.5px] bg-gray-500 block h-5"></span>
+
 					{/* TEXTLEFT */}
 					<button
 						className="relative px-1 transition-colors duration-100 ease-in has-tooltip hover:bg-gray-700"
@@ -853,6 +943,26 @@ export default function Toolbar({ editor, handleSave }) {
 						</svg>
 
 						<ToolTip text={"redo"} />
+					</button>
+
+					{/* DELETE */}
+					<button
+						className="relative px-1 transition-colors duration-100 ease-in has-tooltip hover:bg-gray-700"
+						onClick={handleDelete}
+					>
+						<svg
+							className="w-5 h-5 text-gray-200 icon"
+							width="24"
+							height="24"
+							xmlns="http://www.w3.org/2000/svg"
+							fill="currentColor"
+							viewBox="0 0 24 24"
+						>
+							<path fill="none" d="M0 0h24v24H0z" />
+							<path d="M7 6V3a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3h5v2h-2v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V8H2V6h5zm6.414 8l1.768-1.768-1.414-1.414L12 12.586l-1.768-1.768-1.414 1.414L10.586 14l-1.768 1.768 1.414 1.414L12 15.414l1.768 1.768 1.414-1.414L13.414 14zM9 4v2h6V4H9z" />
+						</svg>
+
+						<ToolTip text={"delete"} />
 					</button>
 
 					{/* SAVE */}

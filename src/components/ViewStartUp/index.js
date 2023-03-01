@@ -10,11 +10,15 @@ import RichTextEditor from "../RichTextEditor";
 import AdminEditor from "../RichTextEditor/adminEditor";
 import SignInOrUpPrompt from "../SignIn/SignInOrUpPrompt";
 import ContributePrompt from "../ContributePrompt";
+import startCase from "lodash/startCase";
+import toast from "react-hot-toast";
+import { CheckCircleIcon } from "@heroicons/react/solid";
 
 const ViewStartUpPage = (props) => {
 	const { uid } = useParams();
 	const authUser = useContext(AuthUserContext);
 	const [startup, setStartup] = useState({});
+	const [updatingStartup, setUpdatingStartup] = useState(false);
 	const [isSignInOrUpPromptOpen, setSignInOrUpPromptOpen] = useState(false);
 	const [isAdminEditorOpen, setAdminEditorOpen] = useState(false);
 	const [isContributePromptOpen, setContributePromptOpen] = useState(false);
@@ -34,14 +38,64 @@ const ViewStartUpPage = (props) => {
 			}
 		};
 		fetchStartup();
-	}, [props.firebase, props.firebase.db, uid]);
+	}, [props.firebase, props.firebase.db, uid, updatingStartup]);
 
 	const saveContent = async (data) => {
+		setUpdatingStartup(true);
 		try {
 			await props.firebase.doEditStartupPageAsAdmin(startup.uid, data);
+			customToast(`Your entry has been saved.`);
+			setUpdatingStartup(false);
 		} catch (error) {
 			console.log(error);
+			setUpdatingStartup(false);
 		}
+	};
+
+	const deletePost = async (title) => {
+		setUpdatingStartup(true);
+		try {
+			await props.firebase.doDeleteStartupPageFieldAsAdmin(
+				startup.uid,
+				title
+			);
+			customToast(`${title} has been deleted.`);
+			setUpdatingStartup(false);
+		} catch (error) {
+			console.log(error);
+			setUpdatingStartup(false);
+		}
+	};
+
+	const customToast = (text) => {
+		return toast.custom((t) => (
+			<div
+				className={`${
+					t.visible ? "animate-enter" : "animate-leave"
+				} max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+			>
+				<div className="flex-1 w-0 p-4">
+					<div className="flex items-start">
+						<div className="flex-shrink-0 pt-0.5">
+							<CheckCircleIcon className="w-10 h-10 text-green-500 rounded-full" />
+						</div>
+						<div className="flex-1 ml-3">
+							<p className="text-sm font-medium text-gray-900">
+								{text}
+							</p>
+						</div>
+					</div>
+				</div>
+				<div className="flex border-l border-gray-200">
+					<button
+						onClick={() => toast.dismiss(t.id)}
+						className="flex items-center justify-center w-full p-4 text-sm font-medium text-indigo-600 border border-transparent rounded-none rounded-r-lg hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+					>
+						Close
+					</button>
+				</div>
+			</div>
+		));
 	};
 
 	return (
@@ -60,6 +114,7 @@ const ViewStartUpPage = (props) => {
 				open={isAdminEditorOpen}
 				setOpen={setAdminEditorOpen}
 				saveContent={saveContent}
+				deletePost={deletePost}
 				page={startup.page}
 			/>
 			{startup && (
@@ -81,7 +136,7 @@ const ViewStartUpPage = (props) => {
 										key={tag}
 										className="inline px-2 py-1 my-1 text-gray-600 capitalize bg-gray-200 rounded-md text-card-tags"
 									>
-										{tag}
+										{startCase(tag)}
 									</span>
 								))}
 						</div>

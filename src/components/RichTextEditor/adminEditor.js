@@ -7,6 +7,7 @@ export default function AdminEditor({
 	setOpen,
 	page = null,
 	saveContent,
+	deletePost,
 }) {
 	const cancelButtonRef = useRef(null);
 	const [title, setTitle] = useState("");
@@ -124,6 +125,7 @@ export default function AdminEditor({
 								</div>
 								<RichTextEditor
 									saveContent={saveContent}
+									deletePost={deletePost}
 									title={title}
 									initialEditorState={initialValue}
 									isEditable={true}
