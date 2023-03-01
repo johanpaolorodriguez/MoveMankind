@@ -119,6 +119,9 @@ const SignInFormBase = (props) => {
 									)}
 								</button>
 							</div>
+							<div className="flex justify-end w-full">
+								{PasswordForgetLink()}
+							</div>
 						</div>
 
 						<button
