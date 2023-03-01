@@ -1,6 +1,8 @@
 import React from "react";
+import startCase from "lodash/startCase";
 
 const Card = ({ startup }) => {
+	console.log(startup);
 	return (
 		<a
 			href={`/startups/${startup.uid}`}
@@ -14,7 +16,9 @@ const Card = ({ startup }) => {
 			<div className="flex flex-col px-6 py-6 space-y-4">
 				<h3 className="text-h3">{startup.name}</h3>
 				<p className="text-base text-gray-500 font-secondary">
-					{startup.city ? `${startup.city} ` : startup.country}
+					{startup.city
+						? `${startup.city}, ${startup.country} `
+						: startup.country}
 				</p>
 				<p className="text-gray-700 text-body line-clamp-3 md:text-sm">
 					{startup.description}
@@ -26,7 +30,7 @@ const Card = ({ startup }) => {
 							key={tag}
 							className="inline px-2 py-1 my-1 text-gray-600 capitalize bg-gray-200 rounded-md text-card-tags"
 						>
-							{tag}
+							{startCase(tag)}
 						</span>
 					))}
 				</div>
