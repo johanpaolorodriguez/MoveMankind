@@ -157,6 +157,18 @@ class Firebase {
 		}
 	};
 
+	doDeleteStartupPageFieldAsAdmin = async (startupId, title) => {
+		try {
+			const startupRef = doc(this.db, "startups", startupId);
+
+			await updateDoc(startupRef, {
+				[`page.${title}`]: deleteField(),
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	doRegisterStartupAsUser = async (userId, startupId) => {
 		try {
 			const batch = writeBatch(this.db);
