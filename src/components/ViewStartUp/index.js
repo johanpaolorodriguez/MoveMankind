@@ -16,7 +16,7 @@ import { CheckCircleIcon } from "@heroicons/react/solid";
 
 const ViewStartUpPage = (props) => {
 	const { uid } = useParams();
-	const authUser = useContext(AuthUserContext);
+	const { authUser } = useContext(AuthUserContext);
 	const [startup, setStartup] = useState({});
 	const [updatingStartup, setUpdatingStartup] = useState(false);
 	const [isSignInOrUpPromptOpen, setSignInOrUpPromptOpen] = useState(false);
@@ -99,7 +99,7 @@ const ViewStartUpPage = (props) => {
 	};
 
 	return (
-		<main className="max-w-screen-xl mx-auto">
+		<main className="max-w-screen-xl mx-auto mb-32">
 			<SignInOrUpPrompt
 				isOpen={isSignInOrUpPromptOpen}
 				setIsOpen={setSignInOrUpPromptOpen}

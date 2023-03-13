@@ -11,7 +11,7 @@ import clsx from "clsx";
 // import Search from "../Search";
 
 const Navigation = () => {
-	const authUser = useContext(AuthUserContext);
+	const { authUser, isLoading } = useContext(AuthUserContext);
 	const history = useHistory();
 	let location = useLocation();
 
@@ -70,8 +70,11 @@ const Navigation = () => {
 
 							<div className="flex items-center w-full">
 								{/* Logo */}
-								<div className="flex items-center justify-center w-full space-x-3 | md:justify-start">
-									<Link to={"/"}>
+								<div className="w-full">
+									<Link
+										to={"/"}
+										className="flex items-center justify-center w-full space-x-3 | md:justify-start"
+									>
 										<div className="flex items-center flex-shrink-0">
 											<img
 												src={logo}
@@ -79,11 +82,10 @@ const Navigation = () => {
 												className="block w-10 h-10"
 											/>
 										</div>
+										<span className="text-2xl font-semibold text-white hidden | md:block">
+											For Future
+										</span>
 									</Link>
-
-									<span className="text-xl font-semibold text-white hidden | md:block">
-										For Future
-									</span>
 								</div>
 								{/* Nav Links */}
 								<div className="hidden w-full | sm:block sm:ml-6">
@@ -96,7 +98,8 @@ const Navigation = () => {
 											/>
 											{/* Algolia Search Component */}
 											{/* <Search /> */}
-											{!authUser && (
+											{!authUser &&
+											isLoading === false ? (
 												<NavbarLink
 													to={
 														ROUTES.SIGN_IN
@@ -106,8 +109,9 @@ const Navigation = () => {
 													}
 													exact
 												/>
-											)}
-											{!authUser && (
+											) : null}
+											{!authUser &&
+											isLoading === false ? (
 												<NavbarLink
 													to={
 														ROUTES.SIGN_UP
@@ -117,7 +121,7 @@ const Navigation = () => {
 													}
 													exact
 												/>
-											)}
+											) : null}
 											{/* Profile dropdown */}
 											{authUser && (
 												<Menu

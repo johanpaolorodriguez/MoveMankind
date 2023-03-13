@@ -5,9 +5,11 @@ import { withFirebase } from "../Firebase";
 const withAuthentication = (Component) => {
 	const WithAuthentication = (props) => {
 		const [authUser, setAuthUser] = useState(null);
+		const [isLoading, setIsLoading] = useState(null);
 
 		useEffect(() => {
 			//get the authenticated user from Firebase
+			setIsLoading(true);
 			let listener = props.firebase.auth.onAuthStateChanged(
 				(authUser) => {
 					if (authUser) {
@@ -23,10 +25,12 @@ const withAuthentication = (Component) => {
 							authUser.admin = userClaims.claims.admin;
 							authUser.data = userData;
 							setAuthUser({ authUser });
+							setIsLoading(false);
 						};
 						getUserData();
 					} else {
 						setAuthUser(null);
+						setIsLoading(false);
 					}
 				}
 			);
@@ -37,7 +41,7 @@ const withAuthentication = (Component) => {
 		}, [props.firebase.auth, props.firebase]);
 
 		return (
-			<AuthUserContext.Provider value={authUser}>
+			<AuthUserContext.Provider value={{ authUser, isLoading }}>
 				<Component {...props} />
 			</AuthUserContext.Provider>
 		);
