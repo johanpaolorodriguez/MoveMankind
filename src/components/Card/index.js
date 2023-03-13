@@ -2,7 +2,6 @@ import React from "react";
 import startCase from "lodash/startCase";
 
 const Card = ({ startup }) => {
-	console.log(startup);
 	return (
 		<a
 			href={`/startups/${startup.uid}`}

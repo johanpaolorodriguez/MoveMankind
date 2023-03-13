@@ -6,12 +6,12 @@ import { AuthUserContext } from "../Session";
 import { onSnapshot, doc } from "@firebase/firestore";
 
 const FollowButton = ({ firebase, setIsOpen, startupUid }) => {
-	const authUser = useContext(AuthUserContext);
+	const { authUser } = useContext(AuthUserContext);
 	const [snapshotData, setSnapshotData] = useState(null);
 
 	const userIsFollowingStartup = () => {
-		if (snapshotData) {
-			return snapshotData.following.includes(startupUid);
+		if (snapshotData && snapshotData?.following.includes(startupUid)) {
+			return true;
 		} else {
 			return false;
 		}

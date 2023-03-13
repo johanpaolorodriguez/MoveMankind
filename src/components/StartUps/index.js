@@ -75,14 +75,14 @@ const StartUpsPage = (props) => {
 		}
 		if (startups.length === 0 && filters.length !== 0) {
 			return (
-				<div className="mx-auto mb-20 space-y-6 | lg:flex lg:flex-row-reverse lg:space-y-0">
+				<div className="mx-auto py-20 space-y-6 | lg:flex lg:flex-row-reverse lg:space-y-0">
 					<img
-						className="mx-auto max-w-[290px] space-x-10 | lg:max-w-none"
+						className="mx-auto max-w-[290px] space-x-10 | lg:max-w-none lg:pt-16"
 						src={NoResultsImage}
 						alt="No Results"
 					/>
 					<div className="space-y-3 text-center | lg:text-left lg:space-y-6">
-						<p className="text-xl font-semibold md:text-4xl text-primary">
+						<p className="text-lg font-semibold md:text-3xl text-primary">
 							No results found
 						</p>
 						<p className="max-w-xl whitespace-pre-line | lg:text-lg">
