@@ -10,7 +10,7 @@ const FollowButton = ({ firebase, setIsOpen, startupUid }) => {
 	const [snapshotData, setSnapshotData] = useState(null);
 
 	const userIsFollowingStartup = () => {
-		if (snapshotData && snapshotData?.following.includes(startupUid)) {
+		if (snapshotData && snapshotData?.following?.includes(startupUid)) {
 			return true;
 		} else {
 			return false;
