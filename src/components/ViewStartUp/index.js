@@ -25,6 +25,9 @@ const ViewStartUpPage = (props) => {
 	const [isOrderSectionsOpen, setOrderSectionsOpen] = useState(false);
 	const [isContributePromptOpen, setContributePromptOpen] = useState(false);
 	const [pageIndex, setPageIndex] = useState([]);
+	const [sortedStartupPageByIndex, setSortedStartupPageByIndex] = useState(
+		[]
+	);
 
 	const location = useLocation();
 	useEffect(() => {
@@ -44,28 +47,20 @@ const ViewStartUpPage = (props) => {
 	}, [props.firebase, props.firebase.db, uid, updatingStartup]);
 
 	useEffect(() => {
-		console.log(startup.pageIndex);
 		if (startup.pageIndex) {
 			setPageIndex(startup.pageIndex);
 		}
-		if (startup?.page && !startup.pageIndex) {
+		if (startup.page && !startup.pageIndex) {
 			setPageIndex(Object.keys(startup.page).sort());
 		}
-		if (
-			startup?.page &&
-			pageIndex.length !== Object.keys(startup?.page).length
-		) {
-			setPageIndex(Object.keys(startup.page).sort());
-		}
-	}, [props.firebase, props.firebase.db, updatingStartup, startup]);
-	console.log(pageIndex);
-	if (startup.page) {
-		console.log(Object.keys(startup?.page).length);
-	}
+	}, [updatingStartup, startup]);
 
-	let sortedStartupPageByIndex = pageIndex.map((v) => {
-		return { key: v, value: startup?.page[v] };
-	});
+	useEffect(() => {
+		let sortedPage = pageIndex.map((v) => {
+			return { key: v, value: startup?.page[v] };
+		});
+		setSortedStartupPageByIndex(sortedPage);
+	}, [startup, pageIndex, updatingStartup]);
 
 	const saveContent = async (data) => {
 		setUpdatingStartup(true);
