@@ -144,6 +144,18 @@ class Firebase {
 		}
 	};
 
+	doEditPageIndexAsAdmin = async (startupId, data) => {
+		const startupRef = doc(this.db, "startups", startupId);
+
+		try {
+			await updateDoc(startupRef, {
+				pageIndex: data,
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	doEditStartupPageAsAdmin = async (startupId, data) => {
 		try {
 			const startupRef = doc(this.db, "startups", startupId);
@@ -151,6 +163,7 @@ class Firebase {
 
 			await updateDoc(startupRef, {
 				[`page.${key}`]: data[key],
+				pageIndex: arrayUnion(key),
 			});
 		} catch (error) {
 			console.log(error);
@@ -163,6 +176,7 @@ class Firebase {
 
 			await updateDoc(startupRef, {
 				[`page.${title}`]: deleteField(),
+				pageIndex: arrayRemove(title),
 			});
 		} catch (error) {
 			console.log(error);

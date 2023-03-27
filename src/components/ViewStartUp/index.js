@@ -13,6 +13,7 @@ import ContributePrompt from "../ContributePrompt";
 import startCase from "lodash/startCase";
 import toast from "react-hot-toast";
 import { CheckCircleIcon } from "@heroicons/react/solid";
+import OrderSections from "../Admin/OrderSections";
 
 const ViewStartUpPage = (props) => {
 	const { uid } = useParams();
@@ -21,7 +22,9 @@ const ViewStartUpPage = (props) => {
 	const [updatingStartup, setUpdatingStartup] = useState(false);
 	const [isSignInOrUpPromptOpen, setSignInOrUpPromptOpen] = useState(false);
 	const [isAdminEditorOpen, setAdminEditorOpen] = useState(false);
+	const [isOrderSectionsOpen, setOrderSectionsOpen] = useState(false);
 	const [isContributePromptOpen, setContributePromptOpen] = useState(false);
+	const [pageIndex, setPageIndex] = useState([]);
 
 	const location = useLocation();
 	useEffect(() => {
@@ -39,6 +42,30 @@ const ViewStartUpPage = (props) => {
 		};
 		fetchStartup();
 	}, [props.firebase, props.firebase.db, uid, updatingStartup]);
+
+	useEffect(() => {
+		console.log(startup.pageIndex);
+		if (startup.pageIndex) {
+			setPageIndex(startup.pageIndex);
+		}
+		if (startup?.page && !startup.pageIndex) {
+			setPageIndex(Object.keys(startup.page).sort());
+		}
+		if (
+			startup?.page &&
+			pageIndex.length !== Object.keys(startup?.page).length
+		) {
+			setPageIndex(Object.keys(startup.page).sort());
+		}
+	}, [props.firebase, props.firebase.db, updatingStartup, startup]);
+	console.log(pageIndex);
+	if (startup.page) {
+		console.log(Object.keys(startup?.page).length);
+	}
+
+	let sortedStartupPageByIndex = pageIndex.map((v) => {
+		return { key: v, value: startup?.page[v] };
+	});
 
 	const saveContent = async (data) => {
 		setUpdatingStartup(true);
@@ -60,6 +87,18 @@ const ViewStartUpPage = (props) => {
 				title
 			);
 			customToast(`${title} has been deleted.`);
+			setUpdatingStartup(false);
+		} catch (error) {
+			console.log(error);
+			setUpdatingStartup(false);
+		}
+	};
+
+	const saveIndex = async (data) => {
+		setUpdatingStartup(true);
+		try {
+			await props.firebase.doEditPageIndexAsAdmin(startup.uid, data);
+			customToast(`Your entry has been saved.`);
 			setUpdatingStartup(false);
 		} catch (error) {
 			console.log(error);
@@ -117,6 +156,17 @@ const ViewStartUpPage = (props) => {
 				deletePost={deletePost}
 				page={startup.page}
 			/>
+
+			{pageIndex.length !== 0 && (
+				<OrderSections
+					key={pageIndex}
+					saveIndex={saveIndex}
+					pageIndex={pageIndex}
+					isOpen={isOrderSectionsOpen}
+					setIsOpen={setOrderSectionsOpen}
+				/>
+			)}
+
 			{startup && (
 				<>
 					<header className="flex flex-col justify-around m-6 space-y-7 | md:space-y-14 md:m-12">
@@ -222,52 +272,53 @@ const ViewStartUpPage = (props) => {
 
 					{authUser?.authUser.admin && (
 						<div className="pb-24">
-							<Banner setOpen={setAdminEditorOpen} />
+							<Banner
+								setAdminEditorOpen={setAdminEditorOpen}
+								setOrderSectionsOpen={
+									setOrderSectionsOpen
+								}
+							/>
 						</div>
 					)}
 
 					{startup?.page &&
-						Object.keys(startup.page).length !== 0 && (
+						sortedStartupPageByIndex.length !== 0 && (
 							<Tab.Group
 								as="section"
 								className="min-h-screen"
 							>
 								<Tab.List className="px-6 space-x-12 text-lg border-gray-300 border-y">
-									{Object.keys(startup.page).map(
-										(key, index) => {
-											return (
-												<Tab
-													key={index}
-													className="font-semibold py-6 focus:outline-none ui-selected:border-b-4 ui-selected:border-blue-500 ui-selected:text-blue-700 | ui-not-selected:text-gray-400 capitalize"
-												>
-													{key}
-												</Tab>
-											);
-										}
+									{sortedStartupPageByIndex.map(
+										(entry) => (
+											<Tab
+												key={entry.key}
+												className="font-semibold py-6 focus:outline-none ui-selected:border-b-4 ui-selected:border-blue-500 ui-selected:text-blue-700 | ui-not-selected:text-gray-400 capitalize"
+											>
+												{entry.key}
+											</Tab>
+										)
 									)}
 								</Tab.List>
 
 								<Tab.Panels>
-									{Object.entries(startup.page).map(
-										([key, value]) => {
-											return (
-												<Tab.Panel
-													key={key}
-												>
-													<RichTextEditor
-														saveContent={
-															saveContent
-														}
-														title={
-															key
-														}
-														initialEditorState={
-															value
-														}
-													/>
-												</Tab.Panel>
-											);
-										}
+									{sortedStartupPageByIndex.map(
+										(entry) => (
+											<Tab.Panel
+												key={entry.key}
+											>
+												<RichTextEditor
+													saveContent={
+														saveContent
+													}
+													title={
+														entry.key
+													}
+													initialEditorState={
+														entry.value
+													}
+												/>
+											</Tab.Panel>
+										)
 									)}
 								</Tab.Panels>
 							</Tab.Group>
