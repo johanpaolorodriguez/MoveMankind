@@ -268,10 +268,18 @@ const ViewStartUpPage = (props) => {
 					{authUser?.authUser.admin && (
 						<div className="pb-24">
 							<Banner
-								setAdminEditorOpen={setAdminEditorOpen}
-								setOrderSectionsOpen={
-									setOrderSectionsOpen
-								}
+								title={`Add or Eit the sections of this page`}
+								functions={[
+									{
+										function: setAdminEditorOpen,
+										content: `Open Editor`,
+									},
+									{
+										function:
+											setOrderSectionsOpen,
+										content: `Order Sections`,
+									},
+								]}
 							/>
 						</div>
 					)}
