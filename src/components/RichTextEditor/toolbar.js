@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import clsx from "clsx";
+import { withFirebase } from "../Firebase";
 
 const ToolTip = ({ text }) => (
 	<span className="-left-1/2 -top-12 | whitespace-nowrap absolute z-10 px-3 py-2 text-xs w-auto font-medium text-white transition-opacity duration-500 bg-gray-900 rounded-lg shadow-sm tooltip">
@@ -7,14 +8,26 @@ const ToolTip = ({ text }) => (
 	</span>
 );
 
-export default function Toolbar({ editor, handleSave, handleDelete }) {
-	const addImage = useCallback(() => {
-		const url = window.prompt("URL");
+const Toolbar = ({ editor, handleSave, handleDelete, firebase }) => {
+	const addImage = useCallback(
+		async (image) => {
+			try {
+				const formattedImageObj = {
+					fileName: image.name,
+					file: image,
+				};
 
-		if (url) {
-			editor.chain().focus().setImage({ src: url }).run();
-		}
-	}, [editor]);
+				const url = await firebase.doAddFileToDB(formattedImageObj);
+
+				if (url) {
+					editor.chain().focus().setImage({ src: url }).run();
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		[editor]
+	);
 
 	const setLink = useCallback(() => {
 		const previousUrl = editor.getAttributes("link").href;
@@ -874,10 +887,7 @@ export default function Toolbar({ editor, handleSave, handleDelete }) {
 					<span className="w-[1.5px] bg-gray-500 block h-5"></span>
 
 					{/* IMAGE */}
-					<button
-						className="relative px-1 transition-colors duration-100 ease-in has-tooltip hover:bg-gray-700"
-						onClick={addImage}
-					>
+					<label className="relative px-1 transition-colors duration-100 ease-in has-tooltip hover:bg-gray-700">
 						<svg
 							className="w-6 h-6 text-gray-200 icon"
 							width="24"
@@ -891,7 +901,15 @@ export default function Toolbar({ editor, handleSave, handleDelete }) {
 						</svg>
 
 						<ToolTip text={"add image"} />
-					</button>
+						<input
+							type="file"
+							onChange={(e) => {
+								addImage(e.target.files[0]);
+							}}
+							id="image-upload-input"
+							className="hidden"
+						/>
+					</label>
 
 					<span className="w-[1.5px] bg-gray-500 block h-5"></span>
 
@@ -988,4 +1006,6 @@ export default function Toolbar({ editor, handleSave, handleDelete }) {
 			)}
 		</div>
 	);
-}
+};
+
+export default withFirebase(Toolbar);
