@@ -7,11 +7,6 @@ import {
 	arrayUnion,
 	arrayRemove,
 	deleteField,
-} from "@firebase/firestore";
-import { getFunctions, httpsCallable } from "firebase/functions";
-import { getStorage, connectStorageEmulator } from "firebase/storage";
-import { seedAllCollections } from "./databaseSeeder/102222_seeder";
-import {
 	collection,
 	doc,
 	setDoc,
@@ -22,7 +17,18 @@ import {
 	orderBy,
 	limit,
 	where,
-} from "firebase/firestore";
+	serverTimestamp,
+} from "@firebase/firestore";
+import { getFunctions, httpsCallable } from "firebase/functions";
+import {
+	getStorage,
+	ref,
+	uploadBytesResumable,
+	getDownloadURL,
+	connectStorageEmulator,
+	uploadBytes,
+} from "firebase/storage";
+import { seedAllCollections } from "./databaseSeeder/102222_seeder";
 
 const config = {
 	apiKey: process.env.REACT_APP_API_KEY,
@@ -139,6 +145,103 @@ class Firebase {
 			});
 
 			await batch.commit();
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	stringClean = (string) => {
+		return string.replace(/[^A-Z0-9]+/gi, "").toLowerCase();
+	};
+
+	replaceSpaceWithUnderscore = (string) => {
+		return string.replaceAll(" ", "_").toLowerCase();
+	};
+
+	doAddFileToDB = async (formattedFileObj) => {
+		const storageRef = ref(this.storage, `/${formattedFileObj.fileName}`);
+		const snapshot = await uploadBytes(storageRef, formattedFileObj.file);
+		return await getDownloadURL(snapshot.ref);
+	};
+
+	doAddStartupToDBasAdmin = async (data, files) => {
+		try {
+			const existingTagsInDB = await this.getAllTags();
+			const startupDocID = this.stringClean(data.name);
+			const { tags, ...startup } = data;
+			const startupDocRef = doc(this.db, "startups", startupDocID);
+			const allTagIDsOfStartup = [];
+			const tagsToUpdate = [];
+			const batch = writeBatch(this.db);
+
+			//upload the files and assign the returned urls to their fields in the data object
+			let filesArray = await Promise.all(
+				Object.entries(files).map(async ([key, value]) => {
+					const url = await this.doAddFileToDB(value);
+					console.log(url);
+
+					return { [key]: url };
+				})
+			);
+
+			//transforms data object to replace file fields to their respective urls
+			for await (const i of filesArray) {
+				Object.assign(startup, i);
+			}
+
+			await tags.forEach((tag) => {
+				const tagDocID = this.replaceSpaceWithUnderscore(tag.name);
+				allTagIDsOfStartup.push(tagDocID);
+
+				//check if tags already exist
+				if (!existingTagsInDB.some((e) => e.uid === tagDocID)) {
+					//if not, create a document
+					const tagDocRef = doc(this.db, "tags", tagDocID);
+					batch.set(tagDocRef, {
+						name: tag.name,
+						uid: tagDocRef.id,
+						subsector: true,
+						createdAt: serverTimestamp(),
+						startups: [startupDocRef.id],
+						startupsMap: {
+							[`${startupDocRef.id}`]: true,
+						},
+					});
+				} else {
+					tagsToUpdate.push(tagDocID);
+				}
+			});
+
+			//for the tags field in startup which contain an array of tagIDs
+			const tagsMapObj = Object.fromEntries(
+				allTagIDsOfStartup.map((startupTagID) => [
+					[`tagsMap.${startupTagID}`],
+					true,
+				])
+			);
+
+			//create the startup
+			batch.set(startupDocRef, {
+				uid: startupDocRef.id,
+				createdAt: serverTimestamp(),
+				tags: [...allTagIDsOfStartup],
+				...startup,
+				...tagsMapObj,
+			});
+
+			//iterate over the startup's tags (existing in DB) and add the startup field as an array and a map
+
+			for (const tag of tagsToUpdate) {
+				const tagDocRef = doc(this.db, "tags", tag);
+				batch.update(tagDocRef, {
+					startups: arrayUnion(startupDocRef.id),
+					[`startupsMap.${startupDocRef.id}`]: true,
+				});
+			}
+
+			await batch.commit();
+
+			return true;
 		} catch (error) {
 			console.log(error);
 		}
@@ -277,6 +380,15 @@ class Firebase {
 			startups = [...startups, doc.data()];
 		});
 		return startups;
+	};
+
+	getAllTags = async () => {
+		let tags = [];
+		const querySnaphshot = await getDocs(collection(this.db, "tags"));
+		querySnaphshot.forEach((doc) => {
+			tags = [...tags, doc.data()];
+		});
+		return tags;
 	};
 
 	getStartupByID = async (uid) => {
