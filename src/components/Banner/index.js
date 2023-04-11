@@ -8,7 +8,7 @@ export default function Banner(props) {
 
 					{functions?.map((fn) => (
 						<button
-							key={fn.function}
+							key={fn.content}
 							onClick={() => fn.function(true)}
 							className="flex justify-center px-4 py-2 text-base text-blue-500 bg-white border border-blue-500 rounded-md text-button font-primary"
 						>

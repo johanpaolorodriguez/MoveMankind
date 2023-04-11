@@ -1,13 +1,45 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
 import { withFirebase } from "../Firebase";
-// import FilterGroup from "../Tags";
 import Table from "./table";
 import SectorFilters from "../SectorFilters";
 import NoResultsImage from "../../assets/Illustration-No Results.png";
 import { AuthUserContext } from "../Session";
 import Banner from "../Banner";
 import AddVentureForm from "../Admin/AddVentureForm";
+import toast from "react-hot-toast";
+import { CheckCircleIcon } from "@heroicons/react/solid";
+
+const customToast = (text) => {
+	return toast.custom((t) => (
+		<div
+			className={`${
+				t.visible ? "animate-enter" : "animate-leave"
+			} max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+		>
+			<div className="flex-1 w-0 p-4">
+				<div className="flex items-start">
+					<div className="flex-shrink-0 pt-0.5">
+						<CheckCircleIcon className="w-10 h-10 text-green-500 rounded-full" />
+					</div>
+					<div className="flex-1 ml-3">
+						<p className="text-sm font-medium text-gray-900">
+							{text}
+						</p>
+					</div>
+				</div>
+			</div>
+			<div className="flex border-l border-gray-200">
+				<button
+					onClick={() => toast.dismiss(t.id)}
+					className="flex items-center justify-center w-full p-4 text-sm font-medium text-indigo-600 border border-transparent rounded-none rounded-r-lg hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+				>
+					Close
+				</button>
+			</div>
+		</div>
+	));
+};
 
 const StartUpsPage = (props) => {
 	const { authUser } = useContext(AuthUserContext);
@@ -18,13 +50,6 @@ const StartUpsPage = (props) => {
 	const filterWithId = (field, id) => {
 		setFilters((filters) => [...filters, `${field}.${id}`]);
 	};
-
-	// const removeFilterWithId = (field, id) => {
-	// 	const newFilters = filters.filter(
-	// 		(filter) => filter !== `${field}.${id}`
-	// 	);
-	// 	setFilters(newFilters);
-	// };
 
 	const removeAllFilters = () => {
 		setFilters([]);
@@ -50,29 +75,22 @@ const StartUpsPage = (props) => {
 		fetchStartups();
 	}, [props.firebase, filters]);
 
-	const [tags, setTags] = useState({});
-	useEffect(() => {
-		const fetchTags = async () => {
-			try {
-				const sectors = await props.firebase.getAllSectors();
-				const subSectors = await props.firebase.getAllSubSectors();
-				setTags((prev) => ({
-					...prev,
-					Sectors: sectors.map((obj) => ({
-						...obj,
-						field: "tagsMap",
-					})),
-					Subsectors: subSectors.map((obj) => ({
-						...obj,
-						field: "tagsMap",
-					})),
-				}));
-			} catch (error) {
-				console.log(error);
+	const saveStartupToDB = async (data, files) => {
+		try {
+			const attempt = await props.firebase.doAddStartupToDBasAdmin(
+				data,
+				files
+			);
+
+			if (attempt) {
+				customToast(`Your entry has been saved.`);
+			} else {
+				customToast(`There was an error. Please try again`);
 			}
-		};
-		fetchTags();
-	}, [props.firebase]);
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	const matchConditions = () => {
 		if (startups.length !== 0) {
@@ -132,6 +150,7 @@ const StartUpsPage = (props) => {
 			<AddVentureForm
 				isOpen={isAddVentureFormOpen}
 				setIsOpen={setAddVentureFormOpen}
+				saveStartupToDB={saveStartupToDB}
 			/>
 			{/* Filters/Tags */}
 			<SectorFilters
