@@ -1,14 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
 import { withFirebase } from "../Firebase";
 // import FilterGroup from "../Tags";
 import Table from "./table";
 import SectorFilters from "../SectorFilters";
 import NoResultsImage from "../../assets/Illustration-No Results.png";
+import { AuthUserContext } from "../Session";
+import Banner from "../Banner";
+import AddVentureForm from "../Admin/AddVentureForm";
 
 const StartUpsPage = (props) => {
+	const { authUser } = useContext(AuthUserContext);
 	const [startups, setStartups] = useState([]);
 	const [filters, setFilters] = useState([]);
+	const [isAddVentureFormOpen, setAddVentureFormOpen] = useState(false);
 
 	const filterWithId = (field, id) => {
 		setFilters((filters) => [...filters, `${field}.${id}`]);
@@ -124,6 +129,10 @@ const StartUpsPage = (props) => {
 
 	return (
 		<section className="flex flex-col justify-center mb-20">
+			<AddVentureForm
+				isOpen={isAddVentureFormOpen}
+				setIsOpen={setAddVentureFormOpen}
+			/>
 			{/* Filters/Tags */}
 			<SectorFilters
 				filterWithId={filterWithId}
@@ -132,6 +141,20 @@ const StartUpsPage = (props) => {
 
 			{/* Results Table */}
 			{matchConditions()}
+
+			{authUser?.authUser.admin && (
+				<div className="pb-6">
+					<Banner
+						title={`Add a venture`}
+						functions={[
+							{
+								function: setAddVentureFormOpen,
+								content: `Add Venture`,
+							},
+						]}
+					/>
+				</div>
+			)}
 		</section>
 	);
 };
