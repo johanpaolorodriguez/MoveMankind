@@ -51,6 +51,10 @@ const StartUpsPage = (props) => {
 		setFilters((filters) => [...filters, `${field}.${id}`]);
 	};
 
+	const filterByCategory = (filtersArray) => {
+		setFilters((filters) => [...filters, ...filtersArray]);
+	};
+
 	const removeAllFilters = () => {
 		setFilters([]);
 	};
@@ -63,7 +67,7 @@ const StartUpsPage = (props) => {
 					setStartups(data);
 				} else {
 					const data =
-						await props.firebase.getAllStartupsWithFilters(
+						await props.firebase.getAllStartupsWithORFilters(
 							filters
 						);
 					setStartups(data);
@@ -154,7 +158,7 @@ const StartUpsPage = (props) => {
 			/>
 			{/* Filters/Tags */}
 			<SectorFilters
-				filterWithId={filterWithId}
+				filterByCategory={filterByCategory}
 				removeAllFilters={removeAllFilters}
 			/>
 
