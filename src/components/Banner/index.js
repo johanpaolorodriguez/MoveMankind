@@ -1,9 +1,9 @@
 export default function Banner(props) {
-	const { functions, title } = props;
+	const { functions, title, children, className } = props;
 	return (
-		<div className="bg-[#1b2733] rounded-md">
+		<div className={`bg-white ${className}`}>
 			<div className="px-3 py-3 mx-auto max-w-7xl sm:px-6 lg:px-8">
-				<div className="flex flex-wrap items-center justify-center space-x-6 text-center text-white">
+				<div className="flex flex-wrap items-center justify-center space-x-6 text-center">
 					{title && <span>{title}</span>}
 
 					{functions?.map((fn) => (
@@ -15,6 +15,8 @@ export default function Banner(props) {
 							{fn.content}
 						</button>
 					))}
+
+					{children}
 				</div>
 			</div>
 		</div>
