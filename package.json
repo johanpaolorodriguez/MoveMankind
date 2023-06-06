@@ -27,7 +27,7 @@
 		"clsx": "^1.2.1",
 		"concurrently": "^7.0.0",
 		"eslint-config-prettier": "^8.5.0",
-		"firebase": "^9.6.7",
+		"firebase": "^9.22.1",
 		"firebase-functions": "^4.1.0",
 		"little-state-machine": "^4.8.0",
 		"lodash": "^4.17.21",
