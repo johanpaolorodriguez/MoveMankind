@@ -29,6 +29,8 @@ const ViewStartUpPage = (props) => {
 		[]
 	);
 
+	console.log(startup);
+
 	const location = useLocation();
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -204,14 +206,18 @@ const ViewStartUpPage = (props) => {
 												: startup.country}
 										</dd>
 									</div>
-									<div>
-										<dt className="text-lg font-semibold uppercase text-primary">
-											FUNDING STAGE
-										</dt>
-										<dd className="font-secondary">
-											{startup["funding type"]}
-										</dd>
-									</div>
+									{startup.funding_type && (
+										<div>
+											<dt className="text-lg font-semibold uppercase text-primary">
+												FUNDING TYPE
+											</dt>
+											<dd className="font-secondary">
+												{
+													startup.funding_type
+												}
+											</dd>
+										</div>
+									)}
 									<div>
 										<dt className="text-lg font-semibold uppercase text-primary">
 											WEBSITE
