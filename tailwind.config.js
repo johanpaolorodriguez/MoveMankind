@@ -26,6 +26,10 @@ module.exports = {
 				"screen-1/3": "33vh",
 				"screen-1/2": "50vh",
 			},
+
+			boxShadow: {
+				"box-primary": "30px -30px #4661FF",
+			},
 		},
 	},
 	plugins: [
