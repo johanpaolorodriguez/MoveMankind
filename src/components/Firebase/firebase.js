@@ -18,6 +18,7 @@ import {
 	limit,
 	where,
 	serverTimestamp,
+	or,
 } from "@firebase/firestore";
 import { getFunctions, httpsCallable } from "firebase/functions";
 import {
@@ -424,6 +425,7 @@ class Firebase {
 		const constraints = filters.map((filter) =>
 			where(filter, "==", true)
 		);
+
 		if (limitBy) {
 			constraints.push(limit(limitBy));
 		}
@@ -433,6 +435,42 @@ class Firebase {
 			//destructure the constraints to be included in the query
 			...constraints
 		);
+
+		const querySnapshot = await getDocs(data);
+		querySnapshot.forEach((doc) => {
+			startups = [...startups, doc.data()];
+		});
+		return startups;
+	};
+
+	getAllStartupsWithORFilters = async (filters, limitBy) => {
+		let startups = [];
+		let data = null;
+		//map the filters to a where clause
+		const constraints = filters.map((filter) =>
+			where(filter, "==", true)
+		);
+
+		if (limitBy) {
+			constraints.push(limit(limitBy));
+		}
+		const startupsRef = collection(this.db, "startups");
+
+		if (constraints.length > 1) {
+			data = query(
+				startupsRef,
+				//destructure the constraints to be included in the query
+				or(...constraints)
+			);
+		}
+
+		if (constraints.length <= 1) {
+			data = query(
+				startupsRef,
+				//destructure the constraints to be included in the query
+				...constraints
+			);
+		}
 
 		const querySnapshot = await getDocs(data);
 		querySnapshot.forEach((doc) => {
