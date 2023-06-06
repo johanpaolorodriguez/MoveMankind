@@ -5,7 +5,7 @@ import EnvPng from "../../assets/mobile/environment.png";
 import SpacePng from "../../assets/mobile/space.png";
 import BioTechPng from "../../assets/mobile/biotechnology.png";
 
-const SectorFilters = ({ filterWithId, removeAllFilters }) => {
+const SectorFilters = ({ filterByCategory, removeAllFilters }) => {
 	return (
 		<section className="max-w-screen-xl mx-auto px-6 grid w-full grid-cols-5 gap-5 text-[10px] text-center my-16 | md:text-base">
 			<button
@@ -23,7 +23,10 @@ const SectorFilters = ({ filterWithId, removeAllFilters }) => {
 			<button
 				onClick={() => {
 					removeAllFilters();
-					filterWithId("tagsMap", "artificialintelligence");
+					filterByCategory([
+						`tagsMap.artificial_intelligence`,
+						`tagsMap.artificial_intelligence_`,
+					]);
 				}}
 				className="flex flex-col items-center"
 			>
@@ -40,7 +43,7 @@ const SectorFilters = ({ filterWithId, removeAllFilters }) => {
 			<button
 				onClick={() => {
 					removeAllFilters();
-					filterWithId("tagsMap", "biotechnology");
+					filterByCategory([`tagsMap.biotech`]);
 				}}
 				className="flex flex-col items-center"
 			>
@@ -55,7 +58,7 @@ const SectorFilters = ({ filterWithId, removeAllFilters }) => {
 			<button
 				onClick={() => {
 					removeAllFilters();
-					filterWithId("tagsMap", "space");
+					filterByCategory([`tagsMap.space`]);
 				}}
 				className="flex flex-col items-center"
 			>
@@ -70,7 +73,7 @@ const SectorFilters = ({ filterWithId, removeAllFilters }) => {
 			<button
 				onClick={() => {
 					removeAllFilters();
-					filterWithId("tagsMap", "environment");
+					filterByCategory([`tagsMap.environment`]);
 				}}
 				className="flex flex-col items-center"
 			>
